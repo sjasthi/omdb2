@@ -1,0 +1,301 @@
+[1] Get the count of movies produced in each year sorted by the year in descending order.
+
+SELECT
+    `year_made`,
+    COUNT(*)
+FROM
+    `movies`
+GROUP BY
+    `year_made`
+DESC;
+
+OUTPUT
+
+year_made	COUNT(*)	
+2021		3	
+2020		7	
+2019		7	
+2018		4	
+2017		6	
+2016		4	
+2015		6	
+2014		5	
+2013		5	
+2012		1	
+----------------------------------------------------------
+[2] Get the native_name, and year_made of all movies in which [a person] is the ‘leading actor’
+
+SELECT
+    `native_name`,
+    `year_made`
+FROM
+    `movies`,
+    `movie_people`,
+    `people`
+WHERE
+    `movies`.`movie_id` = `movie_people`.`movie_id` AND `movie_people`.`role` = "leading actor" AND `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = "Brad Pitt";
+
+OUTPUT
+
+native_name			year_made	
+Hunk				1987	
+No Way Out			1987	
+No Man's Land		        1987	
+The Dark Side of the Sun	1988	
+Happy Together		        1989	
+Cutting Class			1989	
+Across the Tracks		1991	
+Thelma & Louise		        1991	
+Johnny Suede			1991	
+Contact			        1992	
+----------------------------------------------------------
+[3] Get the native_name, and year_made of all movies in which [a person] is the ‘leading actor’ AND [another person] is the ‘leading actress’
+
+SELECT
+    `native_name`,
+    `year_made`
+FROM
+    `movies`,
+    `movie_people`,
+    `people`
+WHERE
+    `movies`.`movie_id` = `movie_people`.`movie_id` AND `movie_people`.`role` = "Leading Actor" AND `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = "Brad Pitt" AND `movies`.`movie_id` IN(
+    SELECT
+        `movie_id`
+    FROM
+        `movie_people`,
+        `people`
+    WHERE
+        `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = "Angeline Jolie" AND `movie_people`.`role` = "Leading Actress"
+);
+
+OUTPUT
+
+native_name		year_made
+Mr. & Mrs. Smith	2005	
+----------------------------------------------------------
+[4] Get the native_name, year_made, and song_title where [a person] is a ‘Lyricist”
+
+SELECT
+    `movies`.`native_name`,
+    `movies`.`year_made`,
+    `songs`.`title`
+FROM
+    `movies`,
+    `songs`,
+    `song_people`,
+    `people`,
+    `movie_song`
+WHERE
+    `song_people`.`role` = 'Lyricist' AND `people`.`stage_name` = 'Kid Singer' AND `movies`.`movie_id` = `movie_song`.`movie_id` AND `movie_song`.`song_id` = `songs`.`song_id` AND `song_people`.`song_id` = `songs`.`song_id` AND song_people.people_id = people.people_id;
+
+OUTPUT 
+
+native_name   year_made   		title
+అహల్య              1934                Hello Sun
+----------------------------------------------------------
+[5] Get the native_name, year_made, and song_title where [a person A] is a ‘playback singer” and [person B] is a ‘playback singer’
+
+SELECT DISTINCT
+    `movies`.`native_name`,
+    `movies`.`year_made`,
+    `songs`.`title`
+FROM
+    `movies`,
+    `songs`,
+    `song_people`,
+    `movie_song`,
+    `people`
+WHERE
+    `movies`.`movie_id` = `movie_song`.`movie_id` AND `songs`.`song_id` = `movie_song`.`song_id` AND `song_people`.`role` = 'playback singer' AND `song_people`.`people_id` = `people`.`people_id` AND `song_people`.`song_id` = `songs`.`song_id` AND `people`.`stage_name` = 'Sing A lot' AND `movies`.`movie_id` IN(
+    SELECT
+        `movies`.`movie_id`
+    FROM
+        `movies`,
+        `songs`,
+        `song_people`,
+        `movie_song`,
+        `people`
+    WHERE
+        `movies`.`movie_id` = `movie_song`.`movie_id` AND `song_people`.`role` = 'playback singer' AND `songs`.`song_id` = `movie_song`.`song_id` AND `song_people`.`people_id` = `people`.`people_id` AND `song_people`.`song_id` = `songs`.`song_id` AND `people`.`stage_name` = 'Loves Song'
+);
+
+OUTPUT
+ 
+native_name   year_made   		 title
+అహల్య              1934                Hello Sun
+----------------------------------------------------------
+[6]  Provide the song_title, native_name, year_made, lyricist_name where the song lyrics contains the keyword “love” and “hate”  
+
+SELECT
+    `title`,
+    `native_name`,
+    `year_made`,
+    `stage_name`
+FROM
+    `movies`,
+    `songs`,
+    `people`,
+    `movie_song`,
+    `song_people`
+WHERE
+    `songs`.`lyrics` LIKE "%love%" AND `songs`.`lyrics` LIKE "%hate%" AND `movies`.`movie_id` = `movie_song`.`movie_id` AND `song_people`.`role` = "lyricist" AND `song_people`.`people_id` = `people`.`people_id` AND `songs`.`song_id` = `song_people`.`song_id` AND `movie_song`.`song_id` = `song_people`.`song_id`;
+
+
+OUTPUT
+
+title 			native_name 		year_made    stage_name
+Love and Hate		Mr. & Mrs. Smith	2005	          Camylio
+
+----------------------------------------------------------
+[7] Get all the native_names, song_titles, and stage_names where [a given string] is appearing as a substring. The first column of the result set is called “match” and the second column of the result set is called “type” (where type = movie or person or song)
+
+SELECT
+    *
+FROM
+    (
+    SELECT
+        `movies`.`native_name` AS 'match',
+        'movie' AS TYPE
+    FROM
+        `movies`
+    UNION ALL
+SELECT
+    `songs`.`title` AS 'match',
+    'song' AS `type`
+FROM
+    `songs`
+UNION ALL
+SELECT
+    `people`.`stage_name` AS 'match',
+    'person' AS TYPE
+FROM
+    `people`
+) AS `matches_table`
+WHERE
+    `match` LIKE '%it%';
+
+OUTPUT
+
+match	                                   TYPE	
+A River Runs Through It	movie	
+Interview with the Vampire	movie	
+Mr. & Mrs. Smith		movie	
+Running with Scissors	movie	
+The Audition			movie	
+Hitting the Apex		movie	
+Serendipity?			movie	
+Life or Something Like It	movie	
+Hell's Kitchen			movie	
+Without Evidence		movie	
+Soundtrack Suite		song	
+Alfred Hitchcock		person	
+Brad Pitt			person	
+
+----------------------------------------------------------
+[8] What are the top 10 movies sorted by length in descending order. 
+
+SELECT
+    `movies`.`native_name`
+FROM
+    `movies`,
+    `movie_numbers`
+WHERE
+    `movies`.`movie_id` = `movie_numbers`.`movie_id`
+ORDER BY
+    `movie_numbers`.`length`
+DESC
+LIMIT 10;
+
+OUTPUT
+
+native_name	
+à°œà°‚à°•à±	
+à°…à°®à±à°®	
+Lara Croft: Tomb Raider ? The Cradle of Life	
+Kung Fu Panda: Secrets of the Masters	
+Sky Captain and the World of Tomorrow	
+The Curious Case of Benjamin Button	
+The Last Black Man in San Francisco	
+The Assassination of Jesse James	
+Sinbad: Legend of the Seven Seas	
+Confessions of a Dangerous Mind	
+----------------------------------------------------------
+[9] Given [a set of base characters], return all the movies (native_name and year_made) containing those base characters. (Length of the movie does not matter. So, we may get some movies with some additional characters)
+
+SELECT
+    `movies`.`native_name`,
+    `movies`.`year_made`
+FROM
+    `movie_numbers`,
+    `movies`
+WHERE
+    `movies`.`movie_id` = `movie_numbers`.`movie_id` 
+AND `movie_numbers`.`base_chars` LIKE '%B%' 
+AND `movie_numbers`.`base_chars` LIKE '%a%' 
+AND `movie_numbers`.`base_chars` LIKE '%b%' 
+AND `movie_numbers`.`base_chars` LIKE '%e%' 
+AND `movie_numbers`.`base_chars` LIKE '%l%';
+
+OUTPUT
+
+native_name					year_made	
+TESTING_ABULLAHI				1996	
+TESTING_ABULLAHI_2				1996	
+Meet Joe Black					1998	
+Being John Malkovich				1999	
+Sinbad: Legend of the Seven Seas		2003	
+Babel						2006	
+Inglourious Basterds				2009	
+Moneyball					2011	
+Beautiful Boy					2018	
+If Beale Street Could Talk			2018	
+The Last Black Man in San Francisco		2019	
+In the Land of Blood and Honey			2011	
+Lara Croft: Tomb Raider				2001	
+Lara Croft: Tomb Raider ? The Cradle of Life	2003	
+Playing by Heart				1998	
+----------------------------------------------------------
+[10] Get the list of movies (native_name, year_made) with no songs.
+
+SELECT
+    `native_name`,
+    `year_made`
+FROM
+    `movies`
+WHERE
+    `movie_id` NOT IN(
+    SELECT
+        `movie_id`
+    FROM
+        `movie_song`
+);
+
+OUTPUT
+
+Native_name			year_made	
+శకుంతల 			          1932	
+చింతామణి 		 	   	  1933	
+పృధ్వీపుత్ర 			          1933	
+రామదాసు 			          1933	
+రామదాసు 			          1933	
+సావిత్రి	            		  1933	
+సావిత్రి	            		  1933	
+లవకుశ 			          1934	
+సీతాకళ్యాణం 			  1934	
+అనసూయ			          1935	
+కుచేల 	            		  1935	
+కృష్ణ తులాభారం		          1935	
+రాణి ప్రేమలత 		          1935	
+శ్రీకృష్ణ లీలలు			  1935	
+సక్కుబాయి			          1935	
+హరిశ్చంద్ర 			          1935	
+అనసూయ			          1936	
+కబీర్				  1936	
+ద్రౌపదీ మానసంరక్షణం	                  1936	
+ద్రౌపదీ వస్త్రాపహరణం	                  1936	
+ప్రేమవిజయం			  1936	
+మాయా బజార్ 			  1936	
+మోహినీ భస్మాసుర 		          1936	
+లంకాదహనం			  1936	
+వీరాభిమన్యు 			  1936
