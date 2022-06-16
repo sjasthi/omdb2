@@ -60,16 +60,17 @@
               <label class="form-check-label" for="remember_label"> Remember me </label>
             </div>
           </div>
-
-          <div class="col">
-            <!-- Simple link -->
-            <a href="#">Forgot password?</a>
-          </div>
         </div>
 
         <!-- Submit button -->
         <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
 
+        <div class="col">
+          <!-- Simple link -->
+          <a href="#">Forgot password?</a>
+          or
+          <a href="sign_up.php">Not signed up?</a>
+        </div>
 
       </form>
 </div>
