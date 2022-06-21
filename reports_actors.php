@@ -1,6 +1,6 @@
 <?php
 
-  $nav_selected = "PEOPLE";
+  $nav_selected = "REPORTS";
   $left_buttons = "YES";
   $left_selected = "ACTORS";
 

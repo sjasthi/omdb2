@@ -1,4 +1,5 @@
 <?php
+  session_start();
 
   $nav_selected = "PEOPLE";
   $left_buttons = "YES";
@@ -17,8 +18,15 @@
 
         <h3><img src="images/people.png" style="max-height: 35px;" />People List</h3>
 
+
+          <?php
+            if(isset($_SESSION['username'])){
+              ?>
+            
           <button title="Create Person"><a class="btn btn-sm" href="create_people.php"><i class = "fa fa-plus"></i></a></button>
           <br><br>
+        <?php } ?>
+
         <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
             width="100%" style="width: 100px;">

@@ -1,4 +1,6 @@
 <?php
+  session_start();
+
   header("Pragma: cache");
   header("Cache-Control: public, max-age=3600");
 
@@ -17,9 +19,14 @@
     <div class="container">
 
       <h3 style = "color: #01B0F1;">Movies -> Movies List</h3>
+      <?php
+      if (isset($_SESSION['username']))
+      { ?>
+       <button title='Create Movie'><a class='btn btn-sm' href='create_movie.php'><i class = 'fa fa-plus'></i></a></button>
+       <button title="Poster Upload"><a class="btn btn-sm" href="add_movie_posters.php"><i class = "fa fa-file-image-o"></i></a></button>
+      <?php } ?>
 
-    <button title="Create Movie"><a class="btn btn-sm" href="create_movie.php"><i class = "fa fa-plus"></i></a></button>
-    <button title="Poster Upload"><a class="btn btn-sm" href="add_movie_posters.php"><i class = "fa fa-file-image-o"></i></a></button>
+    
 <br>
 <br>
 

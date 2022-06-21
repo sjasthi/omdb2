@@ -11,14 +11,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- jQuery library -->
         <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+        
         <title>Online Movie Database (OMDB)</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
@@ -110,8 +110,14 @@
             <br/>Login</li>
         </a>
 
-        <li>
+        <a href="log_out.php">
+          <li <?php if($nav_selected == "LOG_OUT"){ echo 'class="current-page"'; } ?>>
+            <img src="./images/help.png"> <!-- make a picture for login or just remove this -->
+            <br/>LogOut</li>
+        </a>
 
+        <li>
+        
     </li>
 
       </ul>
@@ -169,3 +175,5 @@
         <?php
           }
         ?>
+
+

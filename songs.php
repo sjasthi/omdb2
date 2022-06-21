@@ -1,4 +1,5 @@
 <?php
+  session_start();
   $nav_selected = "SONGS";
   $left_buttons = "YES";
   $left_selected = "SONGS";
@@ -11,8 +12,13 @@
     <div class="container">
 
       <h3 style = "color: #01B0F1;">Songs --> Songs List</h3>
-     <button title="Create Song"><a class="btn btn-sm" href="create_song.php"><i class = "fa fa-plus"></i></a></button><br>
+    
 
+      <?php
+        if (isset($_SESSION['username']))
+        { ?>
+         <button title='Create Song'><a class='btn btn-sm' href='create_song.php'><i class = 'fa fa-plus'></i></a></button>
+      <?php } ?>
     <br>
 
             <table id="info" cellpadding="0" cellspacing="0" border="0"

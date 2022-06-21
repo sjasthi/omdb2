@@ -1,3 +1,5 @@
+
+
 <?php
 
   // set the current page to one of the main buttons
@@ -38,16 +40,16 @@
 <h2 style = "color: #01B0F1;">Sign In </h3>
 
 
-      <form action="user_functions.php" method="post">
+      <form action="login.php" method="post">
         <!-- Email input -->
         <div class="form-outline mb-4">
-          <input type="email" id="email" class="form-control" />
+          <input type="email" id="email" name="email" class="form-control" />
           <label class="form-label" for="email_label">Email address</label>
         </div>
 
         <!-- Password input -->
         <div class="form-outline mb-4">
-          <input type="password" id="password" class="form-control" />
+          <input type="password" id="password" name="password" class="form-control" />
           <label class="form-label" for="password_label">Password</label>
         </div>
 
@@ -79,6 +81,45 @@
 
 
 <?php
+  if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        $my_email = mysqli_real_escape_string($db, $_POST['email']);
+        $my_password = mysqli_real_escape_string($db, $_POST['password']);
+
+        $sql = "SELECT * FROM users WHERE password = '$my_password' AND email = '$my_email'";
+
+        // $sql = "SELECT native_name, year_made from movies, movie_people, people where `movies`.`movie_id` = `movie_people`.`movie_id` AND `movie_people`.`role` = 'leading actor' AND `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = 'Brad Pitt' ";
+
+        echo $sql;
+
+        $result = $db->query($sql);
+
+ // while ($row = $result->fetch_assoc()) {
+        //     echo $row['users']."<br>";
+        // }
+
+        if (mysqli_num_rows($result) == 0) {
+          echo " zero columns";
+        }
+        else{
+          while($row = mysqli_fetch_array( $result)){
+          
+            echo '<br>'.$row['email'].'<br>';
+            $_SESSION['username'] = $my_email;
+            $_SESSION['password'] = $my_password;
+
+            header("Location: index.php");
+
+
+            exit();
+          }
+        }
+          
+        
+    }
+    
+
+
     db_disconnect($db);
     include("./footer.php");
 ?>
