@@ -1,17 +1,18 @@
 <?php
-  session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-  header("Pragma: cache");
-  header("Cache-Control: public, max-age=3600");
 
-  $nav_selected = "MOVIES"; 
-  $left_buttons = "YES"; 
-  $left_selected = "MOVIES"; 
 
-  
+  $nav_selected = "MOVIES";
+  $left_buttons = "YES";
+  $left_selected = "MOVIES";
+
+
   include("./nav.php");
-  
-  
+
+
   ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,7 +27,7 @@
        <button title="Poster Upload"><a class="btn btn-sm" href="add_movie_posters.php"><i class = "fa fa-file-image-o"></i></a></button>
       <?php } ?>
 
-    
+
 <br>
 <br>
 
@@ -45,65 +46,40 @@
 
             <tbody>
 
-              <?php
-
-                $sql = "SELECT * from movies ORDER BY year_made ASC;";
-
-                $db->set_charset("utf8");
-
-                $result = $db->query($sql);
-                header('Content-type: text/html; charset=utf-8');
-                if(isset($_GET['create'])){
-                       if($_GET["create"] == "Success"){
-                           echo '<br><h3 style="color:#01B0F1;">Success! The movie has been added.</h3>';
-                       }
-                }
-                if(isset($_GET['updated'])){
-                       if($_GET['updated'] == "Success"){
-                           echo '<br><h3 style="color:orange;">Success! The movie has been updated.</h3>';
-                       }
-                }
-
-                if(isset($_GET['delete'])){
-                       if($_GET['delete'] == "Success"){
-                           echo '<br><h3 style="color:#FF0000;">Success! The movie has been deleted.</h3>';
-                       }
-                }
-                  
-
-                if ($result->num_rows > 0) {
-                    // output data of each row
-                    while($row = $result->fetch_assoc()) {
-                        echo '<tr>
-                                <td>'.$row["movie_id"].'</td>
-                                <td>'.$row["native_name"].' </span> </td>
-                                <td>'.$row["english_name"].'</td>
-                                <td>'.$row["year_made"].'</td>
-                                <td><a title="View" class="btn btn-info btn-sm" href="movie_info.php?movie_id='.$row["movie_id"].'"><i class="fa fa-eye"></i></a>
-                                    <a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='.$row["movie_id"].'"><i class="fa fa-pencil"></i></a>
-                                    <a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='.$row["movie_id"].'"><i class="fa fa-close"></i></a>
-                                    <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?movie_id='.$row["movie_id"].'"><i class="fa fa-music"></i></a>
-                                    <a title="Add People" class="btn btn-info btn-sm" href="add_people.php?movie_id='.$row["movie_id"].'"><i class = "fa fa-id-badge"></i></a>
-                                    <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?movie_id='.$row["movie_id"].'"><i class="fa fa-database"></i></a></td>
-
-                            </tr>';
-                    }//end while
-                }//end if
-                else {
-                    echo "0 results";
-                }//end else
-
-                 $result->close();
-                ?>
-
               </tbody>
         </table>
 
 
         <script type="text/javascript" language="javascript">
     $(document).ready( function () {
-        
+
+
+
         $('#info').DataTable( {
+            "processing" : true,
+            'ajax': 'movies_ajax.php',
+            "columns" : [
+              {"data" : "movie_id"},
+              {"data" : "native_name"},
+              {"data" : "english_name"},
+              {"data" : "year_made"},
+            ],
+
+            columnDefs: [
+      {  targets: 4,
+         render: function (data, type, row) {
+            return '<a title="View" class="btn btn-info btn-sm" href="movie_info.php?movie_id='+row.movie_id+'"><i class="fa fa-eye"></i></a>'
+                                 + '<a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='+row.movie_id+'"><i class="fa fa-pencil"></i></a>'
+                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='+row.movie_id+'"><i class="fa fa-close"></i></a>'
+                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?movie_id='+row.movie_id+'"><i class="fa fa-music"></i></a>'
+                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?movie_id='+row.movie_id+'"><i class = "fa fa-id-badge"></i></a>'
+                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?movie_id='+row.movie_id+'"><i class="fa fa-database"></i></a>';
+         }
+
+      }
+    ],
+
+
             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
             dom: 'lfrtBip',
             buttons: [
@@ -115,7 +91,7 @@
         $('#info thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-    
+
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table
@@ -125,19 +101,17 @@
                 }
             } );
         } );
-    
+
         var table = $('#info').DataTable( {
             orderCellsTop: true,
             fixedHeader: true,
-            retrieve: true
+            retrieve: true,
+
         } );
-        
+
     } );
 
 </script>
-
-        
-
  <style>
    tfoot {
      display: table-header-group;
