@@ -1,6 +1,9 @@
 <?php
   ob_start(); // output buffering is turned on
-  session_start();
+  // session_start();
+  if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+  }
   
   
   // Assign file paths to PHP constants

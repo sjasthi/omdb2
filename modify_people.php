@@ -1,3 +1,11 @@
+<?php
+  session_start();
+ if (!isset($_SESSION['username']))
+      { 
+       header("Location: login.php");
+       exit();
+      }     
+?>
 <?php $page_title = 'The Cow Layer'; ?>
 <?php
     $nav_selected = "LIST";

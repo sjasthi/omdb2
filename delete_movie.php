@@ -1,4 +1,11 @@
-
+<?php
+  session_start();
+ if (!isset($_SESSION['username']))
+      { 
+       header("Location: login.php");
+       exit();
+      }     
+?>
 <?php $page_title = 'Delete your movie'; ?>
 <?php 
     $nav_selected = "LIST";
