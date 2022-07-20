@@ -1,192 +1,228 @@
-<!-- Logic:
-1. Select a random movie.
-	- Create an array of strings that are movie titles.
-	- Randomly pick one string out of an array of movie titles.
-2. Break it up into letters.
-	- Turn the string into its own array of characters.
-3. For each letter, select another movie whose name contains the letter.
-	- Loop through the array of characters.
-	- For each character, search another movie  for the same character in its name.
-4. Grab the corresponding poster. If the poser is not there, default to "not found" image.
-	- Take that movie title,
-	- Find the index of that letter in the movie title.
-	- Find the length of the movie title.
-5. Construct the number box for that letter based on the movie name.
-	- Create html text display,
-6. Display the equation
-	- Have in it (index of the letter in the movie title +1)/(length of the movie title).
-7. Validate the users guess.
-	- Create user input text box.
-	- User's input is matched against the hidden movie title of the random choice.
-	- If user inputs the correct movie title, message displays they win.
-	- If user inputs the incorrect movie title, message displays they must try again.
+<!DOCTYPE html>
+<html>
+<style>
+/*table, th, td {
+  border:1px solid black;
+}*/
+</style>
+	<body>
 
-	TODO - remove empty space in string length for mp hint.
+	<?php
+	// We're using sessions to store values.
+	if (session_status() == PHP_SESSION_NONE) {
+	    session_start();
+	}
+	// if(isset($_GET['telugu'])){
+	// 	$_SESSION['language'] = 'native_name';
+	// 	echo 'Is native_name';
 
--->
+	// }else{
+	// 	$_SESSION['language'] = 'english_name';
+	// 	echo 'Is english_name';
+	// }
 
-<?php
-
-$nav_selected = "MOVIES";
-$left_buttons = "YES";
-$left_selected = "MOVIES";
+	$nav_selected = "GAMES";
+	$left_buttons = "YES";
+	$left_selected = "GAMES";
 
 
-include("./nav.php");
-// Index of letters used for hints.
-$mp_hint_indexes = array();
+	include("./nav.php");
+	// Index of letters used for hints.
+	$mp_hint_indexes = array();
 
-// Array of movies for user to solve from.
-$movie_poster_hints = array();
-// An array of movie title strings.
+	// Array of movies for user to solve from.
+	$movie_poster_hints = array();
+	// An array of movie title strings.
 
-//TODO cleanup, This is no longer being used.
-$movie_titles = array(
-	"Fight Club",
-	"Neverending Story",
-	"PeeWees Big Adventure",
-	"Kung Fu Panda",
-	"StarWars",
-	"Indiana Jones",
-	"Karate Kid",
-	"Last Star Fighter",
-	"Friday the 13th",
-	"Three Amigos",
-	"Beetlejuice",
-	"Labyrinth",
-	"The Goonies",
-	"Ledgend",
-	"Batman",
-	"Tron",
-	"Top Gun",
-	"Footloose",
-	"Howard the Duck",
-	"Superman",
-	"Back to the Future",
-	"Conan the Barbarian",
-	"Scrooged",
-	"Splash",
-	"Time Bandits",
-	"Dune",
-	"ET",
-	"Spaceballs",
-	"The Thing",
-	"the Evil Dead",
-	"Flash Gordon",
-	"Twins",
-	"Bill and Teds Excellent Adventure",
-	"The Lost Boys",
-	"the Burbs",
-	"Short Circuit",
-	"Blood Sport",
-	"They Live",
-	"Weird Science",
-	"Willow"
-	);
+	$movie_name_language = $_SESSION['language'];
 
 	 // getting data from db
-	$sql = "SELECT english_name from movies"; // only grabbing english_name, logic changes if native_name or english_name possible
- 	$data = array();
+	$sql = "SELECT $movie_name_language from movies"; // only grabbing english_name, logic changes if native_name or english_name possible
+	$data = array();
 	$result = $db->query($sql);
 
-	                if ($result->num_rows > 0) {
-	                    // output data of each row
-	                    while($row = $result->fetch_assoc()) {
-												$data[] = $row; // currently has all rows of movie titles
-											}
-}
-// A random number picker the size of the movie list.
-$random_number = rand(0, count($data) - 1);
-
-// Picking a random movie title from the array.
-$movie_choice = strtolower($data[$random_number]['english_name']);
-
-$language = "English"; // Hardcoded for now TODO
-
-echo $movie_choice."<br>";
-
-// From URL to get webpage contents.
-// $url = "wpapi.telugupuzzles.com/api/getLength.php?string=$movie_choice&language=English";
-
-// // Initialize a CURL session.
-// $ch = curl_init();
-
-// // Return Page contents.
-// curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-// //grab URL and pass it to the variable.
-// curl_setopt($ch, CURLOPT_URL, $url);
-
-// $result = curl_exec($ch);
-
-// echo "The results are: ".$result;
-
-
-// URL encode urlencode(), allows for SPACES to be inside Strings passed
-$jsonLog = "https://wpapi.telugupuzzles.com/api/parseToLogicalCharacters.php?string=".urlencode($movie_choice)."&language=".urlencode($language);
-$jsonfile = file_get_contents($jsonLog);
-$decodedData = json_decode(strstr($jsonfile, '{'));
-// $base_chars = implode(", ", $decodedData->data);
-
-$stdClass_to_array = (array)$decodedData;
-print_r($stdClass_to_array) ;
-echo "<br>Did this work?: ".$stdClass_to_array['string']."<br>";
-
-
-//$movie_json = json_decode($result, false); //  LINE 120 - 126 REDACTED.
-//echo "This is: ".$movie_json;
-
-$movie_choice = str_split($stdClass_to_array['string']);
-
-// Randomize movie list to get random hints.
-//
-// Loop through the movie choice array, letter by letter.
-foreach($movie_choice as $letters){
-	// If the letter is a empty space between words, don't look for match.
-	if($letters == " "){
-		echo "<br> empty space <br>";
-		$movie_poster_hints[] = " ";
-	}else{
-		// While the count of the loop is less than the length of movie titles...
-	echo "<br>---$letters ---<br>";
-	$count = 0;
-	while($count < count($movie_titles)){
-		// ... check if a movie title has the desired letter for the hidden movie choice. If it does...
-		if(str_contains(strtolower($movie_titles[$count]), $letters)){
-			// ... loop through each in the array of movies already picked as clues.
-			echo "match <br>";
-			echo "$movie_titles[$count] <br>";
-			$is_present = false;
-			foreach($movie_poster_hints as $poster_in_use){
-				// If it is in the hints already, mark as "is present".
-				if(strtolower($poster_in_use) == strtolower($movie_titles[$count]) || strtolower($poster_in_use) == $movie_choice){
-					$is_present = true;
-					echo "poster already in hints. <br> <br>";
-					Break;
-				}
-			}
-			// If the movie is not already in the hints array, add it and break loop.
-			if(!$is_present){
-				$movie_poster_hints[] = $movie_titles[$count];
-				$mp_hint_indexes[] = strpos($movie_titles[$count], $letters)."/".strlen($movie_titles[$count]);
-				echo "Not yet in hints, adding. <br>";
-				Break;
-			}
-		// If it does not contain the letter required, keep looping.
-		} else{
-			echo "searching... <br>";
+	if ($result->num_rows > 0) {
+	    // output data of each row
+	    while($row = $result->fetch_assoc()) {
+			$data[] = $row; // currently has all rows of movie titles
 		}
-		// Iterates for how many movies have been found.
-		$count += 1;
-	}
 	}
 
-}
-// Prints out the collection of hint posters
-echo "<br>";
-print_r($movie_poster_hints);
-echo "<br> <br>";
-print_r($mp_hint_indexes);
+	// A random movie picker the size of the movie list.
+	$hidden_movie_name = rand(0, count($data) - 1);
 
 
-?>
+	while(True){
+		if(strlen($data[$hidden_movie_name][$movie_name_language]) > 8 || strlen($data[$hidden_movie_name][$movie_name_language]) < 2 ){
+			$hidden_movie_name = rand(0, count($data) - 1);
+		}else{
+			Break;
+		}
+	}
+
+	// Picking a random movie title from the array.
+	$movie_choice = strtolower($data[$hidden_movie_name][$movie_name_language]);
+	$movie_string = $movie_choice;
+	$language = $movie_name_language; // Hardcoded for now TODO
+
+	// URL encode urlencode(), allows for SPACES to be inside Strings passed
+	$jsonLog = "https://wpapi.telugupuzzles.com/api/parseToLogicalCharacters.php?string=".urlencode($movie_choice)."&language=".urlencode($language);
+	$jsonfile = file_get_contents($jsonLog);
+	$decodedData = json_decode(strstr($jsonfile, '{'));
+
+	$stdClass_to_array = (array)$decodedData;
+
+	$movie_choice = str_split($stdClass_to_array['string']);
+	// print_r($movie_choice);
+	// Randomize movie list to get random hints.
+	shuffle($data);
+	// Loop through the movie choice array, letter by letter.
+	foreach($movie_choice as $letters){
+		// If the letter is a empty space between words, don't look for match.
+		if($letters == " "){
+			//echo "<br> empty space <br>";
+			// $movie_poster_hints[] = " ";
+		}else{
+			// While the count of the loop is less than the length of movie titles...
+			//echo "<br>---$letters ---<br>";
+			$count = 0;
+			while($count < count($data)){ // total rows
+				// ... check if a movie title has the desired letter for the hidden movie choice. If it does...
+				if(str_contains(strtolower($data[$count][$movie_name_language]), $letters)){
+					// ... loop through each in the array of movies already picked as clues.
+					//echo "match <br>";
+					$is_present = false;
+					foreach($movie_poster_hints as $poster_in_use){
+						// If it is in the hints already, mark as "is present".
+						if(strtolower($poster_in_use) == strtolower($data[$count][$movie_name_language]) || strtolower($poster_in_use) == $movie_choice){
+							$is_present = true;
+							//echo "poster already in hints. <br> <br>";
+							Break;
+						}
+					}
+					// If the movie is not already in the hints array, add it and break loop.
+					if(!$is_present){
+						$movie_poster_hints[] = $data[$count][$movie_name_language];
+						$spaceless_name = str_replace(' ', '', $data[$count][$movie_name_language]);
+						$mp_hint_indexes[] = (strpos($spaceless_name, $letters) + 1)."/".strlen($spaceless_name);
+						//echo "Not yet in hints, adding. <br>";
+						Break;
+					}
+				// If it does not contain the letter required, keep looping.
+				} else{
+					//echo "searching... <br>";
+				}
+				// Iterates for how many movies have been found.
+				$count += 1;
+			}
+		}
+	}
+
+
+
+	$hidden_movie_name = $movie_string; //TODO this came from earlier. this is the random movie.
+
+	
+	// check if random movie has been added AND a user has submitted something
+	if(isset($_SESSION['hidden_movie_name']) && isset($_GET['answer'])){ 
+			echo "<h2> Hidden movie name is : ".$_SESSION['hidden_movie_name']." </h2>";
+
+		?>
+		<table style="width:100%">
+			<tr>
+				<?php
+			foreach ($_SESSION['poster_array'] as $movie) {
+				echo "<td><div style='background-color: lightgrey; width: 100px; height: 150px; border: 5px solid darkgrey; padding: 50px 0 0 0;  margin: auto; text-align: center; '>$movie</div></td>";
+			}
+	?>
+			</tr>
+			
+			<tr>
+				<?php
+			foreach ($_SESSION['hint_array'] as $movie) {
+				echo "<td style='text-align: center;'>".$movie."</td>";
+			}
+			?>
+			</tr>
+		</table>
+			<?php
+			
+		
+	}else{																													 // ELSE == first run through
+		// store the randomly generated movie so that it can be retrieved.
+		echo "<h2> Hidden movie name is : $hidden_movie_name </h2>";
+		$_SESSION['hidden_movie_name'] = $hidden_movie_name;
+	?>
+		<table style="width:100%">
+		  	<tr>
+
+		  	<?php
+		  	foreach ($movie_poster_hints as $movie){
+		  		echo "<td><div style='background-color: lightgrey; width: 100px; height: 150px; border: 5px solid darkgrey; padding: 50px 0 0 0;  margin: auto; text-align: center; '>$movie</div></td>";
+		  	}
+				// SET POSTER ARRAY
+				$_SESSION['poster_array'] = $movie_poster_hints; // TODO update to real information
+		  	?>
+		  	</tr>
+		   	<tr>
+
+		  	<?php
+		  	foreach ($mp_hint_indexes as $movie){
+		  		echo "<td style='text-align: center;'>".$movie."</td>";
+		  		// echo "<td><img src='img_girl.jpg' alt='Girl in a jacket' width='500' height='600'><td>";
+		  	}
+				// SET HINT ARRAY
+				$_SESSION['hint_array'] = $mp_hint_indexes; // TODO update to real information
+		  	?>
+
+		  	</tr>
+		</table>
+
+		
+
+	<?php
+	} // END ELSE
+	  // submit to the same page or create a validation interstep
+	?>
+		<form action ="movie_in_movies.php" method="get">
+			<input type="checkbox" id="telugu" name="telugu" value="telugu" onClick = 'this.form.submit() '<?php if(isset($_GET['telugu'])) echo "checked='checked'"; ?>>
+				<label>Telugu</label><br>
+		
+		</form>
+
+		<form action ="movie_in_movies.php" style="padding: 30px 0 0 0">
+			Guess answer: <input type="text" name="answer" value="">
+			<button type="submit">Click Me!</button>
+		</form>
+
+
+	<?php
+		if(isset($_GET['answer'])){
+			if($_GET['answer'] == $_SESSION['hidden_movie_name']){
+				echo "<h2> user guess is correct</h2>";
+			} else{
+				echo "<h2> User did not guess correctly</h2>";
+			}
+		}
+	
+		
+
+	?>
+
+	<script type="text/javascript">
+		$('').click(function(){
+			if($(#telugu).is(':checked')){
+				<?php $_SESSION['language'] = 'native_name' ?>;
+				$(form).submit();
+			}else{
+				<?php $_SESSION['language'] = 'english_name' ?>;
+				$(form).submit();
+			}
+		});
+	
+		
+
+	</script>
+
+	</body>
+</html>
