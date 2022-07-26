@@ -74,6 +74,7 @@
 	shuffle($data);
 	// Loop through the movie choice array, letter by letter.
 	foreach($movie_choice as $letters){
+		echo $letters;
 
 		if($letters == " " or ""){
 			// because of the way the api acts, must check for blank nonspaces too.
@@ -117,8 +118,8 @@
 						// If the movie is not already in the hints array, add it and break loop.
 						if(!$is_present){
 							$movie_poster_hints[] = $data[0][$movie_name_language];
-							$spaceless_name = strtolower(str_replace(' ', '', $data[$count][$movie_name_language]));
-							$mp_hint_indexes[] = api_indexOf($spaceless_name,$language,$letters) + (1)."/".api_getLengthNoSpaces($data[$count][$movie_name_language],$language);
+							// $spaceless_name = str_replace(' ', '', $data[0][$movie_name_language]);
+							$mp_hint_indexes[] = strtolower(api_indexOf($data[$count][$movie_name_language],$language,$letters))."/".api_getLengthNoSpaces($data[0][$movie_name_language],$language);
 							//echo "Not yet in hints, adding. <br>";
 							Break;
 						}
@@ -175,7 +176,7 @@
 		  		echo "<td><div style='background-color: lightgrey; width: 100px; height: 150px; border: 5px solid darkgrey; padding: 50px 0 0 0;  margin: auto; text-align: center; '>$movie</div></td>";
 		  	}
 				// SET POSTER ARRAY
-				$_SESSION['poster_array'] = $movie_poster_hints;
+				$_SESSION['poster_array'] = $movie_poster_hints; // TODO update to real information
 		  	?>
 		  	</tr>
 		   	<tr>
@@ -186,7 +187,7 @@
 		  		// echo "<td><img src='img_girl.jpg' alt='Girl in a jacket' width='500' height='600'><td>";
 		  	}
 				// SET HINT ARRAY
-				$_SESSION['hint_array'] = $mp_hint_indexes;
+				$_SESSION['hint_array'] = $mp_hint_indexes; // TODO update to real information
 		  	?>
 
 		  	</tr>
@@ -198,13 +199,13 @@
 	} // END ELSE
 	  // submit to the same page or create a validation interstep
 	?>
-		<form action ="movie_in_movies.php" method="get">
+		<form action ="m_in_m_tester.php" method="get">
 			<input type="checkbox" id="telugu" name="telugu" value="telugu" onClick = 'this.form.submit() '<?php if(isset($_GET['telugu'])) echo "checked='checked'"; ?>>
 				<label>Telugu</label><br>
 
 		</form>
 
-		<form action ="movie_in_movies.php" style="padding: 30px 0 0 0">
+		<form action ="m_in_m_tester.php" style="padding: 30px 0 0 0">
 			Guess answer: <input type="text" name="answer" value="">
 			<button type="submit">Click Me!</button>
 		</form>

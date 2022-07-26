@@ -104,17 +104,27 @@
             <br/>Help</li>
         </a>
 
-        <a href="login.php">
-          <li <?php if($nav_selected == "LOGIN"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/help.png"> <!-- make a picture for login or just remove this -->
-            <br/>Login</li>
-        </a>
+         <?php if(isset($_SESSION['username'])){
 
-        <a href="log_out.php">
-          <li <?php if($nav_selected == "LOG_OUT"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/help.png"> <!-- make a picture for login or just remove this -->
-            <br/>LogOut</li>
-        </a>
+                    ?><a href="log_out.php">
+                        <li <?php if($nav_selected == "LOG_OUT"){ echo 'class="current-page"'; } ?>>
+                        <img src="./images/help.png"> <!-- make a picture for login or just remove this -->
+                        <br/>LogOut</li>
+                    </a>
+                    <?php
+                }else{ 
+                    ?><a href="login.php">
+                        <li <?php if($nav_selected == "LOGIN"){ echo 'class="current-page"'; } ?>>
+                        <img src="./images/help.png"> <!-- make a picture for login or just remove this -->
+                        <br/>Login</li>
+                    </a>
+                    <?php
+                } ?>
+
+
+       
+
+       
 
         <li>
         
