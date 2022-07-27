@@ -8,6 +8,7 @@
 	<body>
 
 	<?php
+
 	// We're using sessions to store values.
 	if (session_status() == PHP_SESSION_NONE) {
 	    session_start();
@@ -116,7 +117,7 @@
 					}
 						// If the movie is not already in the hints array, add it and break loop.
 						if(!$is_present){
-							$movie_poster_hints[] = $data[0][$movie_name_language];
+							$movie_poster_hints[] = $data[$count][$movie_name_language];
 							$spaceless_name = strtolower(str_replace(' ', '', $data[$count][$movie_name_language]));
 							$mp_hint_indexes[] = api_indexOf($spaceless_name,$language,$letters) + (1)."/".api_getLengthNoSpaces($data[$count][$movie_name_language],$language);
 							//echo "Not yet in hints, adding. <br>";
