@@ -29,5 +29,12 @@
       <br/>Anagram Game (User)<br/></div>
     </a>
 
+    <a href = "movie_in_movies.php">
+      <div <?php if($left_selected == "MOVIE_IN_MOVIES")
+      { echo 'class="menu-left-current-page"'; } ?>>
+      <img src="./images/image53.png">
+      <br/>Movie in Movies (User)<br/></div>
+    </a>
+
 </div>
 

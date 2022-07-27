@@ -1,4 +1,5 @@
 <?php
+  session_start();
   $nav_selected = "SONGS";
   $left_buttons = "YES";
   $left_selected = "SONGS";
@@ -11,8 +12,13 @@
     <div class="container">
 
       <h3 style = "color: #01B0F1;">Songs --> Songs List</h3>
-     <button title="Create Song"><a class="btn btn-sm" href="create_song.php"><i class = "fa fa-plus"></i></a></button><br>
 
+
+      <?php
+        if (isset($_SESSION['username']))
+        { ?>
+         <button title='Create Song'><a class='btn btn-sm' href='create_song.php'><i class = 'fa fa-plus'></i></a></button>
+      <?php } ?>
     <br>
 
             <table id="info" cellpadding="0" cellspacing="0" border="0"
@@ -30,58 +36,38 @@
 
                   <tbody>
 
-                  <?php
-
-    $sql = "SELECT * from songs ORDER BY song_id;";
-    $result = $db->query($sql);
-    if(isset($_GET['updated'])){
-           if($_GET['updated'] == "Success"){
-               echo '<br><h3 style="color:orange;">Success! The song has been updated.</h3>';
-           }
-    }
-    if(isset($_GET['create'])){
-           if($_GET['create'] == "Success"){
-               echo '<br><h3 style="color:#01B0F1;">Success! The song has been added.</h3>';
-           }
-    }
-    if(isset($_GET['delete'])){
-           if($_GET['delete'] == "Success"){
-               echo '<br><h3 style="color:#FF0000;">Success! The song has been deleted.</h3>';
-           }
-    }
-
-                    if ($result->num_rows > 0) {
-                        // output data of each row
-                        while($row = $result->fetch_assoc()) {
-                            echo '<tr>
-                                    <td>'.$row["song_id"].'</td>
-                                    <td>'.$row["title"].' </span> </td>
-                                    <td>'.$row["lyrics"].'</td>
-                                    <td>'.$row["theme"].'</td>
-                                    <td><a title="View" class="btn btn-info btn-sm" href="song_info.php?song_id='.$row["song_id"].'"><i class="fa fa-eye"></i></a>
-                                        <a title="Modify" class="btn btn-warning btn-sm" href="modify.php?song_id='.$row["song_id"].'"><i class="fa fa-pencil"></i></a>
-                                        <a title="Delete" class="btn btn-danger btn-sm" href="delete_song1.php?song_id='.$row["song_id"].'"><i class="fa fa-close"></i></a>
-                                        <a title="More Info" class="btn btn-success btn-sm" href="songs_more_info.php?song_id='.$row["song_id"].'"><i class="fa fa-database"></i></a>
-                                        <a title="Add People" class="btn btn-info btn-sm" href="songs_people_list.php?song_id='.$row["song_id"].'"><i class = "fa fa-id-badge"></i></a>
-                                        </td>
-                                </tr>';
-                        }//end while
-                    }//end if
-                    else {
-                        echo "0 results";
-                    }//end else
-
-                     $result->close();
-                    ?>
-
-                  </tbody>
             </table>
-
-
             <script type="text/javascript" language="javascript">
         $(document).ready( function () {
 
+
+
             $('#info').DataTable( {
+                "processing" : true,
+                'ajax': 'songs_ajax.php',
+                "columns" : [
+                  {"data" : "song_id"},
+                  {"data" : "title"},
+                  {"data" : "lyrics"},
+                  {"data" : "theme"},
+                ],
+
+                columnDefs: [
+          {  targets: 4,
+             render: function (data, type, row) {
+                return '<a title="View" class="btn btn-info btn-sm" href="movie_info.php?movie_id='+row.song_id+'"><i class="fa fa-eye"></i></a>'
+                                     + '<a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='+row.song_id+'"><i class="fa fa-pencil"></i></a>'
+                                     + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='+row.song_id+'"><i class="fa fa-close"></i></a>'
+                                     + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?movie_id='+row.song_id+'"><i class="fa fa-music"></i></a>'
+                                     + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?movie_id='+row.song_id+'"><i class = "fa fa-id-badge"></i></a>'
+                                     + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?movie_id='+row.song_id+'"><i class="fa fa-database"></i></a>';
+             }
+
+          }
+        ],
+
+
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 dom: 'lfrtBip',
                 buttons: [
                     'copy', 'excel', 'csv', 'pdf'
@@ -106,12 +92,15 @@
             var table = $('#info').DataTable( {
                 orderCellsTop: true,
                 fixedHeader: true,
-                retrieve: true
+                retrieve: true,
+
             } );
 
         } );
 
     </script>
+
+
 
 
 
