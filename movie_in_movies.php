@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <style>
-/*table, th, td {
-  border:1px solid black;
-}*/
+
 </style>
 	<body>
 
 	<?php
+
+
+
 	// We're using sessions to store values.
 	if (session_status() == PHP_SESSION_NONE) {
 	    session_start();
@@ -30,6 +31,7 @@
 	// Included link to file with api methods used in this file.
 	include("./api_methods.php");
 	include("./nav.php");
+
 	// Index of letters used for hints.
 	$mp_hint_indexes = array();
 
@@ -54,83 +56,141 @@
 	// A random movie picker the size of the movie list.
 	$hidden_movie_name = rand(0, count($data) - 1);
 
-	// Constrants on the size of the title of the movie. Pick again if too big or too small.
-	// while(True){
-	// 	if(strlen($data[$hidden_movie_name][$movie_name_language]) > 8 || strlen($data[$hidden_movie_name][$movie_name_language]) < 2 ){
-	// 		$hidden_movie_name = rand(0, count($data) - 1);
-	// 	}else{
-	// 		Break;
-	// 	}
-	// }
-
 	// Picking a random movie title from the array.
 	$movie_choice = strtolower($data[$hidden_movie_name][$movie_name_language]);
 	$movie_string = $movie_choice;
-	$language = $movie_name_language; // Hardcoded for now TODO
+	$language = $movie_name_language;
 
 	$movie_choice = api_parseToLogicalCharacters($movie_choice,$language);
-	// print_r($movie_choice);
+
 	// Randomize movie list to get random hints.
 	shuffle($data);
 	// Loop through the movie choice array, letter by letter.
-	foreach($movie_choice as $letters){
+	if(isset($_GET['telugu'])){
+		foreach($movie_choice as $letters){
 
-		if($letters == " " or ""){
-			// because of the way the api acts, must check for blank nonspaces too.
-			//echo "<br> empty space <br>";
-			// $movie_poster_hints[] = " ";
-		}else{
-			// While the count of the loop is less than the length of movie titles...
-			//echo "<br>---$letters ---<br>";
-			$sql = "SELECT `$language` FROM `movies` WHERE `$language` LIKE '%$letters%'";
-			$data = array();
-			$result = $db->query($sql);
+			if($letters == " " or ""){
+				// because of the way the api acts, must check for blank nonspaces too.
+			}else{
+				// While the count of the loop is less than the length of movie titles...
+				$sql = "SELECT `$language` FROM `movies` WHERE `$language` LIKE '%$letters%'";
+				$data = array();
+				$result = $db->query($sql);
 
-				if ($result->num_rows > 0) {
-				    // output data of each row
-				    while($row = $result->fetch_assoc()) {
-						$data[] = $row; // currently has all rows of movie titles
-					}
-				}
-			// var_dump($data);
-
-			$count = 0;
-
-			while($count < count($data)){ // total rows
-				// ... check if a movie title has the desired letter for the hidden movie choice. If it does...
-				// echo "<br>".$count."<br>";
-				if(api_containsChar($data[$count][$movie_name_language],$language,$letters)){
-
-				// if(str_contains($data[0][$movie_name_language], $letters)){
-					// ... loop through each in the array of movies already picked as clues.
-					//echo "match <br>";
-					$is_present = false;
-					foreach($movie_poster_hints as $poster_in_use){
-						// If it is in the hints already, mark as "is present".
-						if(strtolower($poster_in_use) == strtolower($data[$count][$movie_name_language]) || strtolower($poster_in_use) == $movie_choice){
-							$is_present = true;
-							//echo "poster already in hints. <br> <br>";
-							Break;
+					if ($result->num_rows > 0) {
+					    // output data of each row
+					    while($row = $result->fetch_assoc()) {
+							$data[] = $row; // currently has all rows of movie titles
 						}
-
 					}
-						// If the movie is not already in the hints array, add it and break loop.
-						if(!$is_present){
-							$movie_poster_hints[] = $data[0][$movie_name_language];
-							$spaceless_name = strtolower(str_replace(' ', '', $data[$count][$movie_name_language]));
-							$mp_hint_indexes[] = api_indexOf($spaceless_name,$language,$letters) + (1)."/".api_getLengthNoSpaces($data[$count][$movie_name_language],$language);
-							//echo "Not yet in hints, adding. <br>";
-							Break;
+
+				$count = 0;
+
+				while($count < count($data)){ // total rows
+					// ... check if a movie title has the desired letter for the hidden movie choice. If it does...
+					if(api_containsChar($data[$count][$movie_name_language],$language,$letters)){
+
+					// if(str_contains($data[0][$movie_name_language], $letters)){
+						// ... loop through each in the array of movies already picked as clues.
+						$is_present = false;
+						foreach($movie_poster_hints as $poster_in_use){
+							// If it is in the hints already, mark as "is present".
+							if(strtolower($poster_in_use) == strtolower($data[$count][$movie_name_language]) || strtolower($poster_in_use) == $movie_choice){
+								$is_present = true;
+								Break;
+							}
+
 						}
-				// If it does not contain the letter required, keep looping.
-				} else{
-					//echo "searching... <br>";
+							// If the movie is not already in the hints array, add it and break loop.
+							if(!$is_present){
+								$movie_poster_hints[] = $data[$count][$movie_name_language];
+								$selection = api_parseToLogicalCharacters($data[$count][$movie_name_language], $language); // turn back into array
+								$counter = 1;
+								foreach ($selection as $letters2) { // compare letters because if we implode space we ruin the telugu word.
+									if($letters2 == $letters){// the letter in this matches the letter in that
+										break; // break out of foreach.
+									}elseif($letters2 == " " or $letters2 == ""){ // check for spaces and blank array columns.
+										continue;
+									} else{
+										$counter++; // keep counting as long as the correct letter has not been identified.
+									}
+								}
+								$mp_hint_indexes[] =  $counter."/".api_getLengthNoSpaces($data[$count][$movie_name_language],$language);
+								Break;
+							}
+					// If it does not contain the letter required, keep looping.
+					} else{
+					}
+					// Iterates for how many movies have been found.
+					$count += 1;
 				}
-				// Iterates for how many movies have been found.
-				$count += 1;
+			}
+		}
+	}else{
+
+		$_SESSION['language'] = 'english_name';
+		foreach($movie_choice as $letters){
+
+
+			if($letters == " " or ""){
+				// because of the way the api acts, must check for blank nonspaces too.
+			}else{
+				// While the count of the loop is less than the length of movie titles...
+				$sql = "SELECT `$language` FROM `movies` WHERE `$language` LIKE '%$letters%'";
+				$data = array();
+				$result = $db->query($sql);
+
+					if ($result->num_rows > 0) {
+							// output data of each row
+							while($row = $result->fetch_assoc()) {
+							$data[] = $row; // currently has all rows of movie titles
+						}
+					}
+
+				$count = 0;
+
+				while($count < count($data)){ // total rows
+					// ... check if a movie title has the desired letter for the hidden movie choice. If it does...
+					if(api_containsChar($data[$count][$movie_name_language],$language,$letters)){
+
+					// if(str_contains($data[0][$movie_name_language], $letters)){
+						// ... loop through each in the array of movies already picked as clues.
+						$is_present = false;
+						foreach($movie_poster_hints as $poster_in_use){
+							// If it is in the hints already, mark as "is present".
+							if(strtolower($poster_in_use) == strtolower($data[$count][$movie_name_language]) || strtolower($poster_in_use) == $movie_choice){
+								$is_present = true;
+								Break;
+							}
+
+						}
+							// If the movie is not already in the hints array, add it and break loop.
+							if(!$is_present){
+								$movie_poster_hints[] = $data[$count][$movie_name_language];
+								$selection = str_split($data[$count][$movie_name_language]); // turn back into array
+								$counter = 1;
+								foreach ($selection as $letters2) { // compare letters because if we implode space we ruin the telugu word.
+									if($letters2 == $letters){// the letter in this matches the letter in that
+										break; // break out of foreach.
+									}elseif($letters2 == " " or $letters2 == ""){ // check for spaces and blank array columns.
+										continue;
+									} else{
+										$counter++; // keep counting as long as the correct letter has not been identified.
+									}
+								}
+								$mp_hint_indexes[] =  $counter."/".api_getLengthNoSpaces($data[$count][$movie_name_language],$language);
+								Break;
+							}
+					// If it does not contain the letter required, keep looping.
+					} else{
+					}
+					// Iterates for how many movies have been found.
+					$count += 1;
+				}
 			}
 		}
 	}
+
 
 
 
@@ -183,7 +243,6 @@
 		  	<?php
 		  	foreach ($mp_hint_indexes as $movie){
 		  		echo "<td style='text-align: center;'>".$movie."</td>";
-		  		// echo "<td><img src='img_girl.jpg' alt='Girl in a jacket' width='500' height='600'><td>";
 		  	}
 				// SET HINT ARRAY
 				$_SESSION['hint_array'] = $mp_hint_indexes;

@@ -55,4 +55,24 @@
 	    return $result;
 	}
 
+	function api_replace($string,$language,$replaced,$with){
+
+		$jsonLength = "https://wpapi.telugupuzzles.com/api/parseToLogicalCharacters.php?input1=".urlencode($string)."&input2=".urlencode($language)."&input3=".urlencode($replaced)."&input4=".urlencode($with);
+		$jsonfile = file_get_contents($jsonLength);
+		$decoder = json_decode(strstr($jsonfile, '{'));
+		$result = $decoder->data;
+
+		return $result;
+
+	}
+
+	function api_equals($string, $language, $compare){
+		$jsonLength = "https://wpapi.telugupuzzles.com/api/equals.php?input1=hello&input2=English&input3=hello";
+		$jsonfile = file_get_contents();
+		$decoder = json_decode(strstr($jsonfile, '{'));
+			$result = intval($decoder->data);
+
+			return $result;
+	}
+
 ?>
