@@ -58,6 +58,7 @@
 
 	// Picking a random movie title from the array.
 	$movie_choice = strtolower($data[$hidden_movie_name][$movie_name_language]);
+
 	$movie_string = $movie_choice;
 	$language = $movie_name_language;
 
@@ -67,13 +68,15 @@
 	shuffle($data);
 	// Loop through the movie choice array, letter by letter.
 	if(isset($_GET['telugu'])){
+		$_SESSION['language'] = 'native_name';
 		foreach($movie_choice as $letters){
 
 			if($letters == " " or ""){
 				// because of the way the api acts, must check for blank nonspaces too.
 			}else{
 				// While the count of the loop is less than the length of movie titles...
-				$sql = "SELECT `$language` FROM `movies` WHERE `$language` LIKE '%$letters%'";
+
+				$sql = "SELECT `$language` FROM `movies` WHERE  `$language` != '$movie_string' AND `$language` LIKE '%$letters%'";
 				$data = array();
 				$result = $db->query($sql);
 
@@ -136,7 +139,7 @@
 				// because of the way the api acts, must check for blank nonspaces too.
 			}else{
 				// While the count of the loop is less than the length of movie titles...
-				$sql = "SELECT `$language` FROM `movies` WHERE `$language` LIKE '%$letters%'";
+				$sql = "SELECT `$language` FROM `movies` WHERE `$language` !='$movie_string' AND `$language` LIKE '%$letters%'";
 				$data = array();
 				$result = $db->query($sql);
 
