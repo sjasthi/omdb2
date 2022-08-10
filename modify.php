@@ -15,22 +15,24 @@
 
      include("./nav.php");
     
-    $song_id = $_GET["song_id"];
-    $movie_id = $_GET["movie_id"];
-    $people_id = $_GET["people_id"];
+
 
     $movieModify = "";
     $addSong = "";
     $addPerson = "";
 
-    if(isset($_GET["movie_id"])){
+   if(isset($_GET["movie_id"])){
+        $movie_id = $_GET["movie_id"];
         $movieModify = "autofocus";
     }
     elseif(isset($_GET["song_id"])){
+        $song_id = $_GET["song_id"];
         $addSong = "autofocus";
     }
     elseif(isset($_GET["people_id"])){
         $addPerson = "autofocus";
+        $people_id = $_GET["people_id"];
+
     }
   ?>
 
