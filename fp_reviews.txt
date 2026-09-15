@@ -1,0 +1,20 @@
+[9.15.26]  FP1 Initial Exploration
+
+[1] Can you review this code repo sjasthi/omdb2 and explain what this does?
+
+[2] How do I deploy it on my local machine using XAMPP?
+
+[3] This is the project enhancement. Where does this code repo stand right now in the context of these enhancements? What needs to be cleaned up / refactored / fixed?
+
+[4] Can you plan for this project?
+
+OMDB – Online Movie Database- Version 2.0
+Build an online movie database.
+Maintain information about:
+Movies
+People (actors, directors, and others)
+Songs
+Model and manage the connections among movies, people, and songs.
+Provide useful ways for users to search, browse, and navigate the information.
+
+===============================================
