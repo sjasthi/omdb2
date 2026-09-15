@@ -1,4 +1,5 @@
 <?php $page_title = 'The Cow Layer'; ?>
+<!-- Demo in ICS499 -->
 <?php
     $nav_selected = "LIST";
     $left_buttons = "YES";
