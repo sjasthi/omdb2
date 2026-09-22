@@ -18,3 +18,10 @@ Model and manage the connections among movies, people, and songs.
 Provide useful ways for users to search, browse, and navigate the information.
 
 ===============================================
+
+[9.22.26] FP2 deployed
+
+For FP3, [1] do static code analysis by LLM to identify the issues with the code
+        [2] Do functional testing and create test report of all the things that are not working
+[3] Login as admin and fiure out what additional functionality is thre for admin
+
