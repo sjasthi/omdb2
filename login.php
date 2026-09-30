@@ -81,42 +81,98 @@
 
 
 <?php
-  if($_SERVER["REQUEST_METHOD"] == "POST") {
+ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $my_email = mysqli_real_escape_string($db, $_POST['email']);
-        $my_password = mysqli_real_escape_string($db, $_POST['password']);
+    $my_email = trim($_POST['email'] ?? '');
+    $my_password = $_POST['password'] ?? '';
 
-        $sql = "SELECT * FROM users WHERE password = '$my_password' AND email = '$my_email'";
+    // Do not allow blank or invalid credentials.
+    if (
+        $my_email === '' ||
+        $my_password === '' ||
+        !filter_var($my_email, FILTER_VALIDATE_EMAIL)
+    ) {
+        echo "<p style='color:red;'>Invalid email or password.</p>";
+    } else {
 
-        // $sql = "SELECT native_name, year_made from movies, movie_people, people where `movies`.`movie_id` = `movie_people`.`movie_id` AND `movie_people`.`role` = 'leading actor' AND `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = 'Brad Pitt' ";
+        // Prepared statement prevents SQL injection.
+        $stmt = $db->prepare("
+           SELECT id, email, password, role
+FROM users
+WHERE email = ?
+LIMIT 1
+        ");
 
-        echo $sql;
+        $stmt->bind_param("s", $my_email);
+        $stmt->execute();
 
-        $result = $db->query($sql);
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
 
- // while ($row = $result->fetch_assoc()) {
-        //     echo $row['users']."<br>";
-        // }
+        $login_valid = false;
 
-        if (mysqli_num_rows($result) == 0) {
-          echo " zero columns";
+        if ($user) {
+
+            $stored_password = $user['password'];
+
+            // Support newer hashed passwords.
+            $password_info = password_get_info($stored_password);
+
+if ($password_info['algoName'] !== 'unknown') {
+                $login_valid = password_verify(
+                    $my_password,
+                    $stored_password
+                );
+            } else {
+                // Temporary support for existing plaintext accounts.
+                $login_valid = hash_equals(
+                    (string)$stored_password,
+                    (string)$my_password
+                );
+
+                // Automatically upgrade an old plaintext password
+                // to a secure hash after a successful login.
+                if ($login_valid) {
+
+                    $new_hash = password_hash(
+                        $my_password,
+                        PASSWORD_DEFAULT
+                    );
+
+                    $update = $db->prepare(
+                        "UPDATE users SET password = ? WHERE id = ?"
+                    );
+
+                    $update->bind_param(
+                        "si",
+                        $new_hash,
+                        $user['id']
+                    );
+
+                    $update->execute();
+                    $update->close();
+                }
+            }
         }
-        else{
-          while($row = mysqli_fetch_array( $result)){
-          
-            echo '<br>'.$row['email'].'<br>';
-            $_SESSION['username'] = $my_email;
-            $_SESSION['password'] = $my_password;
+
+        if ($login_valid) {
+
+            session_regenerate_id(true);
+
+            $_SESSION['username'] = $user['email'];
+            $_SESSION['role'] = $user['role'];
 
             header("Location: index.php");
-
-
             exit();
-          }
+
+        } else {
+
+            echo "<p style='color:red;'>Invalid email or password.</p>";
         }
-          
-        
+
+        $stmt->close();
     }
+}
     
 
 

@@ -1,20 +1,38 @@
 <?php
-require_once('initialize.php'); // Trying to grab the DB connection. This could be changed to anything smaller.
 
-$sql = "SELECT * from songs"; // Change this to required SQL
-$db->set_charset("utf8");
+require_once('initialize.php');
+
+$db->set_charset("utf8mb4");
+
+$sql = "SELECT
+            song_id,
+            title,
+            lyrics,
+            theme
+        FROM songs";
+
 $result = $db->query($sql);
+
 $data = array();
 
-while($row = mysqli_fetch_array($result)){ // This is how to format array for Datatables + wrap it in final array['data'].
-    $sub_array = array();
-    $sub_array['song_id'] = $row["song_id"];
-    $sub_array['title'] = $row["title"];
-    $sub_array['lyrics'] = $row["lyrics"];
-    $sub_array['theme'] = $row['theme'];
-    $data[] = $sub_array;
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $data[] = array(
+            "song_id" => $row["song_id"],
+            "title"    => $row["title"],
+            "lyrics"   => $row["lyrics"],
+            "theme"    => $row["theme"]
+        );
+    }
+
+    $result->free();
 }
 
-echo json_encode(array("data" => $data));
+header('Content-Type: application/json; charset=utf-8');
+
+echo json_encode(
+    array("data" => $data),
+    JSON_UNESCAPED_UNICODE
+);
 
 ?>

@@ -202,7 +202,7 @@
 
 	// check if random movie has been added AND a user has submitted something
 	if(isset($_SESSION['hidden_movie_name']) && isset($_GET['answer'])){
-			echo "<h2> Hidden movie name is : ".$_SESSION['hidden_movie_name']." </h2>";
+			echo "<h2>Guess the hidden movie!</h2>";
 
 		?>
 		<table style="width:100%">
@@ -227,7 +227,7 @@
 
 	}else{																													 // ELSE == first run through
 		// store the randomly generated movie so that it can be retrieved.
-		echo "<h2> Hidden movie name is : $hidden_movie_name </h2>";
+		echo "<h2>Guess the hidden movie!</h2>";
 		$_SESSION['hidden_movie_name'] = $hidden_movie_name;
 	?>
 		<table style="width:100%">

@@ -1,20 +1,75 @@
 <?php
-require_once('initialize.php'); // Trying to grab the DB connection. This could be changed to anything smaller.
 
-$sql = "SELECT * from movies"; // Change this to required SQL
-$db->set_charset("utf8");
-$result = $db->query($sql);
+require_once('initialize.php');
+
+$db->set_charset("utf8mb4");
+
+$year = $_GET['year'] ?? '';
+
 $data = array();
 
-while($row = mysqli_fetch_array($result)){ // This is how to format array for Datatables + wrap it in final array['data'].
-    $sub_array = array();
-    $sub_array['movie_id'] = $row["movie_id"];
-    $sub_array['native_name'] = $row["native_name"];
-    $sub_array['english_name'] = $row["english_name"];
-    $sub_array['year_made'] = $row['year_made'];
-    $data[] = $sub_array;
+// If a valid year was supplied, only return movies from that year.
+if ($year !== '' && preg_match('/^\d{4}$/', $year)) {
+
+    $stmt = $db->prepare("
+        SELECT
+            movie_id,
+            native_name,
+            english_name,
+            year_made
+        FROM movies
+        WHERE year_made = ?
+        ORDER BY movie_id
+    ");
+
+    $stmt->bind_param("s", $year);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $data[] = array(
+            "movie_id"     => $row["movie_id"],
+            "native_name"  => $row["native_name"],
+            "english_name" => $row["english_name"],
+            "year_made"    => $row["year_made"]
+        );
+    }
+
+    $stmt->close();
+
+} else {
+
+    // Normal Movies page: return every movie.
+    $stmt = $db->prepare("
+        SELECT
+            movie_id,
+            native_name,
+            english_name,
+            year_made
+        FROM movies
+        ORDER BY movie_id
+    ");
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $data[] = array(
+            "movie_id"     => $row["movie_id"],
+            "native_name"  => $row["native_name"],
+            "english_name" => $row["english_name"],
+            "year_made"    => $row["year_made"]
+        );
+    }
+
+    $stmt->close();
 }
 
-echo json_encode(array("data" => $data));
+header('Content-Type: application/json; charset=utf-8');
 
+echo json_encode(array(
+    "data" => $data
+));
 ?>

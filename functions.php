@@ -149,46 +149,44 @@ function countitems($item) {
 }
 
   function is_logged_in() {
-    // Having a admin_id in the session serves a dual-purpose:
-    // - Its presence indicates the admin is logged in.
-    // - Its value tells which admin for looking up their record.
-    if (!isset($_SESSION['logged_in'])) {return false;}
-	if ($_SESSION['logged_in'] != true) {return false;}
-	return true;
-  }
+    return isset($_SESSION['username']) &&
+           trim($_SESSION['username']) !== '';
+}
 
-  function is_super_admin() {
-    // Having a admin_id in the session serves a dual-purpose:
-    // - Its presence indicates the admin is logged in.
-    // - Its value tells which admin for looking up their record.
-	if (!isset($_SESSION['logged_in'])) {return false;}
-	if (!isset($_SESSION['role'])) {return false;}
-    return ($_SESSION['logged_in'] == true and $_SESSION['role'] == 'SUPER-ADMIN');
-  }  
-  
-  function is_admin() {
-    // Having a admin_id in the session serves a dual-purpose:
-    // - Its presence indicates the admin is logged in.
-    // - Its value tells which admin for looking up their record.
-	if (!isset($_SESSION['logged_in'])) {return false;}
-	if (!isset($_SESSION['role'])) {return false;}
-	if (is_super_admin() == true) {return true;}
-    return ($_SESSION['logged_in'] == true and $_SESSION['role'] == 'ADMIN');
-  }  
-  
-  function is_user() {
-    // Having a admin_id in the session serves a dual-purpose:
-    // - Its presence indicates the admin is logged in.
-    // - Its value tells which admin for looking up their record.
-	if (is_super_admin() == true) {return true;}
-	if (is_admin() == true) {return true;}
-	if (!isset($_SESSION['logged_in'])) {return true;}
-	if (!isset($_SESSION['role'])) {
-		$_SESSION['role'] = 'USER';
-		return true;
-		}
-    return ($_SESSION['logged_in'] == true and $_SESSION['role'] == 'USER');
-  }  
+
+function is_super_admin() {
+    if (!is_logged_in()) {
+        return false;
+    }
+
+    return ($_SESSION['role'] ?? 'USER') === 'SUPER-ADMIN';
+}
+
+
+function is_admin() {
+    if (!is_logged_in()) {
+        return false;
+    }
+
+    $role = $_SESSION['role'] ?? 'USER';
+
+    return $role === 'ADMIN' || $role === 'SUPER-ADMIN';
+}
+
+
+function is_user() {
+    if (!is_logged_in()) {
+        return false;
+    }
+
+    $role = $_SESSION['role'] ?? 'USER';
+
+    return in_array(
+        $role,
+        array('USER', 'ADMIN', 'SUPER-ADMIN'),
+        true
+    );
+}
 
 
 function show_flash_message() {

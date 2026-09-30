@@ -1,20 +1,35 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
    
-include("./nav.php");
+require_once('initialize.php');
     
     if (isset($_POST['movie_id'])) {
-        
-          $movie_id =  mysqli_real_escape_string($db, $_POST['movie_id']);
-          $english_update = $_POST['english_name_update'];
-          $year_update = $_POST['year_update'];
-          $running_time_update = $_POST['running_time_update'];
-          $budget_update = $_POST['budget_update'];
-          $box_office_update = $_POST['box_office_update'];
-          $language_update = $_POST['language_update'];
-          $country_update = $_POST['country_update'];
-          $genre_update = $_POST['genre_update'];
-          $plot_update = $_POST['plot_update'];
-          $tag_line_update = $_POST['tag_line_update'];
+
+    $movie_id = filter_input(INPUT_POST, 'movie_id', FILTER_VALIDATE_INT);
+
+    if (!$movie_id) {
+        db_disconnect($db);
+        header('Location: movies.php');
+        exit();
+    }
+          $english_update = trim($_POST['english_name_update'] ?? '');
+$year_update = filter_input(INPUT_POST, 'year_update', FILTER_VALIDATE_INT);
+
+$running_time_update = filter_input(INPUT_POST, 'running_time_update', FILTER_VALIDATE_INT);
+$budget_update = filter_input(INPUT_POST, 'budget_update', FILTER_VALIDATE_FLOAT);
+$box_office_update = filter_input(INPUT_POST, 'box_office_update', FILTER_VALIDATE_FLOAT);
+
+$language_update = trim($_POST['language_update'] ?? '');
+$country_update = trim($_POST['country_update'] ?? '');
+$genre_update = trim($_POST['genre_update'] ?? '');
+$plot_update = trim($_POST['plot_update'] ?? '');
+$tag_line_update = trim($_POST['tag_line_update'] ?? '');
           $anagram_update = [];
           $anagram_id = [];
           $keyword_update = [];
@@ -62,99 +77,295 @@ include("./nav.php");
         
         //Movies Update
         if (isset($_POST['english_name_update'])) {
-            $sql1 = "UPDATE movies SET english_name = '$english_update', year_made = '$year_update' WHERE movie_id = '$movie_id'";
-            mysqli_query($db, $sql1);
-        }
+    $stmt = mysqli_prepare(
+        $db,
+        "UPDATE movies SET english_name = ?, year_made = ? WHERE movie_id = ?"
+    );
+
+    mysqli_stmt_bind_param($stmt, "sii",
+        $english_update,
+        $year_update,
+        $movie_id
+    );
+
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+}
         
-        if (isset($_POST['native_name_update']) && !empty($_POST['native_name_update'])){
-            $native_update = $_POST['native_name_update'];
-            $nativeJSON = strtolower(str_replace(" ", "", $native_update));
-            $sql2 = "UPDATE movies SET native_name = '$native_update', english_name = '$english_update', year_made = '$year_update' WHERE movie_id = '$movie_id'";
-            
-            //Make API call to find base_chars
-            $jsonLog = "http://indic-wp.thisisjava.com/api/getBaseCharacters.php?string=".$nativeJSON."&language=Telugu";
-            $jsonfile = file_get_contents($jsonLog);
-            $decodedData = json_decode(strstr($jsonfile, '{'));
-            $base_chars = implode(", ", $decodedData->data);
-            
-            //Make API call to find length of string for length
-            $jsonLength = "http://indic-wp.thisisjava.com/api/getLength.php?string=".$nativeJSON."&language=English";
-            $jsonfile= file_get_contents($jsonLength);
-            $decodedData = json_decode(strstr($jsonfile, '{'));
-            $length = intval($decodedData->data);
-            
-            $sql3 = "UPDATE movie_numbers SET length = $length, base_chars = '$base_chars' WHERE movie_id = '$movie_id'";
-            mysqli_query($db, $sql2);
-            mysqli_query($db, $sql3);
-        }
+      if (isset($_POST['native_name_update']) && !empty($_POST['native_name_update'])) {
+
+    $native_update = $_POST['native_name_update'];
+
+    $stmt2 = mysqli_prepare(
+        $db,
+        "UPDATE movies
+         SET native_name = ?, english_name = ?, year_made = ?
+         WHERE movie_id = ?"
+    );
+
+    mysqli_stmt_bind_param(
+        $stmt2,
+        "ssii",
+        $native_update,
+        $english_update,
+        $year_update,
+        $movie_id
+    );
+
+    mysqli_stmt_execute($stmt2);
+    mysqli_stmt_close($stmt2);
+
+}
+
+
         
         //Movie_Data Update
-        if (isset($_POST['language_update']) && isset($_POST['country_update']) && isset($_POST['genre_update']) && isset($_POST['plot_update']) && isset($_POST['tag_line_update'])) {
-            
-            $sqlCheck = "select * from movie_data where movie_id = $movie_id;";
-            $flag = mysqli_query($db, $sqlCheck);
-            
-            if(mysqli_num_rows($flag) > 0){
-                $sql4 = "UPDATE movie_data SET language = '$language_update', country = '$country_update', genre = '$genre_update', plot = '$plot_update', tag_line = '$tag_line_update' WHERE movie_id = '$movie_id'";
-           } else {
-            $sql4 = "insert into movie_data (movie_id, language, country, genre, plot, tag_line) values (".$movie_id.", '".$language_update."', '".$country_update."', '".$genre_update."', '".$plot_update."', '".$tagline_update."');";
-            }
-            mysqli_query($db, $sql4);
-            
-        }
-        
-        //Movie_Numbers Update
-        if(isset($_POST['box_office_update']) && isset($_POST['budget_update']) && isset($_POST['running_time_update'])){
-            
-            $sql5= "UPDATE movie_numbers SET box_office = '$box_office_update', budget = '$budget_update', running_time = '$running_time_update' WHERE movie_id = '$movie_id'";
-            mysqli_query($db, $sql5);
-        }
-        
-        //Movie_Anagrams Update
-        if (!empty($anagram_id)){
-            for ($i = 0; $i < sizeof($anagram_id); $i++){
-                $sql6 = "UPDATE movie_anagrams SET anagram = '$anagram_update[$i]' WHERE movie_id = '$movie_id'
-                    and anagram_id = '$anagram_id[$i]'";
-                mysqli_query($db, $sql6);
-            }
-        }
-             
-        //Movie_Keywords Update
-        if(!empty($keyword_update)){
-            for ($i = 0; $i < sizeof($keyword_update); $i++){
-                $sql7= "UPDATE movie_keywords SET keyword = '$keyword_update[$i]' WHERE movie_id = '$movie_id'";
-                mysqli_query($db, $sql7);
-            }
-        }
+if (
+    isset($_POST['language_update']) &&
+    isset($_POST['country_update']) &&
+    isset($_POST['genre_update']) &&
+    isset($_POST['plot_update']) &&
+    isset($_POST['tag_line_update'])
+) {
 
-        //Movie_Media Update
-        if(!empty($movie_media_id)){
-            for ($i = 0; $i < sizeof($movie_media_id); $i++){
-                $sql8 = "UPDATE movie_media SET m_link = '$m_link_update[$i]', m_link_type = '$m_link_type_update[$i]' WHERE movie_id = '$movie_id' and movie_media_id = '$movie_media_id[$i]'";
-                 mysqli_query($db, $sql8);
-            }
-        }
+    // Check whether movie_data already exists for this movie
+    $stmtCheck = mysqli_prepare(
+        $db,
+        "SELECT movie_id FROM movie_data WHERE movie_id = ?"
+    );
 
-        //Movie_Quotes Update
-        if(!empty($movie_quote_id)){
-            for ($i = 0; $i < sizeof($movie_quote_id); $i++){
-                $sql9 = "UPDATE movie_quotes SET movie_quote_name = '$movie_quote_name[$i]' WHERE movie_id = '$movie_id' and movie_quote_id = '$movie_quote_name[$i]'";
-                mysqli_query($db, $sql9);
-            }
-        }
+    mysqli_stmt_bind_param($stmtCheck, "i", $movie_id);
+    mysqli_stmt_execute($stmtCheck);
 
-        //Movie_Trivia Update
-        if(!empty($movie_trivia_id)){
-            for ($i = 0; $i < sizeof($movie_trivia_id); $i++){
-                $sql10 = "UPDATE movie_trivia SET movie_trivia_name = '$movie_trivia_name[$i]' WHERE movie_id = '$movie_id' and movie_trivia_id = '$movie_trivia_id[$i]'";
-                mysqli_query($db, $sql10);
-            }
-        }
+    $flag = mysqli_stmt_get_result($stmtCheck);
+    $movieDataExists = mysqli_num_rows($flag) > 0;
 
+    mysqli_stmt_close($stmtCheck);
+
+    if ($movieDataExists) {
+
+        $stmt4 = mysqli_prepare(
+            $db,
+            "UPDATE movie_data
+             SET language = ?, country = ?, genre = ?, plot = ?, tag_line = ?
+             WHERE movie_id = ?"
+        );
+
+        mysqli_stmt_bind_param(
+            $stmt4,
+            "sssssi",
+            $language_update,
+            $country_update,
+            $genre_update,
+            $plot_update,
+            $tag_line_update,
+            $movie_id
+        );
+
+    } else {
+
+        $stmt4 = mysqli_prepare(
+            $db,
+            "INSERT INTO movie_data
+             (movie_id, language, country, genre, plot, tag_line)
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
+
+        mysqli_stmt_bind_param(
+            $stmt4,
+            "isssss",
+            $movie_id,
+            $language_update,
+            $country_update,
+            $genre_update,
+            $plot_update,
+            $tag_line_update
+        );
     }
-    
-    db_disconnect($db);
-	header('location: movies.php?updated=Success');
+
+    mysqli_stmt_execute($stmt4);
+    mysqli_stmt_close($stmt4);
+}
+        
+       //Movie_Numbers Update
+if (
+    isset($_POST['box_office_update']) &&
+    isset($_POST['budget_update']) &&
+    isset($_POST['running_time_update'])
+) {
+
+    $stmt5 = mysqli_prepare(
+        $db,
+        "UPDATE movie_numbers
+         SET box_office = ?, budget = ?, running_time = ?
+         WHERE movie_id = ?"
+    );
+
+    mysqli_stmt_bind_param(
+        $stmt5,
+        "ddii",
+        $box_office_update,
+        $budget_update,
+        $running_time_update,
+        $movie_id
+    );
+
+    mysqli_stmt_execute($stmt5);
+    mysqli_stmt_close($stmt5);
+}
+        
+       //Movie_Anagrams Update
+if (!empty($anagram_id)) {
+
+    $stmt6 = mysqli_prepare(
+        $db,
+        "UPDATE movie_anagrams
+         SET anagram = ?
+         WHERE movie_id = ? AND anagram_id = ?"
+    );
+
+    for ($i = 0; $i < sizeof($anagram_id); $i++) {
+
+        $current_anagram = $anagram_update[$i];
+        $current_anagram_id = (int)$anagram_id[$i];
+
+        mysqli_stmt_bind_param(
+            $stmt6,
+            "sii",
+            $current_anagram,
+            $movie_id,
+            $current_anagram_id
+        );
+
+        mysqli_stmt_execute($stmt6);
+    }
+
+    mysqli_stmt_close($stmt6);
+}
+             
+       //Movie_Keywords Update
+if (!empty($keyword_update)) {
+
+    $stmt7 = mysqli_prepare(
+        $db,
+        "UPDATE movie_keywords
+         SET keyword = ?
+         WHERE movie_id = ?"
+    );
+
+    for ($i = 0; $i < sizeof($keyword_update); $i++) {
+
+        $current_keyword = $keyword_update[$i];
+
+        mysqli_stmt_bind_param(
+            $stmt7,
+            "si",
+            $current_keyword,
+            $movie_id
+        );
+
+        mysqli_stmt_execute($stmt7);
+    }
+
+    mysqli_stmt_close($stmt7);
+}
+
+ //Movie_Media Update
+if (!empty($movie_media_id)) {
+
+    $stmt8 = mysqli_prepare(
+        $db,
+        "UPDATE movie_media
+         SET m_link = ?, m_link_type = ?
+         WHERE movie_id = ? AND movie_media_id = ?"
+    );
+
+    for ($i = 0; $i < sizeof($movie_media_id); $i++) {
+
+        $current_link = $m_link_update[$i];
+        $current_link_type = $m_link_type_update[$i];
+        $current_media_id = (int)$movie_media_id[$i];
+
+        mysqli_stmt_bind_param(
+            $stmt8,
+            "ssii",
+            $current_link,
+            $current_link_type,
+            $movie_id,
+            $current_media_id
+        );
+
+        mysqli_stmt_execute($stmt8);
+    }
+
+    mysqli_stmt_close($stmt8);
+}
+
+
+//Movie_Quotes Update
+if (!empty($movie_quote_id)) {
+
+    $stmt9 = mysqli_prepare(
+        $db,
+        "UPDATE movie_quotes
+         SET movie_quote_name = ?
+         WHERE movie_id = ? AND movie_quote_id = ?"
+    );
+
+    for ($i = 0; $i < sizeof($movie_quote_id); $i++) {
+
+        $current_quote = $movie_quote_name[$i];
+        $current_quote_id = (int)$movie_quote_id[$i];
+
+        mysqli_stmt_bind_param(
+            $stmt9,
+            "sii",
+            $current_quote,
+            $movie_id,
+            $current_quote_id
+        );
+
+        mysqli_stmt_execute($stmt9);
+    }
+
+    mysqli_stmt_close($stmt9);
+}
+
+
+//Movie_Trivia Update
+if (!empty($movie_trivia_id)) {
+
+    $stmt10 = mysqli_prepare(
+        $db,
+        "UPDATE movie_trivia
+         SET movie_trivia_name = ?
+         WHERE movie_id = ? AND movie_trivia_id = ?"
+    );
+
+    for ($i = 0; $i < sizeof($movie_trivia_id); $i++) {
+
+        $current_trivia = $movie_trivia_name[$i];
+        $current_trivia_id = (int)$movie_trivia_id[$i];
+
+        mysqli_stmt_bind_param(
+            $stmt10,
+            "sii",
+            $current_trivia,
+            $movie_id,
+            $current_trivia_id
+        );
+
+        mysqli_stmt_execute($stmt10);
+    }
+
+    mysqli_stmt_close($stmt10);
+}
     				
+// closes: if (isset($_POST['movie_id']))
+}
+
+db_disconnect($db);
+header('Location: movies.php?updated=Success');
+exit();
+
 ?>
-    

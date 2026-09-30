@@ -2,7 +2,12 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+// Optional year filter from the Reports page.
+$year_filter = '';
 
+if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
+    $year_filter = $_GET['id'];
+}
 
 
   $nav_selected = "MOVIES";
@@ -57,7 +62,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
         $('#info').DataTable( {
             "processing" : true,
-            'ajax': 'movies_ajax.php',
+            'ajax': 'movies_ajax.php?year=<?php echo urlencode($year_filter); ?>',
             "columns" : [
               {"data" : "movie_id"},
               {"data" : "native_name"},

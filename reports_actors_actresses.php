@@ -1,5 +1,10 @@
 <?php
+session_start();
 
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
   $nav_selected = "REPORTS";
   $left_buttons = "YES";
   $left_selected = "ACTORS_ACTRESSES";
@@ -39,56 +44,74 @@
 
               <?php
 
-              $actor_name = $_GET['name1'] ?? "";
-              $actress_name = $_GET['name2'] ?? "";
-// $sql = "SELECT * from movies ORDER BY native_name ASC;";
+$actor_name = trim($_GET['name1'] ?? '');
+$actress_name = trim($_GET['name2'] ?? '');
 
-// $sql = "SELECT native_name, year_made from movies, movie_people, people where `movies`.`movie_id` = `movie_people`.`movie_id` AND `movie_people`.`role` = 'leading actor' AND `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = '$actor_name' ";
+$actor_role = 'Lead Actor';
+$actress_role = 'Lead Actress';
 
-$sql = "SELECT
-    `native_name`,
-    `year_made`
-FROM
-    `movies`,
-    `movie_people`,
-    `people`
-WHERE
-    `movies`.`movie_id` = `movie_people`.`movie_id` AND `movie_people`.`role` = 'leading actor' AND `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = '$actor_name' AND `movies`.`movie_id` 
+if ($actor_name !== '' && $actress_name !== '') {
 
-    IN(
-    SELECT
-        `movie_id`
-    FROM
-        `movie_people`,
-        `people`
-    WHERE
-        `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = '$actress_name' AND `movie_people`.`role` = 'Leading Actress' )";
+    $stmt = mysqli_prepare(
+        $db,
+        "SELECT DISTINCT
+            m.native_name,
+            m.year_made
+         FROM movies m
 
-// TODO: The above SQL statement becomes a  JOIN between movies and movie_data
-// If there is no corresponding movie_data, then show those as blanks
-//NOTE: Whenever you see ., that means + in PHP
+         INNER JOIN movie_people mp_actor
+            ON m.movie_id = mp_actor.movie_id
 
- 
+         INNER JOIN people p_actor
+            ON p_actor.people_id = mp_actor.people_id
 
-$result = $db->query($sql);
+         INNER JOIN movie_people mp_actress
+            ON m.movie_id = mp_actress.movie_id
 
-                if ($result->num_rows > 0) {
-                    // output data of each row
-                    // Add four more rows of data which you are getting from the database
-                    while($row = $result->fetch_assoc()) {
-                        echo '<tr>
-                                <td>'.$row["native_name"].'</td>
-                                <td>'.$row["year_made"].' </span> </td>
-                              
+         INNER JOIN people p_actress
+            ON p_actress.people_id = mp_actress.people_id
 
-                            </tr>';
-                    }//end while
-                }//end if
-                else {
-                    echo "0 results";
-                }//end else
+         WHERE mp_actor.role = ?
+           AND p_actor.stage_name = ?
+           AND mp_actress.role = ?
+           AND p_actress.stage_name = ?"
+    );
 
-                 $result->close();
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ssss",
+        $actor_role,
+        $actor_name,
+        $actress_role,
+        $actress_name
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    if ($result->num_rows > 0) {
+
+        while ($row = $result->fetch_assoc()) {
+
+            echo '<tr>
+                    <td>' . htmlspecialchars($row["native_name"]) . '</td>
+                    <td>' . htmlspecialchars($row["year_made"]) . '</td>
+                  </tr>';
+        }
+
+    } else {
+
+        echo '<tr><td colspan="2">0 results</td></tr>';
+    }
+
+    $result->close();
+    mysqli_stmt_close($stmt);
+
+} else {
+
+    echo '<tr><td colspan="2">0 results</td></tr>';
+}
 
 
 
@@ -130,7 +153,7 @@ $result = $db->query($sql);
         } );
 
     } );
-
+ss
 </script>
 
 

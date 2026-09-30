@@ -65,15 +65,16 @@
               {"data" : "image_name"},
             ],
 
+          
             columnDefs: [
       {  targets: 7,
          render: function (data, type, row) {
-            return '<a title="View" class="btn btn-info btn-sm" href="movie_info.php?movie_id='+row.people_id+'"><i class="fa fa-eye"></i></a>'
-                                 + '<a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='+row.people_id+'"><i class="fa fa-pencil"></i></a>'
-                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='+row.people_id+'"><i class="fa fa-close"></i></a>'
-                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?movie_id='+row.people_id+'"><i class="fa fa-music"></i></a>'
-                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?movie_id='+row.people_id+'"><i class = "fa fa-id-badge"></i></a>'
-                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?movie_id='+row.people_id+'"><i class="fa fa-database"></i></a>';
+            return '<a title="View" class="btn btn-info btn-sm" href="people_info.php?people_id='+row.people_id+'"><i class="fa fa-eye"></i></a>'
+                               + '<a title="Modify" class="btn btn-warning btn-sm" href="modify_people.php?people_id='+row.people_id+'"><i class="fa fa-pencil"></i></a>'
+                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_people.php?people_id='+row.people_id+'"><i class="fa fa-close"></i></a>'
+                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?people_id='+row.people_id+'"><i class="fa fa-music"></i></a>'
+                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?people_id='+row.people_id+'"><i class = "fa fa-id-badge"></i></a>'
+                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?people_id='+row.people_id+'"><i class="fa fa-database"></i></a>';
          }
 
       }

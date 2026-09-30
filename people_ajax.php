@@ -1,23 +1,44 @@
 <?php
-require_once('initialize.php'); // Trying to grab the DB connection. This could be changed to anything smaller.
 
-$sql = "SELECT * from people"; // Change this to required SQL
-$db->set_charset("utf8");
+require_once('initialize.php');
+
+$db->set_charset("utf8mb4");
+
+$sql = "SELECT
+            people_id,
+            stage_name,
+            first_name,
+            middle_name,
+            last_name,
+            gender,
+            image_name
+        FROM people";
+
 $result = $db->query($sql);
+
 $data = array();
 
-while($row = mysqli_fetch_array($result)){ // This is how to format array for Datatables + wrap it in final array['data'].
-    $sub_array = array();
-    $sub_array['people_id'] = $row["people_id"];
-    $sub_array['stage_name'] = $row["stage_name"];
-    $sub_array['first_name'] = $row["first_name"];
-    $sub_array['middle_name'] = $row['middle_name'];
-    $sub_array['last_name'] = $row['last_name'];
-    $sub_array['gender'] = $row['gender'];
-    $sub_array['image_name'] = $row['image_name'];
-    $data[] = $sub_array;
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $data[] = array(
+            "people_id"   => $row["people_id"],
+            "stage_name"  => $row["stage_name"],
+            "first_name"  => $row["first_name"],
+            "middle_name" => $row["middle_name"],
+            "last_name"   => $row["last_name"],
+            "gender"      => $row["gender"],
+            "image_name"  => $row["image_name"]
+        );
+    }
+
+    $result->free();
 }
 
-echo json_encode(array("data" => $data));
+header('Content-Type: application/json; charset=utf-8');
+
+echo json_encode(
+    array("data" => $data),
+    JSON_UNESCAPED_UNICODE
+);
 
 ?>
