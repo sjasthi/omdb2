@@ -1,5 +1,23 @@
 <?php
 
+session_start();
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if (($_SESSION['role'] ?? '') !== 'ADMIN') {
+    http_response_code(403);
+    echo "<h2>Access Denied</h2>";
+    echo "<p>Administrator access is required.</p>";
+    exit();
+}
+
   $nav_selected = "MOVIES";
   $left_buttons = "YES";
   $left_selected = "ANAGRAM";
@@ -10,7 +28,7 @@
 
 
 <div class="right-content">
-    <div class="container">
+    <div class="container">s
 
       <h3 style = "color: #01B0F1;">Movies -> Movie Anagram</h3>
 

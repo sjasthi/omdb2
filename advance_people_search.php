@@ -167,13 +167,31 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
 
           <?php
           if(!empty($_POST['people_search'])){
-            $people = $_POST['people_search'];
-            $query = mysqli_query($db,"select * from people where
-            stage_name LIKE '%".$people."%'
-            OR first_name LIKE '%".$people."%'
-            OR middle_name LIKE '%".$people."%'
-            OR last_name LIKE '%".$people."%'
-            ");
+  $people = $_POST['people_search'];
+
+  // Prepared statement prevents SQL injection.
+  $stmt = $db->prepare("
+      SELECT *
+      FROM people
+      WHERE stage_name LIKE ?
+         OR first_name LIKE ?
+         OR middle_name LIKE ?
+         OR last_name LIKE ?
+  ");
+
+  $searchTerm = "%" . $people . "%";
+
+  $stmt->bind_param(
+      "ssss",
+      $searchTerm,
+      $searchTerm,
+      $searchTerm,
+      $searchTerm
+  );
+
+  $stmt->execute();
+
+  $query = $stmt->get_result();
             if(mysqli_num_rows($query)>0){
               $count=0;
               ?>

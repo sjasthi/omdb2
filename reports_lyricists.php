@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
   $nav_selected = "REPORTS";
   $left_buttons = "YES";
   $left_selected = "ACTORS";
@@ -41,14 +48,31 @@
 
               <?php
 
-                $stage_name = $_GET['name'] ?? "";
+               $stage_name = $_GET['name'] ?? "";
 
+// Prepared statement prevents SQL injection.
+$stmt = $db->prepare("
+    SELECT
+        movies.native_name,
+        movies.year_made,
+        songs.title
+    FROM movies
+    INNER JOIN movie_song
+        ON movies.movie_id = movie_song.movie_id
+    INNER JOIN songs
+        ON movie_song.song_id = songs.song_id
+    INNER JOIN song_people
+        ON song_people.song_id = songs.song_id
+    INNER JOIN people
+        ON song_people.people_id = people.people_id
+    WHERE song_people.role = 'Lyricist'
+      AND people.stage_name = ?
+");
 
-                $sql = "SELECT `movies`.`native_name`,`movies`.`year_made`,`songs`.`title`FROM`movies`,`songs`,  `song_people`,  `people`,  `movie_song`  WHERE`song_people`.`role` = 'Lyricist' AND `people`.`stage_name` = '$stage_name' AND `movies`.`movie_id` = `movie_song`.`movie_id` AND `movie_song`.`song_id` = `songs`.`song_id` AND `song_people`.`song_id` = `songs`.`song_id` AND song_people.people_id = people.people_id";
+$stmt->bind_param("s", $stage_name);
+$stmt->execute();
 
-
-
-              $result = $db->query($sql);
+$result = $stmt->get_result();
 
                 if ($result->num_rows > 0) {
                     // output data of each row

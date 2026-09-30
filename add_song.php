@@ -1,4 +1,11 @@
-<?php $page_title = 'The Cow Layer'; ?>
+<?php 
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+
+}$page_title = 'The Cow Layer'; ?>
 <!-- Demo in ICS499 -->
 <?php
     $nav_selected = "LIST";
@@ -6,10 +13,21 @@
     $left_selected = "MOVIES";
 
     include("./nav.php");
-    $movie_id = '';
-    if(isset($_GET['movie_id'])){
-        $movie_id = $_GET['movie_id'];
-    }
+    // Get movie_id from either the page URL or a submitted form.
+$movie_id = $_POST['movie_id'] ?? $_GET['movie_id'] ?? null;
+
+// movie_id must be a positive whole number.
+if (
+    $movie_id === null ||
+    filter_var($movie_id, FILTER_VALIDATE_INT) === false ||
+    (int)$movie_id < 1
+) {
+    $_SESSION['action_message'] = "Please select a valid movie first.";
+    header("Location: movies.php");
+    exit();
+}
+
+$movie_id = (int)$movie_id;
 
     if(isset($_POST['add'])){
         $movie_id = $_POST['movie_id'];

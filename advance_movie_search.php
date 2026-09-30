@@ -209,14 +209,32 @@ if(isset($_POST['people'])){ ?>
 
               <?php
               $count = 0;
-              $query = mysqli_query($db, "SELECT * FROM `movies` WHERE native_name LIKE '%".$name2."%'
-                OR english_name LIKE '%".$name2."%'
-                OR year_made LIKE '%".$name2."%'
-              ");
+
+// Use a prepared statement so search input cannot change the SQL query.
+$stmt = $db->prepare("
+    SELECT *
+    FROM movies
+    WHERE native_name LIKE ?
+       OR english_name LIKE ?
+       OR CAST(year_made AS CHAR) LIKE ?
+");
+
+$searchTerm = "%" . $name2 . "%";
+
+$stmt->bind_param(
+    "sss",
+    $searchTerm,
+    $searchTerm,
+    $searchTerm
+);
+
+$stmt->execute();
+
+$query = $stmt->get_result();
               if(mysqli_num_rows($query)>0){
               while($movies = mysqli_fetch_assoc($query)){
               $count++;
-              ?>
+              }
 
 
           <tr>

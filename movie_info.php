@@ -220,7 +220,7 @@ var flag = true;
       <div class="movie">
         <h1><?php echo $native_name;?></h1>
         <div class="movie-img">
-        <?php if(!empty(trim($m_link[0]))){ ?>
+        <?php if (isset($m_link[0]) && !empty(trim($m_link[0]))) { ?>
         <img src="posters/<?php echo $m_link[0].'.'.$m_link_type[0];?>" alt="<?php echo $m_link[0];?>" class="movie-image" id="movie-image" onclick="if(flag == true){ enlargeImg();} else { resetImg();}" style="width:300px;height:300px;"></img>
         <?php } else { ?>
             <img class="movie-image" id="movie-image" src="images/no-image.png" alt="No Image" style="width:300px;height:300px;"></img>

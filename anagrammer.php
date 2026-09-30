@@ -9,7 +9,8 @@
         $anagrams = $_POST['anagrams'];
     }
     $flag = "";
-    $native_name = "";
+$native_name = "";
+$winner = null;
     
 
     function mb_count_chars($input) {
@@ -24,54 +25,49 @@
         return $unique;
     }
 
-    if(isset($_POST['movie_id'])){
-        $basecharinput = [];
-        $movie_id = $_POST['movie_id'];
-        
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'input') === 0) {
-                $basecharinput[] = $v;
-            }
-        }
-        $basecharinput = strtolower(str_replace(" ", "", implode("", $basecharinput)));
-        $basecharJSON = $basecharinput;
-        
-        $jsonLog = "http://indic-wp.thisisjava.com/api/getBaseCharacters.php?string=".$basecharJSON."&language=Telugu";
-        $jsonfile = file_get_contents($jsonLog);
-        $decodedData = json_decode(strstr($jsonfile, '{'));
-        $base_charRaw = implode("", $decodedData->data);
-        $base_chars = implode(", ", $decodedData->data);
+    if (isset($_POST['movie_id'])) {
 
-        //Make API call to find length of string for length
-        $jsonLength = "http://indic-wp.thisisjava.com/api/getLength.php?string=".$basecharJSON."&language=Telugu";
-        $jsonfile= file_get_contents($jsonLength);
-        $decoder = json_decode(strstr($jsonfile, '{'));
-        $length = intval($decoder->data);
+    $movie_id = filter_input(
+        INPUT_POST,
+        'movie_id',
+        FILTER_VALIDATE_INT
+    );
 
-        if(isset($base_chars)){
-            $query_conditions = "";
-            $characters = mb_count_chars($base_charRaw);
-            $count = count($characters);
-            foreach ($characters as $key => $value){
-                if($count > 1){
-                   $query_conditions .= "(char_length(base_chars) - char_length(replace(base_chars, '".$key."', ''))/char_length('".$key."')) = ".$value." and ";
-                    $count = $count - 1;
-                } else {
-                    $query_conditions .= "(char_length(base_chars) - char_length(replace(base_chars, '".$key."', ''))/char_length('".$key."')) = ".$value."";
-                }
-            }
+    $guess = trim($_POST['input'] ?? '');
 
-            $sql3 = "SELECT movies.*, movie_numbers.length as length, movie_numbers.base_chars as base_chars from movies inner join movie_numbers on movies.movie_id = movie_numbers.movie_id where ".$query_conditions." ORDER BY length asc;";
-            $basechar_check = mysqli_query($db, $sql3);
-            if($basechar_check->num_rows >= 1){
-                $sql4 = "select movies.*, movie_numbers.length, movie_numbers.base_chars from movies inner join movie_numbers on movies.movie_id = movie_numbers.movie_id where movies.movie_id = ".$movie_id." and replace(lower(movies.native_name), ' ', '') = '".$basecharinput."';";
-                $winner = mysqli_query($db, $sql4);
-            } else {
-                $winner = '';
-                $here = "we're here";
-            }
-        }
+    // Normalize guess by removing spaces and making it lowercase
+    $normalized_guess = mb_strtolower(
+        str_replace(' ', '', $guess),
+        'UTF-8'
+    );
+
+    if ($movie_id && $normalized_guess !== '') {
+
+        $stmt = mysqli_prepare(
+            $db,
+            "SELECT
+                movies.*,
+                movie_numbers.length,
+                movie_numbers.base_chars
+             FROM movies
+             LEFT JOIN movie_numbers
+                ON movies.movie_id = movie_numbers.movie_id
+             WHERE movies.movie_id = ?
+               AND REPLACE(LOWER(movies.native_name), ' ', '') = ?"
+        );
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "is",
+            $movie_id,
+            $normalized_guess
+        );
+
+        mysqli_stmt_execute($stmt);
+
+        $winner = mysqli_stmt_get_result($stmt);
     }
+}
 
     if($flag != "winner" && !isset($_POST['movie_id'])){
         $sql = "select movie_id from movies where movie_id in (select movie_id from movie_anagrams) order by rand() limit 1;";
@@ -118,7 +114,13 @@
 <body>
     <h1> ANAGRAMMER </h1>
     <div id="clues">
-    <?php if($winner->num_rows != 1){echo '<h5 style="color: purple;"> Welcome! Guess the name of the movie based on the following clues:</h5><br>';} ?>
+    <?php
+if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
+    echo '<h5 style="color: purple;">
+            Welcome! Guess the name of the movie based on the following clues:
+          </h5><br>';
+}
+?>
     </div>
     <div id="display-board">
     </div>
@@ -145,7 +147,7 @@
               <tbody>
 
         <?php
-                if ($winner->num_rows == 1) {
+                if ($winner instanceof mysqli_result && $winner->num_rows == 1) {
                     $flag = "winner";
                     // output data of each row
                     $row = $winner->fetch_assoc();

@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
   $nav_selected = "REPORTS";
   $left_buttons = "YES";
   $left_selected = "ACTORS";
@@ -38,16 +45,32 @@
 
               <?php
 
-              $actor_name = $_GET['name'] ?? "";
-// $sql = "SELECT * from movies ORDER BY native_name ASC;";
+              $actor_name = trim($_GET['name'] ?? '');
 
-$sql = "SELECT native_name, year_made from movies, movie_people, people where `movies`.`movie_id` = `movie_people`.`movie_id` AND `movie_people`.`role` = 'leading actor' AND `people`.`people_id` = `movie_people`.`people_id` AND `people`.`stage_name` = '$actor_name' ";
+$role = 'Lead Actor';
 
-// TODO: The above SQL statement becomes a  JOIN between movies and movie_data
-// If there is no corresponding movie_data, then show those as blanks
-//NOTE: Whenever you see ., that means + in PHP
+$stmt = mysqli_prepare(
+    $db,
+    "SELECT movies.native_name, movies.year_made
+     FROM movies
+     INNER JOIN movie_people
+        ON movies.movie_id = movie_people.movie_id
+     INNER JOIN people
+        ON people.people_id = movie_people.people_id
+     WHERE movie_people.role = ?
+       AND people.stage_name = ?"
+);
 
-$result = $db->query($sql);
+mysqli_stmt_bind_param(
+    $stmt,
+    "ss",
+    $role,
+    $actor_name
+);
+
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
@@ -66,7 +89,7 @@ $result = $db->query($sql);
                 }//end else
 
                  $result->close();
-
+                mysqli_stmt_close($stmt);
 
 
                 ?>

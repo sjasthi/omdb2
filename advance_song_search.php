@@ -197,7 +197,28 @@ if(isset($_POST['people'])){ ?>
 
             <?php
             $count = 0;
-            $query = mysqli_query($db, "SELECT * FROM `songs` WHERE title LIKE '%".$name1."%' OR lyrics LIKE '%".$name1."%' OR theme LIKE '%".$name1."%'");
+
+// Prepared statement prevents SQL injection.
+$stmt = $db->prepare("
+    SELECT *
+    FROM songs
+    WHERE title LIKE ?
+       OR lyrics LIKE ?
+       OR theme LIKE ?
+");
+
+$searchTerm = "%" . $name1 . "%";
+
+$stmt->bind_param(
+    "sss",
+    $searchTerm,
+    $searchTerm,
+    $searchTerm
+);
+
+$stmt->execute();
+
+$query = $stmt->get_result();
             if(mysqli_num_rows($query)>0){
             while($song = mysqli_fetch_assoc($query)){
             $count++;

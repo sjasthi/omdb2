@@ -1,5 +1,10 @@
 <?php
+session_start();
 
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
   // set the current page to one of the main buttons
   $nav_selected = "REPORTS";
 

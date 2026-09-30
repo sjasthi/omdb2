@@ -14,7 +14,12 @@
   
     include("./nav.php");
     
-    $movie_id = $_GET["movie_id"];
+    $movie_id = filter_input(INPUT_GET, 'movie_id', FILTER_VALIDATE_INT);
+
+if (!$movie_id) {
+    header("Location: movies.php");
+    exit();
+}
 
   ?>
 
@@ -28,22 +33,55 @@
   $english_name = "";
   $year_made = "";
   $id = "";
-    $sql = mysqli_query($db,"SELECT * FROM movies WHERE movie_id = '$movie_id'");
-      if(mysqli_num_rows($sql)>0){
-      while($row = mysqli_fetch_assoc($sql)){
-        $native_name = $row['native_name'];
-        $english_name = $row['english_name'];
-        $year_made = $row['year_made'];
-        $id = $row['movie_id'];
-      }
-    }
+  $stmt = mysqli_prepare(
+    $db,
+    "SELECT movie_id, native_name, english_name, year_made
+     FROM movies
+     WHERE movie_id = ?"
+);
+
+mysqli_stmt_bind_param($stmt, "i", $movie_id);
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
+
+if ($row = mysqli_fetch_assoc($result)) {
+    $native_name = $row['native_name'];
+    $english_name = $row['english_name'];
+    $year_made = $row['year_made'];
+    $id = $row['movie_id'];
+}
+
+mysqli_stmt_close($stmt);
     
     ?>
-<div class= "tab">
-  <p><input name= "native_name_update" value="<?php echo $native_name; ?>" placeholder="Modify Native Name" class="form-control" ></p>
-  <p><input name= "english_name_update" value="<?php echo $english_name; ?>" placeholder="Modify English Name" class="form-control" oninput="this.className = ''"></p>
-  <p><input name= "year_update" value="<?php echo $year_made; ?>" class="form-control" placeholder="Modify Year" oninput="this.className = ''"></p>
-  <input type="hidden" name="movie_id" value="<?php echo $id; ?>">
+<div class="tab">
+
+  <p>
+    <input name="native_name_update"
+           value="<?php echo htmlspecialchars($native_name); ?>"
+           placeholder="Modify Native Name"
+           class="form-control">
+  </p>
+
+  <p>
+    <input name="english_name_update"
+           value="<?php echo htmlspecialchars($english_name); ?>"
+           placeholder="Modify English Name"
+           class="form-control">
+  </p>
+
+  <p>
+    <input name="year_update"
+           value="<?php echo htmlspecialchars($year_made); ?>"
+           placeholder="Modify Year"
+           class="form-control">
+  </p>sss
+
+  <input type="hidden"
+         name="movie_id"
+         value="<?php echo htmlspecialchars($id); ?>">
+
 </div>
 <div style="overflow:auto;">
   <div  class="text-left">

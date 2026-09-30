@@ -1,5 +1,22 @@
 <?php
-  $nav_selected = "SETUP";
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if (($_SESSION['role'] ?? '') !== 'ADMIN') {
+    http_response_code(403);
+    echo "<h2>Access Denied</h2>";
+    echo "<p>Administrator access is required.</p>";
+    exit();
+}
+
+$nav_selected = "SETUP";
   $left_buttons = "NO";
   $left_selected = "";
 
@@ -65,10 +82,15 @@
 <?php include("./footer.php"); ?>
 
 <?php
-if(isset($_POST['submit'])){
-  $file = $_FILES['filename'];
+if (isset($_POST['submit'])) {
 
-if( 'text/csv' == $file['type'] ||  'application/vnd.ms-excel' == $file['type'] ) {
+    $file = $_FILES['filename'] ?? null;
+
+    if (
+        $file &&
+        $file['error'] === UPLOAD_ERR_OK &&
+        strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)) === 'csv'
+    ) {
 
           $table_name = $_POST['table_name'];
 						$handle=$_FILES["filename"]["tmp_name"];
@@ -108,21 +130,72 @@ if( 'text/csv' == $file['type'] ||  'application/vnd.ms-excel' == $file['type'] 
                     $row=mysqli_fetch_row($result);
                     $movie_id = intval($row[0]);
                     
-                    //Make API call to find base_chars
-                    $jsonLog = "http://indic-wp.thisisjava.com/api/getBaseCharacters.php?string=".$nativeJSON."&language=Telugu";
-                    $jsonfile = file_get_contents($jsonLog);
-                    $decodedData = json_decode(strstr($jsonfile, '{'));
-                    $base_chars = implode(", ", $decodedData->data);
-                    
-                    //Make API call to find length of string for length
-                    $jsonLength = "http://indic-wp.thisisjava.com/api/getLength.php?string=".$nativeJSON."&language=English";
-                    $jsonfile= file_get_contents($jsonLength);
-                    $decodedData = json_decode(strstr($jsonfile, '{'));
-                    $length = intval($decodedData->data);
-                    
-                    $query3 = "INSERT INTO movie_numbers(movie_id, length, base_chars) values ($movie_id, $length, '$base_chars')";
-                    
-                    mysqli_query($db, $query3);
+                    // Default values if the external API is unavailable
+$base_chars = "";
+$length = 0;
+
+// Try to get base characters
+$jsonLog = "http://indic-wp.thisisjava.com/api/getBaseCharacters.php?string="
+    . urlencode($nativeJSON)
+    . "&language=Telugu";
+
+$jsonfile = @file_get_contents($jsonLog);
+
+if ($jsonfile !== false) {
+    $jsonStart = strstr($jsonfile, '{');
+
+    if ($jsonStart !== false) {
+        $decodedData = json_decode($jsonStart);
+
+        if (
+            $decodedData !== null &&
+            isset($decodedData->data) &&
+            is_array($decodedData->data)
+        ) {
+            $base_chars = implode(", ", $decodedData->data);
+        }
+    }
+}
+
+// Try to get string length
+$jsonLength = "http://indic-wp.thisisjava.com/api/getLength.php?string="
+    . urlencode($nativeJSON)
+    . "&language=English";
+
+$jsonfile = @file_get_contents($jsonLength);
+
+if ($jsonfile !== false) {
+    $jsonStart = strstr($jsonfile, '{');
+
+    if ($jsonStart !== false) {
+        $decodedData = json_decode($jsonStart);
+
+        if (
+            $decodedData !== null &&
+            isset($decodedData->data)
+        ) {
+            $length = intval($decodedData->data);
+        }
+    }
+}
+
+// Insert movie number data safely
+$stmt_numbers = mysqli_prepare(
+    $db,
+    "INSERT INTO movie_numbers (movie_id, length, base_chars)
+     VALUES (?, ?, ?)"
+);
+
+mysqli_stmt_bind_param(
+    $stmt_numbers,
+    "iis",
+    $movie_id,
+    $length,
+    $base_chars
+);
+
+mysqli_stmt_execute($stmt_numbers);
+mysqli_stmt_close($stmt_numbers);
                 }
           }
           elseif ($table_name=="people") {
@@ -149,6 +222,8 @@ if( 'text/csv' == $file['type'] ||  'application/vnd.ms-excel' == $file['type'] 
         }
 
       }
+
+
           ?>
 <?php
     db_disconnect($db);
