@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/security.php';
+?>
 <?php $page_title = 'The Cow Layer'; ?>
 <?php
     $nav_selected = "LIST";
@@ -31,12 +34,9 @@ $count = 0;
 
 $search_term = '%' . $name . '%';
 
-$stmt = mysqli_prepare(
-    $db,
-    "SELECT * FROM movies
+$stmt = db_prepare($db, "SELECT * FROM movies
      WHERE native_name LIKE ?
-        OR english_name LIKE ?"
-);
+        OR english_name LIKE ?");
 
 mysqli_stmt_bind_param($stmt, "ss", $search_term, $search_term);
 mysqli_stmt_execute($stmt);
@@ -51,21 +51,21 @@ $query = mysqli_stmt_get_result($stmt);
 
             <tr>
 
-            <th scope="row"><?php echo $count; ?></th>
+            <th scope="row"><?php echo h($count); ?></th>
 
 <td>
-    <a href="movie_info.php?movie_id=<?php echo urlencode($movies['movie_id']); ?>">
-        <?php echo htmlspecialchars($movies['native_name']); ?>
+    <a href="movie_info.php?movie_id=<?php echo h(urlencode($movies['movie_id'])); ?>">
+        <?php echo h($movies['native_name']); ?>
     </a>
 </td>
 
 <td>
-    <a href="movie_info.php?movie_id=<?php echo urlencode($movies['movie_id']); ?>">
-        <?php echo htmlspecialchars($movies['english_name']); ?>
+    <a href="movie_info.php?movie_id=<?php echo h(urlencode($movies['movie_id'])); ?>">
+        <?php echo h($movies['english_name']); ?>
     </a>
 </td>
 
-<td><?php echo htmlspecialchars($movies['year_made']); ?></td>
+<td><?php echo h($movies['year_made']); ?></td>
             </tr>
 
             <?php
@@ -105,15 +105,12 @@ $count1 = 0;
 
 $people_search_term = '%' . $name1 . '%';
 
-$stmt_people = mysqli_prepare(
-    $db,
-    "SELECT * FROM people
+$stmt_people = db_prepare($db, "SELECT * FROM people
      WHERE stage_name LIKE ?
         OR first_name LIKE ?
         OR middle_name LIKE ?
         OR last_name LIKE ?
-        OR gender LIKE ?"
-);
+        OR gender LIKE ?");
 
 mysqli_stmt_bind_param(
     $stmt_people,
@@ -138,16 +135,16 @@ $query1 = mysqli_stmt_get_result($stmt_people);
 
           <tr>
 
-          <th scope="row"><?php echo $count1; ?></th>
+          <th scope="row"><?php echo h($count1); ?></th>
           <td>
-    <a href="people_info.php?people_id=<?php echo urlencode($people['people_id']); ?>">
-        <?php echo htmlspecialchars($people['stage_name']); ?>
+    <a href="people_info.php?people_id=<?php echo h(urlencode($people['people_id'])); ?>">
+        <?php echo h($people['stage_name']); ?>
     </a>
 </td>
-          <td><?php echo htmlspecialchars($people['first_name']); ?></td>
-<td><?php echo htmlspecialchars($people['middle_name']); ?></td>
-<td><?php echo htmlspecialchars($people['last_name']); ?></td>
-<td><?php echo htmlspecialchars($people['gender']); ?></td>
+          <td><?php echo h($people['first_name']); ?></td>
+<td><?php echo h($people['middle_name']); ?></td>
+<td><?php echo h($people['last_name']); ?></td>
+<td><?php echo h($people['gender']); ?></td>
           </tr>
 
           <?php
@@ -182,13 +179,10 @@ $count2 = 0;
 
 $song_search_term = '%' . $name2 . '%';
 
-$stmt_songs = mysqli_prepare(
-    $db,
-    "SELECT * FROM songs
+$stmt_songs = db_prepare($db, "SELECT * FROM songs
      WHERE title LIKE ?
         OR lyrics LIKE ?
-        OR theme LIKE ?"
-);
+        OR theme LIKE ?");
 
 mysqli_stmt_bind_param(
     $stmt_songs,
@@ -210,16 +204,16 @@ $query2 = mysqli_stmt_get_result($stmt_songs);
 
 
         <tr>
-    <th scope="row"><?php echo $count2; ?></th>
+    <th scope="row"><?php echo h($count2); ?></th>
 
     <td>
-        <a href="song_info.php?song_id=<?php echo urlencode($songs['song_id']); ?>">
-            <?php echo htmlspecialchars($songs['title']); ?>
+        <a href="song_info.php?song_id=<?php echo h(urlencode($songs['song_id'])); ?>">
+            <?php echo h($songs['title']); ?>
         </a>
     </td>
 
-    <td><?php echo htmlspecialchars($songs['lyrics']); ?></td>
-    <td><?php echo htmlspecialchars($songs['theme']); ?></td>
+    <td><?php echo h($songs['lyrics']); ?></td>
+    <td><?php echo h($songs['theme']); ?></td>
 </tr>
     <?php }
   }

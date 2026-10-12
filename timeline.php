@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "TIMELINE";
   $left_buttons = "NO";
   $left_selected = "";

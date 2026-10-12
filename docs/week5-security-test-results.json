@@ -1,0 +1,1182 @@
+[
+  {
+    "test": "add_movie_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people_post.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people_post.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people_post.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people_post.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people_post.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people_post.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_posters.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "add_movie_posters.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_movie_posters.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_movie_posters.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_posters.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_posters.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "add_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "add_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "add_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "add_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "add_song.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "add_song.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_song.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_song.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "add_song.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "add_song.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "add_the_song.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "add_the_song.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_the_song.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "add_the_song.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "add_the_song.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "add_the_song.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "attach_song.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "attach_song.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "attach_song.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "attach_song.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "attach_song.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "attach_song.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "createTheAnagram.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "createTheAnagram.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "createTheAnagram.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "createTheAnagram.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "createTheAnagram.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "createTheAnagram.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "createTheData.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "createTheData.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "createTheData.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "createTheData.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "createTheData.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "createTheData.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "createTheMovie.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "createTheMovie.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "createTheMovie.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "createTheMovie.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "createTheMovie.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "createTheMovie.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "create_Data.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "create_Data.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_Data.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_Data.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "create_Data.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "create_Data.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "create_movie.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "create_movie.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_movie.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_movie.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "create_movie.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "create_movie.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "create_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "create_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "create_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "create_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "create_song.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "create_song.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_song.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "create_song.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "create_song.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "create_song.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_movie.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_movie.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_movie.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_movie.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_movie.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_movie.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_movie_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_movie_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_movie_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_movie_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_movie_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_movie_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_song.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_song.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_song.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_song.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_song.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_song.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_song1.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_song1.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_song1.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_song1.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_song1.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_song1.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "delete_song_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "delete_song_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_song_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "delete_song_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "delete_song_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "delete_song_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_admin.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_admin.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_admin.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_admin.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_admin.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_admin.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "modify.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "modify.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "modify.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "modify.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "modifyTheMovies.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "modifyTheMovies.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "modifyTheMovies.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "modifyTheMovies.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "modifyTheMovies.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "modifyTheMovies.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "modifyThePeople.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "modifyThePeople.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "modifyThePeople.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "modifyThePeople.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "modifyThePeople.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "modifyThePeople.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "modifyTheSongs.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "modifyTheSongs.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "modifyTheSongs.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "modifyTheSongs.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "modifyTheSongs.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "modifyTheSongs.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "modify_movie.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "modify_movie.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify_movie.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify_movie.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "modify_movie.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "modify_movie.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "modify_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "modify_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "modify_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "modify_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "modify_song.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "modify_song.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify_song.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "modify_song.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "modify_song.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "modify_song.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "post_create_song.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "post_create_song.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "post_create_song.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "post_create_song.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "post_create_song.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "post_create_song.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "post_modify_people.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "post_modify_people.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "post_modify_people.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "post_modify_people.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "post_modify_people.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "post_modify_people.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "setup.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "setup.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "setup.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "setup.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "setup.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "setup.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "sign_up.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "sign_up.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "sign_up.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "sign_up.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "sign_up.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "sign_up.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "song_people_list_post.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "song_people_list_post.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "song_people_list_post.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "song_people_list_post.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "song_people_list_post.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "song_people_list_post.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "songs_people_list.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "songs_people_list.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "songs_people_list.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "songs_people_list.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "songs_people_list.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "songs_people_list.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "movies_anagram.php: anonymous POST requires login",
+    "passed": true
+  },
+  {
+    "test": "movies_anagram.php: regular user GET forbidden",
+    "passed": true
+  },
+  {
+    "test": "movies_anagram.php: regular user POST forbidden",
+    "passed": true
+  },
+  {
+    "test": "movies_anagram.php: invalid CSRF rejected (NoneType)",
+    "passed": true
+  },
+  {
+    "test": "movies_anagram.php: invalid CSRF rejected (str)",
+    "passed": true
+  },
+  {
+    "test": "movies_anagram.php: invalid CSRF rejected (list)",
+    "passed": true
+  },
+  {
+    "test": "add_movie_people_post.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "add_the_song.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "attach_song.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "createTheData.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "createTheMovie.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "delete_movie_people.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "delete_song1.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "delete_song_people.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "modifyTheMovies.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "modifyThePeople.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "modifyTheSongs.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "post_create_song.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "post_modify_people.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "song_people_list_post.php: GET cannot write",
+    "passed": true
+  },
+  {
+    "test": "Rejected requests leave all tables unchanged",
+    "passed": true
+  },
+  {
+    "test": "security.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "initialize.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "database.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "db_credentials.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "functions.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "user_functions.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "query_functions.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "validation_functions.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "api_methods.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "nav.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "bin/functions.php: internal path is inaccessible",
+    "passed": true
+  },
+  {
+    "test": "tester.php: debug or GET action unavailable",
+    "passed": true
+  },
+  {
+    "test": "m_in_m_tester.php: debug or GET action unavailable",
+    "passed": true
+  },
+  {
+    "test": "test_api_file.php: debug or GET action unavailable",
+    "passed": true
+  },
+  {
+    "test": "session_practice_file.php: debug or GET action unavailable",
+    "passed": true
+  },
+  {
+    "test": "delete_media.php?movie_id=1: debug or GET action unavailable",
+    "passed": true
+  },
+  {
+    "test": "delete_poster.php?file=database.php: debug or GET action unavailable",
+    "passed": true
+  },
+  {
+    "test": "Login injection does not authenticate",
+    "passed": true
+  },
+  {
+    "test": "Pagination input cannot alter SQL",
+    "passed": true
+  },
+  {
+    "test": "Admin creates a movie containing quotes and markup",
+    "passed": true
+  },
+  {
+    "test": "Hostile movie title stored intact",
+    "passed": true
+  },
+  {
+    "test": "movie_info.php?movie_id=20211: database text is escaped",
+    "passed": true
+  },
+  {
+    "test": "modify.php?movie_id=20211: database text is escaped",
+    "passed": true
+  },
+  {
+    "test": "movies_data.php: database text is escaped",
+    "passed": true
+  },
+  {
+    "test": "Regular user can view movie safely",
+    "passed": true
+  },
+  {
+    "test": "Admin updates a movie safely",
+    "passed": true
+  },
+  {
+    "test": "Admin adds movie/person relationship safely",
+    "passed": true
+  },
+  {
+    "test": "Admin deletes movie/person relationship safely",
+    "passed": true
+  },
+  {
+    "test": "Executable poster upload rejected",
+    "passed": true
+  },
+  {
+    "test": "Admin deletes movie and child rows",
+    "passed": true
+  },
+  {
+    "test": "Admin creates a person with quotes and markup",
+    "passed": true
+  },
+  {
+    "test": "Person edit fields escape database text",
+    "passed": true
+  },
+  {
+    "test": "Admin modifies a person safely",
+    "passed": true
+  },
+  {
+    "test": "Admin creates a song with quotes and markup",
+    "passed": true
+  },
+  {
+    "test": "Admin modifies a song safely",
+    "passed": true
+  },
+  {
+    "test": "Admin adds song/person relationship",
+    "passed": true
+  },
+  {
+    "test": "Admin deletes song and relationships",
+    "passed": true
+  },
+  {
+    "test": "Admin deletes person",
+    "passed": true
+  },
+  {
+    "test": "Admin creates a USER account with a hashed password",
+    "passed": true
+  },
+  {
+    "test": "search.php: search injection remains data",
+    "passed": true
+  },
+  {
+    "test": "advance_movie_search.php: search injection remains data",
+    "passed": true
+  },
+  {
+    "test": "advance_people_search.php: search injection remains data",
+    "passed": true
+  },
+  {
+    "test": "advance_song_search.php: search injection remains data",
+    "passed": true
+  },
+  {
+    "test": "Malformed input produces a generic response without server paths",
+    "passed": true
+  },
+  {
+    "test": "Demoted active session cannot write",
+    "passed": true
+  },
+  {
+    "test": "create_movie.php: SUPER-ADMIN uses the same admin policy",
+    "passed": true
+  },
+  {
+    "test": "setup.php: SUPER-ADMIN uses the same admin policy",
+    "passed": true
+  },
+  {
+    "test": "movies_anagram.php: SUPER-ADMIN uses the same admin policy",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_admin.php: SUPER-ADMIN uses the same admin policy",
+    "passed": true
+  },
+  {
+    "test": "index.php: admin navigation hidden from regular users",
+    "passed": true
+  },
+  {
+    "test": "games_base_chars_user.php: admin navigation hidden from regular users",
+    "passed": true
+  },
+  {
+    "test": "Logout requires token and ends the session",
+    "passed": true
+  },
+  {
+    "test": "Database connection failure returns only a generic message",
+    "passed": true
+  },
+  {
+    "test": "Secret scanner permits clean code",
+    "passed": true
+  },
+  {
+    "test": "Secret scanner rejects a synthetic hardcoded credential",
+    "passed": true
+  },
+  {
+    "test": "Secret scanner rejects staged database configuration",
+    "passed": true
+  }
+]

@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/security.php';
+?>
 <head>
 <link rel="stylesheet" href="styles/mainStyleSheet.css">
 </head>
@@ -18,12 +21,14 @@
   	<br/>Data<br/></div>
   </a>
 
+  <?php if (is_admin()) { ?>
   <a href = "movies_anagram.php">
     <div <?php if($left_selected == "ANAGRAM")
     { echo 'class="menu-left-current-page"'; } ?> >
     <img src="./images/anagram.png">
     <br/>Anagram<br/></div>
   </a>
+  <?php } ?>
 
   <a href = "movies_keywords.php">
     <div <?php if($left_selected == "KEYWORD")

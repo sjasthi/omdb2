@@ -87,6 +87,27 @@ posters/Gone in 60 Seconds_2000.jpg
 ._delete_movie.php
 ._movies.php
 styles/._style.css
+
+# Local configuration, credentials, dumps, and development artifacts
+/db_credentials.php
+*.local.php
+.env
+.env.*
+!.env.example
+*credentials*.json
+*secrets*.json
+*.sql
+*.log
+*.bak
+*.old
+*.tmp
+*.zip
+*~
+._*
+.DS_Store
+Thumbs.db
+/work/
+/outputs/
 ._search_data.php
 ._add_song.php
 ._index.php

@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 // Optional year filter from the Reports page.
 $year_filter = '';
@@ -26,7 +28,7 @@ if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
 
       <h3 style = "color: #01B0F1;">Movies -> Movies List</h3>
       <?php
-      if (isset($_SESSION['username']))
+      if (is_admin())
       { ?>
        <button title='Create Movie'><a class='btn btn-sm' href='create_movie.php'><i class = 'fa fa-plus'></i></a></button>
        <button title="Poster Upload"><a class="btn btn-sm" href="add_movie_posters.php"><i class = "fa fa-file-image-o"></i></a></button>
@@ -62,7 +64,7 @@ if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
 
         $('#info').DataTable( {
             "processing" : true,
-            'ajax': 'movies_ajax.php?year=<?php echo urlencode($year_filter); ?>',
+            'ajax': 'movies_ajax.php?year=<?php echo h(urlencode($year_filter)); ?>',
             "columns" : [
               {"data" : "movie_id"},
               {"data" : "native_name"},
@@ -71,14 +73,15 @@ if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
             ],
 
             columnDefs: [
+      { targets: [0, 1, 2, 3], render: $.fn.dataTable.render.text() },
       {  targets: 4,
          render: function (data, type, row) {
-            return '<a title="View" class="btn btn-info btn-sm" href="movie_info.php?movie_id='+row.movie_id+'"><i class="fa fa-eye"></i></a>'
-                                 + '<a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='+row.movie_id+'"><i class="fa fa-pencil"></i></a>'
-                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='+row.movie_id+'"><i class="fa fa-close"></i></a>'
-                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?movie_id='+row.movie_id+'"><i class="fa fa-music"></i></a>'
-                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?movie_id='+row.movie_id+'"><i class = "fa fa-id-badge"></i></a>'
-                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?movie_id='+row.movie_id+'"><i class="fa fa-database"></i></a>';
+            return '<a title="View" class="btn btn-info btn-sm" href="movie_info.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-eye"></i></a>'
+                                 + (<?php echo is_admin() ? 'true' : 'false'; ?> ? '<a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-pencil"></i></a>'
+                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-close"></i></a>'
+                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-music"></i></a>'
+                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class = "fa fa-id-badge"></i></a>'
+                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-database"></i></a>' : '');
          }
 
       }

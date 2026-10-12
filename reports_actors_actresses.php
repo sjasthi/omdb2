@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+require_once __DIR__ . '/security.php';
+?>
+<?php
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -52,9 +53,7 @@ $actress_role = 'Lead Actress';
 
 if ($actor_name !== '' && $actress_name !== '') {
 
-    $stmt = mysqli_prepare(
-        $db,
-        "SELECT DISTINCT
+    $stmt = db_prepare($db, "SELECT DISTINCT
             m.native_name,
             m.year_made
          FROM movies m
@@ -74,8 +73,7 @@ if ($actor_name !== '' && $actress_name !== '') {
          WHERE mp_actor.role = ?
            AND p_actor.stage_name = ?
            AND mp_actress.role = ?
-           AND p_actress.stage_name = ?"
-    );
+           AND p_actress.stage_name = ?");
 
     mysqli_stmt_bind_param(
         $stmt,
@@ -95,8 +93,8 @@ if ($actor_name !== '' && $actress_name !== '') {
         while ($row = $result->fetch_assoc()) {
 
             echo '<tr>
-                    <td>' . htmlspecialchars($row["native_name"]) . '</td>
-                    <td>' . htmlspecialchars($row["year_made"]) . '</td>
+                    <td>' . h($row["native_name"]) . '</td>
+                    <td>' . h($row["year_made"]) . '</td>
                   </tr>';
         }
 

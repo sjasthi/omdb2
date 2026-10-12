@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 $nav_selected = "MOVIES";
 $left_buttons = "YES";
 $left_selected = "NO";
@@ -65,7 +68,7 @@ role (from song_people)
 ======================================================================== -->
 <?php
 if (isset($_GET['people_id'])) {
-  $people_id = mysqli_real_escape_string($db, $_GET['people_id']);
+  $people_id = $_GET['people_id'];
 }
 ?>
 
@@ -100,22 +103,22 @@ year_made
 
     <?php
     // query string for the Query A.1
-    $sql_A1 = "select * from people where people_id='$people_id'";
+    $sql_A1 = ['sql' => 'select * from people where people_id=?', 'params' => [$people_id]];
 
-    if (!$sql_A1_result = $db->query($sql_A1)) {
-      die('There was an error running query[' . $connection->error . ']');
+    if (!$sql_A1_result = db_query($db, $sql_A1)) {
+      security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
     if ($sql_A1_result->num_rows > 0) {
       $a1_tuple = $sql_A1_result->fetch_assoc();
       ?>
       <tr>
-        <td><?php echo $a1_tuple['people_id'] ?></td>
-        <td><?php echo $a1_tuple['stage_name']?></td>
-        <td><?php echo $a1_tuple["first_name"]?></td>
-        <td><?php echo $a1_tuple["middle_name"]?></td>
-        <td><?php echo $a1_tuple["last_name"] ?></td>
-        <td><?php echo $a1_tuple["gender"] ?></td>
+        <td><?php echo h($a1_tuple['people_id']) ?></td>
+        <td><?php echo h($a1_tuple['stage_name'])?></td>
+        <td><?php echo h($a1_tuple["first_name"])?></td>
+        <td><?php echo h($a1_tuple["middle_name"])?></td>
+        <td><?php echo h($a1_tuple["last_name"]) ?></td>
+        <td><?php echo h($a1_tuple["gender"]) ?></td>
         </tr>
 
   <?php  } //end if

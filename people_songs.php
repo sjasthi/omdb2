@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
   $nav_selected = "PEOPLE";
   $left_buttons = "YES"; 
@@ -43,17 +46,17 @@ $sql = "SELECT `title`, `role`, `screen_name`, `people_id` AS `id` FROM `songs` 
 // If there is no corresponding movie_data, then show those as blanks
 //NOTE: Whenever you see ., that means + in PHP
 
-$result = $db->query($sql);
+$result = db_query($db, $sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
                     // Add four more rows of data which you are getting from the database
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
-                                <td>'.$row["id"].'</td>
-                                <td>'.$row["screen_name"].'</td>
-                                <td>'.$row["title"].'</td>
-                                <td>'.$row["role"].'</td>
+                                <td>' . h($row["id"]) . '</td>
+                                <td>' . h($row["screen_name"]) . '</td>
+                                <td>' . h($row["title"]) . '</td>
+                                <td>' . h($row["role"]) . '</td>
                                 
                                 
                             </tr>';

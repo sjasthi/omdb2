@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+require_once __DIR__ . '/security.php';
+?>
+<?php
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -49,17 +50,17 @@ table.center {
 
         <?php
         // $query = "select count(year_made), year_made from movies GROUP BY year_made";
-        $query = mysqli_query($db,"select count(year_made), year_made from movies GROUP BY year_made");
+        $query = db_query($db, "select count(year_made), year_made from movies GROUP BY year_made");
         $count = 0;
         while($row = mysqli_fetch_assoc($query)){
           $count++;
           ?>
 
           <tr>
-         <th scope="row"><?php echo $count; ?></th>
-         <td><?php echo $row['year_made']; ?></td>
-         <td><?php echo $row['count(year_made)']; ?></td>
-         <td><a href="movies.php?id=<?php echo $row['year_made']; ?>">View all movies</a></td>
+         <th scope="row"><?php echo h($count); ?></th>
+         <td><?php echo h($row['year_made']); ?></td>
+         <td><?php echo h($row['count(year_made)']); ?></td>
+         <td><a href="movies.php?id=<?php echo h($row['year_made']); ?>">View all movies</a></td>
         </tr>
 
 

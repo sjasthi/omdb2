@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 $nav_selected = "HELP";
 $left_buttons = "NO";
 $left_selected = "";
@@ -147,7 +150,7 @@ include("./nav.php");
 
         <ul>
             <li>You must be signed in to use protected OMDB features.</li>
-            <li>Use Sign Up to create a new account.</li>
+            <li>Administrators can create user accounts from the account-creation page.</li>
             <li>Use Log Out when you are finished using OMDB.</li>
         </ul>
 

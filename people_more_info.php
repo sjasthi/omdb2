@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 $nav_selected = "PEOPLE";
 $left_buttons = "YES";
 $left_selected = "NO";
@@ -12,7 +15,7 @@ require 'bin/functions.php';
 
 <?php
 if (isset($_GET['people_id'])) {
-  $people_id = mysqli_real_escape_string($db, $_GET['people_id']);
+  $people_id = $_GET['people_id'];
 }
 ?>
 
@@ -41,26 +44,26 @@ if (isset($_GET['people_id'])) {
           <tbody>
 
     <?php
-    $sql_A1 = "SELECT people_id, stage_name, first_name, middle_name, last_name, gender
+    $sql_A1 = ['sql' => 'SELECT people_id, stage_name, first_name, middle_name, last_name, gender
                FROM people
-               WHERE people_id=" . $people_id;
+               WHERE people_id=?', 'params' => [$people_id]];
 
 
 
 
-    if (!$sql_A1_result = $db->query($sql_A1)) {
-      die('There was an error running query[' . $connection->error . ']');
+    if (!$sql_A1_result = db_query($db, $sql_A1)) {
+      security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
     if ($sql_A1_result->num_rows > 0) {
       $a1_tuple = $sql_A1_result->fetch_assoc();
       ?>
-      <td><?php echo $a1_tuple["people_id"] ?></td>
-      <td><?php echo $a1_tuple["first_name"] ?></td>
-      <td><?php echo $a1_tuple["last_name"] ?></td>
-      <td><?php echo $a1_tuple["middle_name"] ?></td>
-      <td><?php echo $a1_tuple["stage_name"] ?></td>
-      <td><?php echo $a1_tuple["gender"] ?></td>
+      <td><?php echo h($a1_tuple["people_id"]) ?></td>
+      <td><?php echo h($a1_tuple["first_name"]) ?></td>
+      <td><?php echo h($a1_tuple["last_name"]) ?></td>
+      <td><?php echo h($a1_tuple["middle_name"]) ?></td>
+      <td><?php echo h($a1_tuple["stage_name"]) ?></td>
+      <td><?php echo h($a1_tuple["gender"]) ?></td>
     <?php } //end if
     else {
       echo "0 results";

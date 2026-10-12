@@ -1,6 +1,11 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -8,12 +13,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-if (($_SESSION['role'] ?? '') !== 'ADMIN') {
-    http_response_code(403);
-    echo "<h2>Access Denied</h2>";
-    echo "<p>Administrator access is required.</p>";
-    exit();
-}
+
 
 include('database.php');
 $db = db_connect();
@@ -62,7 +62,7 @@ function same_graphemes(string $a, string $b): bool {
 }
 
 function get_movie_by_id(mysqli $db, int $movieId): ?array {
-    $stmt = $db->prepare("
+    $stmt = db_prepare($db, "
         SELECT movie_id, native_name, english_name, year_made
         FROM movies
         WHERE movie_id = ?
@@ -101,12 +101,12 @@ function get_random_movie(mysqli $db): ?array {
         LIMIT 1
     ";
 
-    $result = $db->query($sql);
+    $result = db_query($db, $sql);
     return $result ? ($result->fetch_assoc() ?: null) : null;
 }
 
 function get_anagram_count(mysqli $db, int $movieId): int {
-    $stmt = $db->prepare("
+    $stmt = db_prepare($db, "
         SELECT COUNT(*) AS total
         FROM movie_anagrams
         WHERE movie_id = ?
@@ -155,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 } elseif (get_anagram_count($db, (int)$movieId) >= 3) {
                     $error = "This movie already has the maximum number of anagrams.";
                 } else {
-                    $duplicate = $db->prepare("
+                    $duplicate = db_prepare($db, "
                         SELECT 1
                         FROM movie_anagrams
                         WHERE movie_id = ?
@@ -172,7 +172,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     if ($alreadyExists) {
                         $error = "That anagram has already been added for this movie.";
                     } else {
-                        $insert = $db->prepare("
+                        $insert = db_prepare($db, "
                             INSERT INTO movie_anagrams (movie_id, anagram)
                             VALUES (?, ?)
                         ");
@@ -448,7 +448,7 @@ db_disconnect($db);
                 <input
                     type="hidden"
                     name="movie_id"
-                    value="<?= (int)$movie['movie_id'] ?>"
+                    value="<?= h((int)$movie['movie_id']) ?>"
                 >
 
                 <input

@@ -1,6 +1,11 @@
 <?php
-  session_start();
- if (!isset($_SESSION['username']))
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
+  if (!isset($_SESSION['username']))
       { 
        header("Location: login.php");
        exit();
@@ -24,37 +29,37 @@
 
 <h1>Modify a People</h1>
 <?PHP
-    $sql = "SELECT * FROM people WHERE people_id = '$people_id'";
-    if (!$sql_A1_result= $db->query($sql)) {
-      die('There was an error running query[' . $connection->error . ']');
+    $sql = ['sql' => 'SELECT * FROM people WHERE people_id = ?', 'params' => [$people_id]];
+    if (!$sql_A1_result= db_query($db, $sql)) {
+      security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
     if ($sql_A1_result->num_rows > 0) {
       $a1_tuple = $sql_A1_result->fetch_assoc(); ?>
 
-      <form action="post_modify_people.php"method= "POST">
+      <form action="post_modify_people.php"method= "POST"><?php echo csrf_field(); ?>
 
-        <input type="hidden" name="id" value="<?php echo $a1_tuple['people_id']; ?>">
+        <input type="hidden" name="id" value="<?php echo h($a1_tuple['people_id']); ?>">
   <div class="form-group">
     <label for="stage_name">Stage Name</label>
-    <input type="text" name="stage_name" class="form-control" id="stage_name" value="<?php echo $a1_tuple['stage_name']; ?>">
+    <input type="text" name="stage_name" class="form-control" id="stage_name" value="<?php echo h($a1_tuple['stage_name']); ?>">
   </div>
   <div class="form-group">
     <label for="first_name">First Name</label>
-    <input type="text" name="first_name" class="form-control" id="first_name" value="<?php echo $a1_tuple['first_name']; ?>">
+    <input type="text" name="first_name" class="form-control" id="first_name" value="<?php echo h($a1_tuple['first_name']); ?>">
   </div>
 
   <div class="form-group">
     <label for="middle_name">Middle Name</label>
-    <input type="text" name="middle_name" class="form-control" id="middle_name" value="<?php echo $a1_tuple['middle_name']; ?>">
+    <input type="text" name="middle_name" class="form-control" id="middle_name" value="<?php echo h($a1_tuple['middle_name']); ?>">
   </div>
 
   <div class="form-group">
     <label for="last_name">Last Name</label>
-    <input type="text" name="last_name" class="form-control" id="last_name" value="<?php echo $a1_tuple['last_name']; ?>">
+    <input type="text" name="last_name" class="form-control" id="last_name" value="<?php echo h($a1_tuple['last_name']); ?>">
   </div>
 
-  <select name="gender" class="form-control" value="<?php echo $a1_tuple['gender']; ?>">
+  <select name="gender" class="form-control" value="<?php echo h($a1_tuple['gender']); ?>">
     <option value="male">Male</option>
     <option value="female">Female</option>
   </select>

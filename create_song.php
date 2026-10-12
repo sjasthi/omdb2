@@ -1,6 +1,11 @@
 <?php
-  session_start();
- if (!isset($_SESSION['username']))
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
+  if (!isset($_SESSION['username']))
       { 
        header("Location: login.php");
        exit();
@@ -20,7 +25,7 @@
 <html>
 <h1>Add a song</h1>
 
-<form method="post" action="create_song.php">
+<form method="post" action="create_song.php"><?php echo csrf_field(); ?>
     <label for="title">Title</label>
     <p><input name= "title" placeholder="Title" ></p>
     <label for="lyrics">Lyrics</label>
@@ -90,11 +95,11 @@ if(isset($_POST['create_song'])){
   $lyrics = $_POST['lyrics'];
   $theme = $_POST['theme'];
 
-  $query = mysqli_query($db, "select song_id from songs order by song_id desc limit 1;");
+  $query = db_query($db, "select song_id from songs order by song_id desc limit 1;");
   $row = $query->fetch_assoc();
   $song_id = $row['song_id'] + 1;
 
-  $result = mysqli_query($db, "INSERT INTO `songs`(`song_id`, `title`, `lyrics`, `theme`) VALUES ($song_id, '$title', '$lyrics', '$theme')");
+  $result = db_query($db, ['sql' => 'INSERT INTO `songs`(`song_id`, `title`, `lyrics`, `theme`) VALUES (?, ?, ?, ?)', 'params' => [$song_id, $title, $lyrics, $theme]]);
 
   db_disconnect($db);
   header('Location: songs.php?create=Success');

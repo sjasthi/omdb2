@@ -1,11 +1,16 @@
+<?php
+require_once __DIR__ . '/security.php';
+?>
 <div id="menu-left">
 
+<?php if (is_admin()) { ?>
 <a href="games_base_chars_admin.php">
       <div <?php if($left_selected == "BASECHARSADMIN")
       { echo 'class="menu-left-current-page"'; } ?>>
       <img src="./images/puzzles.png">
       <br/>Base Chars Game (Admin)<br/></div>
   </a>
+<?php } ?>
 
 
   <a href="games_base_chars_user.php">
@@ -15,12 +20,14 @@
       <br/>Base Chars Game (User)<br/></div>
   </a>
 
+  <?php if (is_admin()) { ?>
   <a href = "movies_anagram.php">
     <div <?php if($left_selected == "ANAGRAMADMIN")
     { echo 'class="menu-left-current-page"'; } ?>>
     <img src="./images/anagram.png">
     <br/>Anagram Game (Admin)<br/></div>
   </a>
+  <?php } ?>
 
   <a href="anagrammer.php"> 
   <div <?php if($left_selected == "ANAGRAMUSER") 

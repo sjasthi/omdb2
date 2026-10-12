@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 $nav_selected = "MOVIES";
 $left_buttons = "YES";
 $left_selected = "NO";
@@ -15,7 +18,7 @@ require 'bin/functions.php';
 ======================================================================== -->
 <?php
 if (isset($_GET['movie_id'])) {
-  $movie_id = mysqli_real_escape_string($db, $_GET['movie_id']);
+  $movie_id = $_GET['movie_id'];
 }
 ?>
 
@@ -30,20 +33,17 @@ if (isset($_GET['movie_id'])) {
 
 
     // query string for the Query A.1
-    $sql_A1 = "SELECT movie_id, native_name, english_name, year_made 
-               FROM movies 
-               WHERE movie_id =" . $movie_id;
+    $sql_A1 = ['sql' => 'SELECT movie_id, native_name, english_name, year_made
+               FROM movies
+               WHERE movie_id =?', 'params' => [$movie_id]];
 
-    if (!$sql_A1_result = $db->query($sql_A1)) {
-      die('There was an error running query[' . $connection->error . ']');
+    if (!$sql_A1_result = db_query($db, $sql_A1)) {
+      security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
     if ($sql_A1_result->num_rows > 0) {
       $a1_tuple = $sql_A1_result->fetch_assoc();
-      echo '<br> Movie ID : ' . $a1_tuple["movie_id"] .
-        '<br> Native Name : ' . $a1_tuple["native_name"] .
-        '<br> English Name : ' . $a1_tuple["english_name"] .
-        '<br> Year Made :  ' . $a1_tuple["year_made"];
+      echo '<br> Movie ID : ' . h($a1_tuple["movie_id"]) . '<br> Native Name : ' . h($a1_tuple["native_name"]) . '<br> English Name : ' . h($a1_tuple["english_name"]) . '<br> Year Made :  ' . h($a1_tuple["year_made"]);
     } //end if
     else {
       echo "0 results";
@@ -59,28 +59,25 @@ if (isset($_GET['movie_id'])) {
 
 <div class="right-content">
   <div class="container">
-    
-          
+
+
     <?php
 
-    $sql_A2 = "SELECT language, country, genre, plot FROM `movie_data` WHERE movie_data.movie_id =" . $movie_id;
+    $sql_A2 = ['sql' => 'SELECT language, country, genre, plot FROM `movie_data` WHERE movie_data.movie_id =?', 'params' => [$movie_id]];
 
-   if (!$sql_A2_result = $db->query($sql_A2)) { 
-     die('There was an error running query[' . $connection->error . ']');
+   if (!$sql_A2_result = db_query($db, $sql_A2)) {
+     security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
   if ($sql_A2_result->num_rows > 0) {
     $a2_tuple = $sql_A2_result->fetch_assoc();
-      echo '<br> Language : ' . $a2_tuple["language"] .
-      '<br> Country : ' . $a2_tuple["country"] .
-      '<br> Genre : ' . $a2_tuple["genre"] .
-      '<br> Plot :  ' . $a2_tuple["plot"];
+      echo '<br> Language : ' . h($a2_tuple["language"]) . '<br> Country : ' . h($a2_tuple["country"]) . '<br> Genre : ' . h($a2_tuple["genre"]) . '<br> Plot :  ' . h($a2_tuple["plot"]);
   } //end if
   else {
     echo "0 results";
   } //end else
 
-  $sql_A2_result->close(); 
+  $sql_A2_result->close();
     ?>
 
   </div>
@@ -91,7 +88,7 @@ if (isset($_GET['movie_id'])) {
 
 <div class="right-content">
   <div class="container">
-    
+
 
 
     <table class="display" id="movie_media_table" style="width:100%">
@@ -107,12 +104,12 @@ if (isset($_GET['movie_id'])) {
         </thead>
 
         <?php
-        
+
         // query string for the Query A.1
-        $sql_A3 = "SELECT movie_id, movie_media_id, m_link, m_link_type FROM movie_media WHERE movie_id =" . $movie_id;
-        
-        if (!$sql_A3_result = $db->query($sql_A3)) {
-          die('There was an error running query[' . $connection->error . ']');
+        $sql_A3 = ['sql' => 'SELECT movie_id, movie_media_id, m_link, m_link_type FROM movie_media WHERE movie_id =?', 'params' => [$movie_id]];
+
+        if (!$sql_A3_result = db_query($db, $sql_A3)) {
+          security_fail(500, 'Unable to complete this request. Please try again later.');
         }
 
         // this is 1 to many relationship
@@ -124,23 +121,23 @@ if (isset($_GET['movie_id'])) {
           // output data of each row
           while ($a3_tuple = $sql_A3_result->fetch_assoc()) {
             echo '<tr>
-                      <td>' . $a3_tuple["movie_id"] . '</td>
-                      <td>' . $a3_tuple["movie_media_id"] . '</td>
-                      <td>' . $a3_tuple["m_link"] . '</td>
-                      <td>' . $a3_tuple["m_link_type"] . ' </span> </td>
+                      <td>' . h($a3_tuple["movie_id"]) . '</td>
+                      <td>' . h($a3_tuple["movie_media_id"]) . '</td>
+                      <td>' . h($a3_tuple["m_link"]) . '</td>
+                      <td>' . h($a3_tuple["m_link_type"]) . ' </span> </td>
                   </tr>';
-            echo '<img src="'.$shirtloc.$a3_tuple["m_link"].'" width="100" height="100" />';
+            echo '<img src="' . h($shirtloc) . h($a3_tuple["m_link"]) . '" width="100" height="100" />';
           } //end while
-            
-            
-           
-        } //end second if 
-            
+
+
+
+        } //end second if
+
         $sql_A3_result->close();
         ?>
         <figure>
 
-          
+
           <figcaption>Some more description</figcaption>
         </figure>
     </table>
@@ -153,7 +150,7 @@ if (isset($_GET['movie_id'])) {
 
 <div class="right-content">
   <div class="container">
-    
+
 
     <table class="display" id="keywords_table" style="width:100%">
       <div class="table responsive">
@@ -161,19 +158,19 @@ if (isset($_GET['movie_id'])) {
         <thead>
           <tr>
             <th> Keywords </th>
-            
+
           </tr>
         </thead>
 
         <?php
 
         // query string for the Query A.1
-        $sql_A4 = "SELECT keyword FROM movie_keywords WHERE movie_id=" . $movie_id;
+        $sql_A4 = ['sql' => 'SELECT keyword FROM movie_keywords WHERE movie_id=?', 'params' => [$movie_id]];
 
         // echo $sql_A4;
 
-        if (!$sql_A4_result = $db->query($sql_A4)) {
-          die('There was an error running query[' . $db->error . ']');
+        if (!$sql_A4_result = db_query($db, $sql_A4)) {
+          security_fail(500, 'Unable to complete this request. Please try again later.');
         }
 
         // this is 1 to many relationship
@@ -183,11 +180,11 @@ if (isset($_GET['movie_id'])) {
           // output data of each row
           while ($a4_tuple = $sql_A4_result->fetch_assoc()) {
             echo '<tr>
-                      <td>' . $a4_tuple["keyword"] . ' </span> </td>
+                      <td>' . h($a4_tuple["keyword"]) . ' </span> </td>
                   </tr>';
           } //end while
 
-        } //end second if 
+        } //end second if
 
         $sql_A4_result->close();
         ?>
@@ -208,17 +205,17 @@ if (isset($_GET['movie_id'])) {
         <thead>
           <tr>
             <th> Trivia </th>
-            
+
           </tr>
         </thead>
 
         <?php
 
         // query string for the Query A.1
-        $sql_A5 = "SELECT movie_trivia_name FROM `movie_trivia` WHERE movie_id=" . $movie_id;
+        $sql_A5 = ['sql' => 'SELECT movie_trivia_name FROM `movie_trivia` WHERE movie_id=?', 'params' => [$movie_id]];
 
-        if (!$sql_A5_result = $db->query($sql_A5)) {
-          die('There was an error running query[' . $db->error . ']');
+        if (!$sql_A5_result = db_query($db, $sql_A5)) {
+          security_fail(500, 'Unable to complete this request. Please try again later.');
         }
 
         // this is 1 to many relationship
@@ -229,13 +226,13 @@ if (isset($_GET['movie_id'])) {
           $s_no = 1;
           while ($a5_tuple = $sql_A5_result->fetch_assoc()) {
             echo '<tr>
-                     <td> ' .$s_no .' : </td>
-                      <td>' . $a5_tuple["movie_trivia_name"] . ' </span> </td>
+                     <td> ' . h($s_no) . ' : </td>
+                      <td>' . h($a5_tuple["movie_trivia_name"]) . ' </span> </td>
                   </tr>';
             $s_no = $s_no + 1;
           } //end while
 
-        } //end second if 
+        } //end second if
 
         $sql_A5_result->close();
         ?>
@@ -250,7 +247,7 @@ if (isset($_GET['movie_id'])) {
 
 <div class="right-content">
   <div class="container">
-    
+
 
     <table class="display" id="movie_people_table" style="width:100%">
       <div class="table responsive">
@@ -271,14 +268,14 @@ if (isset($_GET['movie_id'])) {
         <?php
 
         // query string for the Query A.1
-        $sql_B1 = "SELECT stage_name, first_name, middle_name, last_name, gender, `role`, screen_name, image_name 
-                   FROM movie_people INNER JOIN people 
-                   ON movie_people.people_id = people.people_id 
-                   WHERE movie_people.movie_id=" . $movie_id;
+        $sql_B1 = ['sql' => 'SELECT stage_name, first_name, middle_name, last_name, gender, `role`, screen_name, image_name
+                   FROM movie_people INNER JOIN people
+                   ON movie_people.people_id = people.people_id
+                   WHERE movie_people.movie_id=?', 'params' => [$movie_id]];
 
 
-        if (!$sql_B1_result = $db->query($sql_B1)) {
-          die('There was an error running query[' . $connection->error . ']');
+        if (!$sql_B1_result = db_query($db, $sql_B1)) {
+          security_fail(500, 'Unable to complete this request. Please try again later.');
         }
 
         // this is 1 to many relationship
@@ -288,17 +285,17 @@ if (isset($_GET['movie_id'])) {
           // output data of each row
           while ($b1_tuple = $sql_B1_result->fetch_assoc()) {
             echo '<tr>
-                      <td>' . $b1_tuple["stage_name"] . '</td>
-                      <td>' . $b1_tuple["first_name"] . '</td>
-                      <td>' . $b1_tuple["middle_name"] . '</td>
-                      <td>' . $b1_tuple["last_name"] . '</td>
-                      <td>' . $b1_tuple["role"] . '</td>
-                      <td>' . $b1_tuple["screen_name"] . '</td>
-                      <td>' . $b1_tuple["image_name"] . ' </span> </td>
+                      <td>' . h($b1_tuple["stage_name"]) . '</td>
+                      <td>' . h($b1_tuple["first_name"]) . '</td>
+                      <td>' . h($b1_tuple["middle_name"]) . '</td>
+                      <td>' . h($b1_tuple["last_name"]) . '</td>
+                      <td>' . h($b1_tuple["role"]) . '</td>
+                      <td>' . h($b1_tuple["screen_name"]) . '</td>
+                      <td>' . h($b1_tuple["image_name"]) . ' </span> </td>
                   </tr>';
           } //end while
 
-        } //end second if 
+        } //end second if
 
         $sql_B1_result->close();
         ?>
@@ -310,7 +307,7 @@ if (isset($_GET['movie_id'])) {
 
 <div class="right-content">
   <div class="container">
-    
+
 
     <table class="display" id="songs_table" style="width:100%">
       <div class="table responsive">
@@ -325,11 +322,11 @@ if (isset($_GET['movie_id'])) {
         <?php
 
         // query string for the Query A.1
-        $sql_C1 = "SELECT title FROM songs INNER JOIN movie_song ON (movie_song.song_id = songs.song_id)
- WHERE movie_id=" . $movie_id;
+        $sql_C1 = ['sql' => 'SELECT title FROM songs INNER JOIN movie_song ON (movie_song.song_id = songs.song_id)
+ WHERE movie_id=?', 'params' => [$movie_id]];
 
-        if (!$sql_C1_result = $db->query($sql_C1)) {
-          die('There was an error running query[' . $db->error . ']');
+        if (!$sql_C1_result = db_query($db, $sql_C1)) {
+          security_fail(500, 'Unable to complete this request. Please try again later.');
         }
 
         // this is 1 to many relationship
@@ -339,12 +336,12 @@ if (isset($_GET['movie_id'])) {
           // output data of each row
           while ($c1_tuple = $sql_C1_result->fetch_assoc()) {
             echo '<tr>
-                      <td>' . $c1_tuple["title"] . '</td>
-                      <td>' . $c1_tuple["lyrics10"] . '</td>
+                      <td>' . h($c1_tuple["title"]) . '</td>
+                      <td>' . h($c1_tuple["lyrics10"]) . '</td>
                   </tr>';
           } //end while
 
-        } //end second if 
+        } //end second if
 
         $sql_C1_result->close();
         ?>

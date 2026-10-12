@@ -1,6 +1,10 @@
 <?php
-session_start();
-
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -23,12 +27,9 @@ if (!$song_id) {
 }
 
 // Get existing song
-$stmt = mysqli_prepare(
-    $db,
-    "SELECT song_id, title, lyrics, theme
+$stmt = db_prepare($db, "SELECT song_id, title, lyrics, theme
      FROM songs
-     WHERE song_id = ?"
-);
+     WHERE song_id = ?");
 
 mysqli_stmt_bind_param($stmt, "i", $song_id);
 mysqli_stmt_execute($stmt);
@@ -63,12 +64,12 @@ mysqli_stmt_close($stmt);
 
     <h1>Modify Song</h1>
 
-    <form action="modify_song.php?song_id=<?php echo $song_id; ?>" method="POST">
+    <form action="modify_song.php?song_id=<?php echo h($song_id); ?>" method="POST"><?php echo csrf_field(); ?>
 
         <input
             type="hidden"
             name="song_id"
-            value="<?php echo htmlspecialchars($song_id); ?>"
+            value="<?php echo h($song_id); ?>"
         >
 
         <div class="form-group">
@@ -79,7 +80,7 @@ mysqli_stmt_close($stmt);
                 id="title"
                 name="title"
                 class="form-control"
-                value="<?php echo htmlspecialchars($title); ?>"
+                value="<?php echo h($title); ?>"
                 required
             >
         </div>
@@ -94,7 +95,7 @@ mysqli_stmt_close($stmt);
                 name="lyrics"
                 class="form-control"
                 rows="6"
-            ><?php echo htmlspecialchars($lyrics); ?></textarea>
+            ><?php echo h($lyrics); ?></textarea>
         </div>
 
         <br>
@@ -107,7 +108,7 @@ mysqli_stmt_close($stmt);
                 id="theme"
                 name="theme"
                 class="form-control"
-                value="<?php echo htmlspecialchars($theme); ?>"
+                value="<?php echo h($theme); ?>"
             >
         </div>
 
@@ -144,12 +145,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit("Invalid song information.");
     }
 
-    $update_stmt = mysqli_prepare(
-        $db,
-        "UPDATE songs
+    $update_stmt = db_prepare($db, "UPDATE songs
          SET title = ?, lyrics = ?, theme = ?
-         WHERE song_id = ?"
-    );
+         WHERE song_id = ?");
 
     mysqli_stmt_bind_param(
         $update_stmt,

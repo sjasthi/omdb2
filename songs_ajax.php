@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
 require_once('initialize.php');
 
@@ -11,7 +14,7 @@ $sql = "SELECT
             theme
         FROM songs";
 
-$result = $db->query($sql);
+$result = db_query($db, $sql);
 
 $data = array();
 

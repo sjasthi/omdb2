@@ -1,7 +1,12 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -9,12 +14,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-if (($_SESSION['role'] ?? '') !== 'ADMIN') {
-    http_response_code(403);
-    echo "<h2>Access Denied</h2>";
-    echo "<p>Administrator access is required.</p>";
-    exit();
-}
+
 
 $nav_selected = "SETUP";
   $left_buttons = "NO";
@@ -22,13 +22,13 @@ $nav_selected = "SETUP";
 
   include("./nav.php");
 
-  $query = mysqli_query($db,"select movie_id from movies order by movie_id desc limit 1;");
+  $query = db_query($db, "select movie_id from movies order by movie_id desc limit 1;");
   $row = mysqli_fetch_row($query);
   $m_id = $row[0] + 1;
-  $people_query = mysqli_query($db,"select people_id from people order by people_id desc limit 1");
+  $people_query = db_query($db, "select people_id from people order by people_id desc limit 1");
   $people_row = mysqli_fetch_row($people_query);
   $p_id = $people_row[0] + 1;
-  $song_query = mysqli_query($db,"select song_id from songs order by song_id desc limit 1");
+  $song_query = db_query($db, "select song_id from songs order by song_id desc limit 1");
   $song_row = mysqli_fetch_row($song_query);
   $s_id = $song_row[0] + 1;
   
@@ -39,7 +39,7 @@ $nav_selected = "SETUP";
     <div class="container">
 
       <h3 style = "color: #01B0F1;">Setup</h3>
-      <form enctype='multipart/form-data' method='post'>
+      <form enctype='multipart/form-data' method='post'><?php echo csrf_field(); ?>
         <label>Select Table name</label>
         <Select name="table_name" required class="form-control">
           <option value="" disabled>Select Table name</option>
@@ -92,7 +92,11 @@ if (isset($_POST['submit'])) {
         strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)) === 'csv'
     ) {
 
-          $table_name = $_POST['table_name'];
+          $table_name = $_POST['table_name'] ?? '';
+          if (!is_string($table_name) || !in_array($table_name, ['movies', 'people', 'songs'], true)
+              || !is_uploaded_file($file['tmp_name']) || $file['size'] > 5 * 1024 * 1024) {
+              security_fail(400, 'Select a valid table and a CSV file of at most 5 MB.');
+          }
 						$handle=$_FILES["filename"]["tmp_name"];
 						$data = array_map(function($line) {
 					    return str_getcsv($line, ',');
@@ -100,6 +104,7 @@ if (isset($_POST['submit'])) {
 					$key = array_key_last($data);
           end($data);
 					$last_index = key($data);
+          if (count($data) > 10000) { security_fail(400, 'Upload at most 10,000 rows at a time.'); }
           for($i = 0; $i<=$last_index ; $i++){
             $data1 = "";
             $data2 = "";
@@ -112,21 +117,21 @@ if (isset($_POST['submit'])) {
             if(!empty($data[$i][3])){$data4 = $data[$i][3];}
             if(!empty($data[$i][4])){$data5 = $data[$i][4];}
             if($table_name=="movies"){
-                $query = mysqli_query($db,"INSERT INTO movies (movie_id, native_name, english_name, year_made)
-                select '$m_id', '$data1','$data2','$data3'
+                $query = db_query($db, ['sql' => 'INSERT INTO movies (movie_id, native_name, english_name, year_made)
+                select ?, ?,?,?
                 WHERE NOT EXISTS (
                     SELECT 1
                     FROM movies
-                    WHERE native_name = '$data1' AND year_made = '$data3'
+                    WHERE native_name = ? AND year_made = ?
                 )
-                ");
+                ', 'params' => [$m_id, $data1, $data2, $data3, $data1, $data3]]);
                 $m_id = $m_id + 1;
                 if($query){
                     $native_update = $data1;
                     $nativeJSON = strtolower(str_replace(" ", "", $native_update));
-                    $query2 = "SELECT movie_id from movies where native_name = '$data1' and english_name = '$data2' and year_made = '$data3'";
+                    $query2 = ['sql' => 'SELECT movie_id from movies where native_name = ? and english_name = ? and year_made = ?', 'params' => [$data1, $data2, $data3]];
                     
-                    $result = mysqli_query($db, $query2);
+                    $result = db_query($db, $query2);
                     $row=mysqli_fetch_row($result);
                     $movie_id = intval($row[0]);
                     
@@ -139,7 +144,7 @@ $jsonLog = "http://indic-wp.thisisjava.com/api/getBaseCharacters.php?string="
     . urlencode($nativeJSON)
     . "&language=Telugu";
 
-$jsonfile = @file_get_contents($jsonLog);
+$jsonfile = @file_get_contents($jsonLog, false, stream_context_create(['http' => ['timeout' => 3]]));
 
 if ($jsonfile !== false) {
     $jsonStart = strstr($jsonfile, '{');
@@ -162,7 +167,7 @@ $jsonLength = "http://indic-wp.thisisjava.com/api/getLength.php?string="
     . urlencode($nativeJSON)
     . "&language=English";
 
-$jsonfile = @file_get_contents($jsonLength);
+$jsonfile = @file_get_contents($jsonLength, false, stream_context_create(['http' => ['timeout' => 3]]));
 
 if ($jsonfile !== false) {
     $jsonStart = strstr($jsonfile, '{');
@@ -180,11 +185,8 @@ if ($jsonfile !== false) {
 }
 
 // Insert movie number data safely
-$stmt_numbers = mysqli_prepare(
-    $db,
-    "INSERT INTO movie_numbers (movie_id, length, base_chars)
-     VALUES (?, ?, ?)"
-);
+$stmt_numbers = db_prepare($db, "INSERT INTO movie_numbers (movie_id, length, base_chars)
+     VALUES (?, ?, ?)");
 
 mysqli_stmt_bind_param(
     $stmt_numbers,
@@ -200,13 +202,13 @@ mysqli_stmt_close($stmt_numbers);
           }
           elseif ($table_name=="people") {
             $image_name = "image file name";
-            $query = mysqli_query($db,"INSERT INTO people (people_id, stage_name, first_name, middle_name, last_name, gender, image_name)
-            VALUES ('$p_id', '$data1','$data2','$data3','$data4','$data5','$image_name')");
+            $query = db_query($db, ['sql' => 'INSERT INTO people (people_id, stage_name, first_name, middle_name, last_name, gender, image_name)
+            VALUES (?, ?,?,?,?,?,?)', 'params' => [$p_id, $data1, $data2, $data3, $data4, $data5, $image_name]]);
               $p_id = $p_id + 1;
           }
           else{
-            $query = mysqli_query($db,"INSERT INTO songs (song_id, title, lyrics, theme)
-             VALUES ('$s_id', '$data1','$data2','$data3')");
+            $query = db_query($db, ['sql' => 'INSERT INTO songs (song_id, title, lyrics, theme)
+             VALUES (?, ?,?,?)', 'params' => [$s_id, $data1, $data2, $data3]]);
               $s_id = $s_id + 1;
           }
 

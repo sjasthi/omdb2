@@ -1,7 +1,13 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -48,12 +54,10 @@ if (!$movie_id || $movie_id < 1) {
 /*
  * Make sure the movie actually exists.
  */
-$stmt = $db->prepare(
-    "SELECT movie_id
+$stmt = db_prepare($db, "SELECT movie_id
      FROM movies
      WHERE movie_id = ?
-     LIMIT 1"
-);
+     LIMIT 1");
 
 $stmt->bind_param("i", $movie_id);
 $stmt->execute();
@@ -112,7 +116,7 @@ function get_next_id(
         "SELECT COALESCE(MAX(`$column`), 0) + 1 AS next_id
          FROM `$table`";
 
-    $result = $db->query($sql);
+    $result = db_query($db, $sql);
     $row = $result->fetch_assoc();
 
     return (int)$row['next_id'];
@@ -134,8 +138,7 @@ try {
         $tag_line !== ''
     ) {
 
-        $stmt = $db->prepare(
-            "INSERT INTO movie_data
+        $stmt = db_prepare($db, "INSERT INTO movie_data
             (
                 movie_id,
                 language,
@@ -144,8 +147,7 @@ try {
                 plot,
                 tag_line
             )
-            VALUES (?, ?, ?, ?, ?, ?)"
-        );
+            VALUES (?, ?, ?, ?, ?, ?)");
 
         $stmt->bind_param(
             "isssss",
@@ -173,15 +175,13 @@ try {
             'movie_trivia_id'
         );
 
-        $stmt = $db->prepare(
-            "INSERT INTO movie_trivia
+        $stmt = db_prepare($db, "INSERT INTO movie_trivia
             (
                 movie_id,
                 movie_trivia_id,
                 movie_trivia_name
             )
-            VALUES (?, ?, ?)"
-        );
+            VALUES (?, ?, ?)");
 
         $stmt->bind_param(
             "iis",
@@ -209,16 +209,14 @@ try {
             'movie_media_id'
         );
 
-        $stmt = $db->prepare(
-            "INSERT INTO movie_media
+        $stmt = db_prepare($db, "INSERT INTO movie_media
             (
                 movie_id,
                 m_link,
                 m_link_type,
                 movie_media_id
             )
-            VALUES (?, ?, ?, ?)"
-        );
+            VALUES (?, ?, ?, ?)");
 
         $stmt->bind_param(
             "issi",
@@ -238,14 +236,12 @@ try {
      */
     if ($keyword !== '') {
 
-        $stmt = $db->prepare(
-            "INSERT INTO movie_keywords
+        $stmt = db_prepare($db, "INSERT INTO movie_keywords
             (
                 movie_id,
                 keyword
             )
-            VALUES (?, ?)"
-        );
+            VALUES (?, ?)");
 
         $stmt->bind_param(
             "is",
@@ -269,15 +265,13 @@ try {
             'movie_quote_id'
         );
 
-        $stmt = $db->prepare(
-            "INSERT INTO movie_quotes
+        $stmt = db_prepare($db, "INSERT INTO movie_quotes
             (
                 movie_id,
                 movie_quote_name,
                 movie_quote_id
             )
-            VALUES (?, ?, ?)"
-        );
+            VALUES (?, ?, ?)");
 
         $stmt->bind_param(
             "isi",
@@ -296,14 +290,12 @@ try {
      */
     if ($anagram !== '') {
 
-        $stmt = $db->prepare(
-            "INSERT INTO movie_anagrams
+        $stmt = db_prepare($db, "INSERT INTO movie_anagrams
             (
                 movie_id,
                 anagram
             )
-            VALUES (?, ?)"
-        );
+            VALUES (?, ?)");
 
         $stmt->bind_param(
             "is",

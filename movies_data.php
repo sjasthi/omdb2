@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
   $nav_selected = "MOVIES";
   $left_buttons = "YES";
@@ -51,19 +54,19 @@ $sql = "SELECT movie_data.*, movies.native_name FROM movie_data left join movies
 // If there is no corresponding movie_data, then show those as blanks
 //NOTE: Whenever you see ., that means + in PHP
 
-$result = $db->query($sql);
+$result = db_query($db, $sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
                     // Add four more rows of data which you are getting from the database
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
-                                <td>'.$row["movie_id"].'</td>
-                                <td>'.$row["native_name"].'</td>
-                                <td>'.$row["language"].'</td>
-                                <td>'.$row["country"].'</td>
-                                <td>'.$row["genre"].'</td>
-                                <td>'.$row["plot"].'</td>
+                                <td>' . h($row["movie_id"]) . '</td>
+                                <td>' . h($row["native_name"]) . '</td>
+                                <td>' . h($row["language"]) . '</td>
+                                <td>' . h($row["country"]) . '</td>
+                                <td>' . h($row["genre"]) . '</td>
+                                <td>' . h($row["plot"]) . '</td>
                             </tr>';
                     }//end while
                 }//end if

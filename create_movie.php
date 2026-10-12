@@ -1,6 +1,10 @@
 <?php
-session_start();
-
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -24,7 +28,7 @@ include("./nav.php");
 
 <body>
 
-<form id="movieCreate" action="createTheMovie.php" method="post">
+<form id="movieCreate" action="createTheMovie.php" method="post"><?php echo csrf_field(); ?>
 
     <h1>Create a Movie</h1>
 
@@ -60,7 +64,7 @@ include("./nav.php");
                 name="year"
                 placeholder="Year"
                 min="1888"
-                max="<?php echo date('Y') + 10; ?>"
+                max="<?php echo h(date('Y') + 10); ?>"
                 required
             >
         </p>

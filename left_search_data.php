@@ -1,6 +1,9 @@
+<?php
+require_once __DIR__ . '/security.php';
+?>
 <div id="menu-left">
 
-    <form method="post">
+    <form method="post"><?php echo csrf_field(); ?>
   	<div <?php if($left_selected == "SONGS")
   	{ echo 'class="menu-left-current-page"'; } ?>>
     <button type="submit" name="songs"><img src="./images/songs.png">

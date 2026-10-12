@@ -1,6 +1,10 @@
+<?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
 <?php 
-session_start();
-
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -38,8 +42,8 @@ $movie_id = (int)$movie_id;
             }
         }
         foreach($song_id as $song){
-            $sql = "insert ignore into movie_song (movie_id, song_id) values (".$movie_id.", ".$song.");";
-            mysqli_query($db, $sql);
+            $sql = ['sql' => 'insert ignore into movie_song (movie_id, song_id) values (?, ?);', 'params' => [$movie_id, $song]];
+            db_query($db, $sql);
         }
     }
     else if(isset($_POST['delete'])){
@@ -51,14 +55,14 @@ $movie_id = (int)$movie_id;
             }
         }
         foreach($song_id as $song){
-            $sql = "delete from movie_song where movie_id = ".$movie_id." and song_id = ".$song.";";
-            mysqli_query($db, $sql);
+            $sql = ['sql' => 'delete from movie_song where movie_id = ? and song_id = ?;', 'params' => [$movie_id, $song]];
+            db_query($db, $sql);
         }
     }
 
-    $sql = mysqli_query($db,"select songs.* from songs left join movie_song on songs.song_id = movie_song.song_id where movie_song.movie_id = ".$movie_id.";");
+    $sql = db_query($db, ['sql' => 'select songs.* from songs left join movie_song on songs.song_id = movie_song.song_id where movie_song.movie_id = ?;', 'params' => [$movie_id]]);
 
-    $sql2 = mysqli_query($db,"select native_name from movies where movie_id = ".$movie_id.";");
+    $sql2 = db_query($db, ['sql' => 'select native_name from movies where movie_id = ?;', 'params' => [$movie_id]]);
     $name = mysqli_fetch_assoc($sql2);
   
   ?>
@@ -66,14 +70,14 @@ $movie_id = (int)$movie_id;
 <!DOCTYPE html>
 <html>
 <div class = "container">
-<h1>Attach A Song to <?php echo $name['native_name'];?></h1>
+<h1>Attach A Song to <?php echo h($name['native_name']);?></h1>
 <?php
 if(mysqli_num_rows($sql)>0){
     $count = '1';
 ?>
     <br><br><br><br>
-    <h3>Songs for <?php echo $name['native_name'];?></h3>
-    <form name="delete_song" id="delete_song" method="post" action="add_song.php">
+    <h3>Songs for <?php echo h($name['native_name']);?></h3>
+    <form name="delete_song" id="delete_song" method="post" action="add_song.php"><?php echo csrf_field(); ?>
       <table id="info1" cellpadding="0" cellspacing="0" border="0"
           class="datatable table table-striped table-bordered datatable-style table-hover"
           width="100%" style="width: 100px;">
@@ -91,11 +95,11 @@ if(mysqli_num_rows($sql)>0){
         while($row = mysqli_fetch_assoc($sql)){
     ?>
             <tr>
-            <td><input type="checkbox" class="delete" name="song_id<?php echo $count; ?>" value="<?php echo $row['song_id']; ?>"></td>
-            <td><?php echo $row['song_id']; ?></td>
-            <td><?php echo $row['title']; ?></td>
-            <td><?php echo $row['lyrics']; ?></td>
-            <td><?php echo $row['theme']; ?></td>
+            <td><input type="checkbox" class="delete" name="song_id<?php echo h($count); ?>" value="<?php echo h($row['song_id']); ?>"></td>
+            <td><?php echo h($row['song_id']); ?></td>
+            <td><?php echo h($row['title']); ?></td>
+            <td><?php echo h($row['lyrics']); ?></td>
+            <td><?php echo h($row['theme']); ?></td>
 
             </tr>
             
@@ -106,7 +110,7 @@ if(mysqli_num_rows($sql)>0){
     ?>
             </tbody>
             </table>
-            <input type="hidden" name="movie_id" value="<?php echo $movie_id; ?>" />
+            <input type="hidden" name="movie_id" value="<?php echo h($movie_id); ?>" />
             <input type="checkbox" name="delete" id="deleteFinal" value="delete" style="display:none;" required>
             </form>
 
@@ -123,7 +127,7 @@ if(mysqli_num_rows($sql)>0){
 <br>
 <?php } ?>
 <h3>Song Library</h3>
-<form name="add_song" id="add_song" class="add_song" method="post" action="add_song.php">
+<form name="add_song" id="add_song" class="add_song" method="post" action="add_song.php"><?php echo csrf_field(); ?>
   <table id="info" cellpadding="0" cellspacing="0" border="0"
       class="datatable table table-striped table-bordered datatable-style table-hover"
       width="100%" style="width: 100px;">
@@ -141,31 +145,7 @@ if(mysqli_num_rows($sql)>0){
   <?php
 
   $count = '1';
-      $query1 = mysqli_query($db,"select songs.song_id from songs left join movie_song on movie_song.song_id = songs.song_id where movie_song.movie_id = $movie_id");
-      $avoid_songs = [];
-      $attempt = '';
-    if(mysqli_num_rows($query1)>0){
-      while($row = mysqli_fetch_assoc($query1)){
-          $avoid_songs[] = $row['song_id'];
-      }
-        $attempt = "select * from songs where ";
-
-        $count = 0;
-        while ($count < count($avoid_songs)){
-            if(($count + 1) != count($avoid_songs)){
-                $attempt .= 'song_id != '.$avoid_songs[$count].' and ';
-            } else {
-                $attempt .= 'song_id != '.$avoid_songs[$count];
-            }
-            $count++;
-        }
-    } else {
-        $attempt = 'select * from songs';
-    }
-
-    
-
-    $query = mysqli_query($db, $attempt);
+    $query = db_query($db, 'SELECT * FROM songs WHERE song_id NOT IN (SELECT song_id FROM movie_song WHERE movie_id = ?)', [$movie_id]);
     if(mysqli_num_rows($query)>0){
       while($row = mysqli_fetch_assoc($query)){
 
@@ -174,11 +154,11 @@ if(mysqli_num_rows($sql)>0){
 
 
             <tr>
-            <td><input type="checkbox" class="add" id="add" name="song_id<?php echo $count; ?>" value="<?php echo $row['song_id']; ?>"></td>
-            <td><?php echo $row['song_id']; ?></td>
-            <td><?php echo $row['title']; ?></td>
-            <td><?php echo $row['lyrics']; ?></td>
-            <td><?php echo $row['theme']; ?></td>
+            <td><input type="checkbox" class="add" id="add" name="song_id<?php echo h($count); ?>" value="<?php echo h($row['song_id']); ?>"></td>
+            <td><?php echo h($row['song_id']); ?></td>
+            <td><?php echo h($row['title']); ?></td>
+            <td><?php echo h($row['lyrics']); ?></td>
+            <td><?php echo h($row['theme']); ?></td>
 
             </tr>
 
@@ -190,7 +170,7 @@ if(mysqli_num_rows($sql)>0){
 
             </tbody>
             </table>
-            <input type="hidden" name="movie_id" value="<?php echo $movie_id; ?>" />
+            <input type="hidden" name="movie_id" value="<?php echo h($movie_id); ?>" />
             <input type="checkbox" name="add" id="addFinal" value="add" style="display:none;" required>
             </form>
             

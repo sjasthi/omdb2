@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 $nav_selected = "SONGS";
 $left_buttons = "YES";
 $left_selected = "NO";
@@ -91,7 +94,7 @@ media (from songs_media - show the IDs as comma separated list, media_link will 
 ======================================================================== -->
 <?php
 if (isset($_GET['song_id'])) {
-  $song_id = mysqli_real_escape_string($db, $_GET['song_id']);
+  $song_id = $_GET['song_id'];
 }
 ?>
 
@@ -127,18 +130,18 @@ year_made
 
     <?php
     // query string for the Query A.1
-    $sql_A1 = "select * from songs where song_id='$song_id'";
+    $sql_A1 = ['sql' => 'select * from songs where song_id=?', 'params' => [$song_id]];
 
-    if (!$sql_A1_result = $db->query($sql_A1)) {
-      die('There was an error running query[' . $connection->error . ']');
+    if (!$sql_A1_result = db_query($db, $sql_A1)) {
+      security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
     if ($sql_A1_result->num_rows > 0) {
       $a1_tuple = $sql_A1_result->fetch_assoc(); ?>
 
-        <td> <?php echo $a1_tuple["title"] ?></td>
-        <td> <?php echo $a1_tuple["lyrics"] ?></td>
-        <td> <?php echo $a1_tuple["theme"] ?></td>
+        <td> <?php echo h($a1_tuple["title"]) ?></td>
+        <td> <?php echo h($a1_tuple["lyrics"]) ?></td>
+        <td> <?php echo h($a1_tuple["theme"]) ?></td>
       </tr>
     <?php } //end if
     else {

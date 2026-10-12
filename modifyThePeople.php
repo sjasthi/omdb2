@@ -1,7 +1,14 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
 include("./nav.php");
   if(isset($_POST['people_id'])){
-    $people_id = mysqli_real_escape_string($db, $_POST['people_id']);
+    $people_id = $_POST['people_id'];
     $stage_name = $_POST['stage_name'];
     $first_name = $_POST['first_name'];
     $middle_name = $_POST['middle_name'];
@@ -42,31 +49,31 @@ include("./nav.php");
 
       //People Update
       if(isset($_POST['stage_name']) && isset($_POST['first_name']) && isset($_POST['middle_name']) && isset($_POST['last_name']) && isset($_POST['gender']) && isset($_POST['image_name'])){
-          $sql = "UPDATE people SET stage_name='$stage_name', first_name='$first_name', middle_name='$middle_name', last_name='$last_name', gender='$gender', image_name='$image_name' WHERE people_id='$people_id'";
-          mysqli_query($db , $sql);
+          $sql = ['sql' => 'UPDATE people SET stage_name=?, first_name=?, middle_name=?, last_name=?, gender=?, image_name=? WHERE people_id=?', 'params' => [$stage_name, $first_name, $middle_name, $last_name, $gender, $image_name, $people_id]];
+          db_query($db, $sql);
       }
       
       //People_Trivia Update
       if(!empty($people_trivia_id)){
           for ($i = 0; $i < sizeof($people_trivia_id); $i++){
-              $sql2 = "UPDATE people_trivia SET people_trivia_name = '$people_trivia_name_update[$i]' WHERE people_id = '$people_id' and people_trivia_id = '$people_trivia_id[$i]'";
-              mysqli_query($db, $sql2);
+              $sql2 = ['sql' => 'UPDATE people_trivia SET people_trivia_name = ? WHERE people_id = ? and people_trivia_id = ?', 'params' => [$people_trivia_name_update[$i], $people_id, $people_trivia_id[$i]]];
+              db_query($db, $sql2);
           }
       }
       
       //Movie_People Update
       if(!empty($movie_id)){
           for ($i = 0; $i < sizeof($movie_id); $i++){
-              $sql3= "UPDATE movie_people SET role = '$role_update[$i]', screen_name = '$screen_name_update[$i]' WHERE movie_id = '$movie_id[$i]' and people_id = '$people_id'";
-              mysqli_query($db, $sql3);
+              $sql3= ['sql' => 'UPDATE movie_people SET role = ?, screen_name = ? WHERE movie_id = ? and people_id = ?', 'params' => [$role_update[$i], $screen_name_update[$i], $movie_id[$i], $people_id]];
+              db_query($db, $sql3);
           }
       }
       
       //Song_People Update
       if(!empty($song_id)){
           for ($i = 0; $i < sizeof($song_id); $i++){
-              $sql4 = "UPDATE song_people SET role = '$song_role_update[$i]' WHERE song_id = '$song_id[$i]' and people_id = '$people_id'";
-               mysqli_query($db, $sql4);
+              $sql4 = ['sql' => 'UPDATE song_people SET role = ? WHERE song_id = ? and people_id = ?', 'params' => [$song_role_update[$i], $song_id[$i], $people_id]];
+               db_query($db, $sql4);
           }
       }
       

@@ -1,4 +1,11 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
     include("./nav.php");
     $song_id = $_POST['song_id'];
     $total_elements = $_POST['total_elements'];
@@ -24,8 +31,8 @@
     for($i=1 ; $i<$total_elements ; $i++){
       if(!empty($_POST['people_id'.$i.''])){
       $people_id[$i] = $_POST['people_id'.$i.''];
-      $query = "INSERT INTO `song_people`(`song_id`, `people_id`, `role`) VALUES ('$song_id','$people_id[$i]','$role')";
-     $result = mysqli_query($db,$query);
+      $query = ['sql' => 'INSERT INTO `song_people`(`song_id`, `people_id`, `role`) VALUES (?,?,?)', 'params' => [$song_id, $people_id[$i], $role]];
+     $result = db_query($db, $query);
     }
     else{
       // break;

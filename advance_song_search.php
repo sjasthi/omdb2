@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "search_data";
   $left_buttons = "YES";
   $left_selected = "search_data";
@@ -37,7 +40,7 @@
       <?php
       if(!isset($_POST['movies']) AND !isset($_POST['people'])){ ?>
           <h3 style = "color: #01B0F1;">Search Songs</h3>
-          <form method="post" action="advance_song_search.php">
+          <form method="post" action="advance_song_search.php"><?php echo csrf_field(); ?>
 
             <div class="form-group">
               <label for="song_search">Search Songs</label>
@@ -90,7 +93,7 @@
 
 
 
-  <form method="post" action="advance_movie_search.php">
+  <form method="post" action="advance_movie_search.php"><?php echo csrf_field(); ?>
 
     <div class="form-group">
       <label for="movie_search">Search Movie</label>
@@ -133,7 +136,7 @@ if(isset($_POST['people'])){ ?>
   <h3 style = "color: #01B0F1;">Search Peoples</h3>
 
 
-  <form method="post" action="advance_people_search.php">
+  <form method="post" action="advance_people_search.php"><?php echo csrf_field(); ?>
 
     <div class="form-group">
       <label for="search_people">Search People</label>
@@ -144,9 +147,9 @@ if(isset($_POST['people'])){ ?>
 
       <select name="stage_name" id='selUser' class="form-control">
         <?php
-        $query = mysqli_query($db,"select * from people");
+        $query = db_query($db, "select * from people");
         while($options = mysqli_fetch_assoc($query)){ ?>
-          <option value="<?php echo $options['stage_name']?>"><?php echo $options['stage_name'];?></option>
+          <option value="<?php echo h($options['stage_name'])?>"><?php echo h($options['stage_name']);?></option>
 
         <?php }
         ?>
@@ -199,7 +202,7 @@ if(isset($_POST['people'])){ ?>
             $count = 0;
 
 // Prepared statement prevents SQL injection.
-$stmt = $db->prepare("
+$stmt = db_prepare($db, "
     SELECT *
     FROM songs
     WHERE title LIKE ?
@@ -227,10 +230,10 @@ $query = $stmt->get_result();
 
         <tr>
 
-        <th scope="row"><?php echo $count; ?></th>
-        <td><?php echo $song['title']; ?></td>
-        <td><?php echo $song['lyrics'] ?></td>
-        <td><?php echo $song['theme'] ?></td>
+        <th scope="row"><?php echo h($count); ?></th>
+        <td><?php echo h($song['title']); ?></td>
+        <td><?php echo h($song['lyrics']) ?></td>
+        <td><?php echo h($song['theme']) ?></td>
         </tr>
 
         <?php
@@ -271,14 +274,14 @@ $query = $stmt->get_result();
 
           <?php
           $count1 = 0;
-          $query1 = mysqli_query($db, "select songs.song_id, songs.title,songs.lyrics, songs.theme,song_people.role,people.stage_name, people.first_name,
+          $query1 = db_query($db, ['sql' => 'select songs.song_id, songs.title,songs.lyrics, songs.theme,song_people.role,people.stage_name, people.first_name,
           people.middle_name, people.last_name
             from song_people
             join songs on songs.song_id =song_people.song_id
             join people on people.people_id = song_people.people_id
-            where songs.title LIKE '%".$name1."%'
-            OR songs.lyrics LIKE '%".$name1."%'
-            OR songs.theme LIKE '%".$name1."%'");
+            where songs.title LIKE ?
+            OR songs.lyrics LIKE ?
+            OR songs.theme LIKE ?', 'params' => ['%' . $name1 . '%', '%' . $name1 . '%', '%' . $name1 . '%']]);
           if(mysqli_num_rows($query1)>0){
           while($song1 = mysqli_fetch_assoc($query1)){
           $count1++;
@@ -287,13 +290,13 @@ $query = $stmt->get_result();
 
       <tr>
 
-      <th scope="row"><?php echo $count1; ?></th>
-      <td><?php echo $song1['title']; ?></td>
-      <td><?php echo $song1['lyrics'] ?></td>
-      <td><?php echo $song1['theme'] ?></td>
-      <td><?php echo $song1['stage_name']; ?></td>
-      <td><?php echo $song1['first_name']." ".$song1['middle_name']." ".$song1['last_name']; ?></td>
-      <td><?php echo $song1['role'] ?></td>
+      <th scope="row"><?php echo h($count1); ?></th>
+      <td><?php echo h($song1['title']); ?></td>
+      <td><?php echo h($song1['lyrics']) ?></td>
+      <td><?php echo h($song1['theme']) ?></td>
+      <td><?php echo h($song1['stage_name']); ?></td>
+      <td><?php echo h($song1['first_name']) . " " . h($song1['middle_name']) . " " . h($song1['last_name']); ?></td>
+      <td><?php echo h($song1['role']) ?></td>
       </tr>
 
       <?php
@@ -334,15 +337,15 @@ $query = $stmt->get_result();
 
             <?php
             $count2 = 0;
-            $query2 = mysqli_query($db, "select songs.song_id, songs.title,songs.lyrics, songs.theme,movie_song.movie_id, movies.native_name,
+            $query2 = db_query($db, ['sql' => 'select songs.song_id, songs.title,songs.lyrics, songs.theme,movie_song.movie_id, movies.native_name,
             movies.english_name, movies.year_made
               from movie_song
               join songs on songs.song_id =movie_song.song_id
               join movies on movies.movie_id = movie_song.movie_id
-              where songs.title LIKE '%".$name1."%'
-              OR songs.lyrics LIKE '%".$name1."%'
-              OR songs.theme LIKE '%".$name1."%'
-              ");
+              where songs.title LIKE ?
+              OR songs.lyrics LIKE ?
+              OR songs.theme LIKE ?
+              ', 'params' => ['%' . $name1 . '%', '%' . $name1 . '%', '%' . $name1 . '%']]);
 
             if(mysqli_num_rows($query2)>0){
             while($song2 = mysqli_fetch_assoc($query2)){
@@ -352,13 +355,13 @@ $query = $stmt->get_result();
 
           <tr>
 
-          <th scope="row"><?php echo $count2; ?></th>
-          <td><?php echo $song2['title']; ?></td>
-          <td><?php echo $song2['lyrics'] ?></td>
-          <td><?php echo $song2['theme'] ?></td>
-          <td><?php echo $song2['native_name']; ?></td>
-          <td><?php echo $song2['english_name']; ?></td>
-          <td><?php echo $song2['year_made'] ?></td>
+          <th scope="row"><?php echo h($count2); ?></th>
+          <td><?php echo h($song2['title']); ?></td>
+          <td><?php echo h($song2['lyrics']) ?></td>
+          <td><?php echo h($song2['theme']) ?></td>
+          <td><?php echo h($song2['native_name']); ?></td>
+          <td><?php echo h($song2['english_name']); ?></td>
+          <td><?php echo h($song2['year_made']) ?></td>
           </tr>
 
         <?php } ?>
@@ -388,16 +391,16 @@ $query = $stmt->get_result();
 
               <?php
 
-              $query = mysqli_query($db,"select song_people.song_id , song_people.people_id,song_people.role,
+              $query = db_query($db, ['sql' => 'select song_people.song_id , song_people.people_id,song_people.role,
               people.stage_name, people.first_name , people.middle_name, people.last_name
               from song_people
               JOIN people ON people.people_id = song_people.people_id
               JOIN songs ON songs.song_id = song_people.song_id
-              where song_people.role ='lyricist'
-              AND (people.stage_name LIKE '%".$lyricist."%'
-              OR people.first_name LIKE '%".$lyricist."%'
-              OR people.middle_name LIKE '%".$lyricist."%'
-              OR people.last_name LIKE '%".$lyricist."%')") ;
+              where song_people.role =\'lyricist\'
+              AND (people.stage_name LIKE ?
+              OR people.first_name LIKE ?
+              OR people.middle_name LIKE ?
+              OR people.last_name LIKE ?)', 'params' => ['%' . $lyricist . '%', '%' . $lyricist . '%', '%' . $lyricist . '%', '%' . $lyricist . '%']]) ;
               $count = 0;
               if(mysqli_num_rows($query)>0){ ?>
                 <h3 style = "color: #01B0F1;">Songs Result</h3>
@@ -417,10 +420,10 @@ $query = $stmt->get_result();
                 <?php
                   while($row = mysqli_fetch_assoc($query)){
                   $song_id = $row['song_id'];
-                  $query1 = mysqli_query($db,"select songs.title, songs.lyrics, songs.theme
+                  $query1 = db_query($db, ['sql' => 'select songs.title, songs.lyrics, songs.theme
                   from songs
                   JOIN song_people ON song_people.song_id = songs.song_id
-                  WHERE song_people.song_id LIKE '%".$song_id."%'");
+                  WHERE song_people.song_id LIKE ?', 'params' => ['%' . $song_id . '%']]);
                   if(mysqli_num_rows($query1)>0){
                   while($row1 = mysqli_fetch_assoc($query1)){
                     $count++;
@@ -428,10 +431,10 @@ $query = $stmt->get_result();
 
 
                       <tr>
-                        <td><?php echo $count; ?></td>
-                      <td><?php echo $row1['title']; ?></td>
-                      <td><?php echo $row1['lyrics']; ?></td>
-                      <td><?php echo $row1['theme']; ?></td>
+                        <td><?php echo h($count); ?></td>
+                      <td><?php echo h($row1['title']); ?></td>
+                      <td><?php echo h($row1['lyrics']); ?></td>
+                      <td><?php echo h($row1['theme']); ?></td>
                       <td><?php echo "Lyricist"; ?></td>
                     </tr>
 
@@ -456,16 +459,16 @@ $query = $stmt->get_result();
              if(!empty($playback_singer)){ ?>
 
                <?php
-               $query = mysqli_query($db,"select song_people.song_id , song_people.people_id,song_people.role,
+               $query = db_query($db, ['sql' => 'select song_people.song_id , song_people.people_id,song_people.role,
                people.stage_name, people.first_name , people.middle_name, people.last_name
                from song_people
                JOIN people ON people.people_id = song_people.people_id
                JOIN songs ON songs.song_id = song_people.song_id
-               where song_people.role ='singer'
-               AND (people.stage_name LIKE '%".$playback_singer."%'
-               OR people.first_name LIKE '%".$playback_singer."%'
-               OR people.middle_name LIKE '%".$playback_singer."%'
-               OR people.last_name LIKE '%".$playback_singer."%')") ;
+               where song_people.role =\'singer\'
+               AND (people.stage_name LIKE ?
+               OR people.first_name LIKE ?
+               OR people.middle_name LIKE ?
+               OR people.last_name LIKE ?)', 'params' => ['%' . $playback_singer . '%', '%' . $playback_singer . '%', '%' . $playback_singer . '%', '%' . $playback_singer . '%']]) ;
                $count = 0;
                if(mysqli_num_rows($query)>0){ ?>
                  <h3 style = "color: #01B0F1;">Songs Result</h3>
@@ -485,10 +488,10 @@ $query = $stmt->get_result();
                  <?php
                    while($row = mysqli_fetch_assoc($query)){
                      $song_id = $row['song_id'];
-                     $query1 = mysqli_query($db,"select songs.title, songs.lyrics, songs.theme
+                     $query1 = db_query($db, ['sql' => 'select songs.title, songs.lyrics, songs.theme
                      from songs
                      JOIN song_people ON song_people.song_id = songs.song_id
-                     WHERE song_people.song_id LIKE '%".$song_id."%'");
+                     WHERE song_people.song_id LIKE ?', 'params' => ['%' . $song_id . '%']]);
                    if(mysqli_num_rows($query1)>0){
                    while($row1 = mysqli_fetch_assoc($query1)){
                      $count++;
@@ -496,10 +499,10 @@ $query = $stmt->get_result();
 
 
                        <tr>
-                         <td><?php echo $count; ?></td>
-                       <td><?php echo $row1['title']; ?></td>
-                       <td><?php echo $row1['lyrics']; ?></td>
-                       <td><?php echo $row1['theme']; ?></td>
+                         <td><?php echo h($count); ?></td>
+                       <td><?php echo h($row1['title']); ?></td>
+                       <td><?php echo h($row1['lyrics']); ?></td>
+                       <td><?php echo h($row1['theme']); ?></td>
                        <td><?php echo "Playback Singer"?></td>
                      </tr>
 
@@ -525,16 +528,16 @@ $query = $stmt->get_result();
               if(!empty($music_director)){ ?>
 
                 <?php
-                $query = mysqli_query($db,"select song_people.song_id , song_people.people_id,song_people.role,
+                $query = db_query($db, ['sql' => 'select song_people.song_id , song_people.people_id,song_people.role,
                 people.stage_name, people.first_name , people.middle_name, people.last_name
                 from song_people
                 JOIN people ON people.people_id = song_people.people_id
                 JOIN songs ON songs.song_id = song_people.song_id
-                where song_people.role ='music_director'
-                AND (people.stage_name LIKE '%".$music_director."%'
-                OR people.first_name LIKE '%".$music_director."%'
-                OR people.middle_name LIKE '%".$music_director."%'
-                OR people.last_name LIKE '%".$music_director."%')") ;
+                where song_people.role =\'music_director\'
+                AND (people.stage_name LIKE ?
+                OR people.first_name LIKE ?
+                OR people.middle_name LIKE ?
+                OR people.last_name LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]) ;
                 $count = 0;
                 if(mysqli_num_rows($query)>0){ ?>
                   <h3 style = "color: #01B0F1;">Songs Result</h3>
@@ -554,10 +557,10 @@ $query = $stmt->get_result();
                   <?php
                     while($row = mysqli_fetch_assoc($query)){
                       $song_id = $row['song_id'];
-                      $query1 = mysqli_query($db,"select songs.title, songs.lyrics, songs.theme
+                      $query1 = db_query($db, ['sql' => 'select songs.title, songs.lyrics, songs.theme
                       from songs
                       JOIN song_people ON song_people.song_id = songs.song_id
-                      WHERE song_people.song_id LIKE '%".$song_id."%'");
+                      WHERE song_people.song_id LIKE ?', 'params' => ['%' . $song_id . '%']]);
                     if(mysqli_num_rows($query1)>0){
                     while($row1 = mysqli_fetch_assoc($query1)){
                       $count++;
@@ -565,10 +568,10 @@ $query = $stmt->get_result();
 
 
                         <tr>
-                          <td><?php echo $count; ?></td>
-                        <td><?php echo $row1['title']; ?></td>
-                        <td><?php echo $row1['lyrics']; ?></td>
-                        <td><?php echo $row1['theme']; ?></td>
+                          <td><?php echo h($count); ?></td>
+                        <td><?php echo h($row1['title']); ?></td>
+                        <td><?php echo h($row1['lyrics']); ?></td>
+                        <td><?php echo h($row1['theme']); ?></td>
                         <td><?php echo "Music Director"; ?></td>
                       </tr>
 
@@ -592,16 +595,16 @@ $query = $stmt->get_result();
                if(!empty($leading_actor)){ ?>
 
                  <?php
-                 $query = mysqli_query($db,"select movie_people.movie_id , movie_people.people_id,movie_people.role,
+                 $query = db_query($db, ['sql' => 'select movie_people.movie_id , movie_people.people_id,movie_people.role,
                  people.stage_name, people.first_name , people.middle_name, people.last_name
                  from movie_people
                  JOIN people ON people.people_id = movie_people.people_id
                  JOIN movies ON movies.movie_id = movie_people.movie_id
-                 where movie_people.role ='lead_actor'
-                 AND (people.stage_name LIKE '%".$leading_actor."%'
-                 OR people.first_name LIKE '%".$leading_actor."%'
-                 OR people.middle_name LIKE '%".$leading_actor."%'
-                 OR people.last_name LIKE '%".$leading_actor."%')") ;
+                 where movie_people.role =\'lead_actor\'
+                 AND (people.stage_name LIKE ?
+                 OR people.first_name LIKE ?
+                 OR people.middle_name LIKE ?
+                 OR people.last_name LIKE ?)', 'params' => ['%' . $leading_actor . '%', '%' . $leading_actor . '%', '%' . $leading_actor . '%', '%' . $leading_actor . '%']]) ;
                  $count = 0;
                  if(mysqli_num_rows($query)>0){ ?>
                    <h3 style = "color: #01B0F1;">Songs Result</h3>
@@ -621,10 +624,10 @@ $query = $stmt->get_result();
                    <?php
                      while($row = mysqli_fetch_assoc($query)){
                      $movie_id = $row['movie_id'];
-                     $query1 = mysqli_query($db,"select songs.title, songs.lyrics, songs.theme
+                     $query1 = db_query($db, ['sql' => 'select songs.title, songs.lyrics, songs.theme
                      from songs
                      JOIN movie_song ON movie_song.song_id = songs.song_id
-                     WHERE movie_song.movie_id LIKE '%".$movie_id."%'");
+                     WHERE movie_song.movie_id LIKE ?', 'params' => ['%' . $movie_id . '%']]);
                      if(mysqli_num_rows($query1)>0){
                      while($row1 = mysqli_fetch_assoc($query1)){
                        $count++;
@@ -632,10 +635,10 @@ $query = $stmt->get_result();
 
 
                          <tr>
-                           <td><?php echo $count; ?></td>
-                         <td><?php echo $row1['title']; ?></td>
-                         <td><?php echo $row1['lyrics']; ?></td>
-                         <td><?php echo $row1['theme']; ?></td>
+                           <td><?php echo h($count); ?></td>
+                         <td><?php echo h($row1['title']); ?></td>
+                         <td><?php echo h($row1['lyrics']); ?></td>
+                         <td><?php echo h($row1['theme']); ?></td>
                          <td><?php echo "Lead Actor"; ?></td>
                        </tr>
 
@@ -657,16 +660,16 @@ $query = $stmt->get_result();
                 if(!empty($leading_actress)){ ?>
 
                   <?php
-                  $query = mysqli_query($db,"select movie_people.movie_id , movie_people.people_id,movie_people.role,
+                  $query = db_query($db, ['sql' => 'select movie_people.movie_id , movie_people.people_id,movie_people.role,
                   people.stage_name, people.first_name , people.middle_name, people.last_name
                   from movie_people
                   JOIN people ON people.people_id = movie_people.people_id
                   JOIN movies ON movies.movie_id = movie_people.movie_id
-                  where movie_people.role ='lead_actress'
-                  AND (people.stage_name LIKE '%".$leading_actress."%'
-                  OR people.first_name LIKE '%".$leading_actress."%'
-                  OR people.middle_name LIKE '%".$leading_actress."%'
-                  OR people.last_name LIKE '%".$leading_actress."%')") ;
+                  where movie_people.role =\'lead_actress\'
+                  AND (people.stage_name LIKE ?
+                  OR people.first_name LIKE ?
+                  OR people.middle_name LIKE ?
+                  OR people.last_name LIKE ?)', 'params' => ['%' . $leading_actress . '%', '%' . $leading_actress . '%', '%' . $leading_actress . '%', '%' . $leading_actress . '%']]) ;
                   $count = 0;
                   if(mysqli_num_rows($query)>0){ ?>
                     <h3 style = "color: #01B0F1;">Songs Result</h3>
@@ -686,10 +689,10 @@ $query = $stmt->get_result();
                     <?php
                       while($row = mysqli_fetch_assoc($query)){
                       $movie_id = $row['movie_id'];
-                      $query1 = mysqli_query($db,"select songs.title, songs.lyrics, songs.theme
+                      $query1 = db_query($db, ['sql' => 'select songs.title, songs.lyrics, songs.theme
                       from songs
                       JOIN movie_song ON movie_song.song_id = songs.song_id
-                      WHERE movie_song.movie_id LIKE '%".$movie_id."%'");
+                      WHERE movie_song.movie_id LIKE ?', 'params' => ['%' . $movie_id . '%']]);
                       if(mysqli_num_rows($query1)>0){
                       while($row1 = mysqli_fetch_assoc($query1)){
                         $count++;
@@ -697,10 +700,10 @@ $query = $stmt->get_result();
 
 
                           <tr>
-                            <td><?php echo $count; ?></td>
-                          <td><?php echo $row1['title']; ?></td>
-                          <td><?php echo $row1['lyrics']; ?></td>
-                          <td><?php echo $row1['theme']; ?></td>
+                            <td><?php echo h($count); ?></td>
+                          <td><?php echo h($row1['title']); ?></td>
+                          <td><?php echo h($row1['lyrics']); ?></td>
+                          <td><?php echo h($row1['theme']); ?></td>
                           <td><?php echo "Lead Actress"; ?></td>
                         </tr>
 
@@ -724,16 +727,16 @@ $query = $stmt->get_result();
                  if(!empty($director)){ ?>
 
                    <?php
-                   $query = mysqli_query($db,"select movie_people.movie_id , movie_people.people_id,movie_people.role,
+                   $query = db_query($db, ['sql' => 'select movie_people.movie_id , movie_people.people_id,movie_people.role,
                    people.stage_name, people.first_name , people.middle_name, people.last_name
                    from movie_people
                    JOIN people ON people.people_id = movie_people.people_id
                    JOIN movies ON movies.movie_id = movie_people.movie_id
-                   where movie_people.role ='director'
-                   AND (people.stage_name LIKE '%".$director."%'
-                   OR people.first_name LIKE '%".$director."%'
-                   OR people.middle_name LIKE '%".$director."%'
-                   OR people.last_name LIKE '%".$director."%')") ;
+                   where movie_people.role =\'director\'
+                   AND (people.stage_name LIKE ?
+                   OR people.first_name LIKE ?
+                   OR people.middle_name LIKE ?
+                   OR people.last_name LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]) ;
                    $count = 0;
                    if(mysqli_num_rows($query)>0){ ?>
                      <h3 style = "color: #01B0F1;">Songs Result</h3>
@@ -753,10 +756,10 @@ $query = $stmt->get_result();
                      <?php
                        while($row = mysqli_fetch_assoc($query)){
                        $movie_id = $row['movie_id'];
-                       $query1 = mysqli_query($db,"select songs.title, songs.lyrics, songs.theme
+                       $query1 = db_query($db, ['sql' => 'select songs.title, songs.lyrics, songs.theme
                        from songs
                        JOIN movie_song ON movie_song.song_id = songs.song_id
-                       WHERE movie_song.movie_id LIKE '%".$movie_id."%'");
+                       WHERE movie_song.movie_id LIKE ?', 'params' => ['%' . $movie_id . '%']]);
                        if(mysqli_num_rows($query1)>0){
                        while($row1 = mysqli_fetch_assoc($query1)){
                          $count++;
@@ -764,10 +767,10 @@ $query = $stmt->get_result();
 
 
                            <tr>
-                             <td><?php echo $count; ?></td>
-                           <td><?php echo $row1['title']; ?></td>
-                           <td><?php echo $row1['lyrics']; ?></td>
-                           <td><?php echo $row1['theme']; ?></td>
+                             <td><?php echo h($count); ?></td>
+                           <td><?php echo h($row1['title']); ?></td>
+                           <td><?php echo h($row1['lyrics']); ?></td>
+                           <td><?php echo h($row1['theme']); ?></td>
                            <td><?php echo "Director"; ?></td>
                          </tr>
 
@@ -792,16 +795,16 @@ $query = $stmt->get_result();
                   if(!empty($producer)){ ?>
 
                     <?php
-                    $query = mysqli_query($db,"select movie_people.movie_id , movie_people.people_id,movie_people.role,
+                    $query = db_query($db, ['sql' => 'select movie_people.movie_id , movie_people.people_id,movie_people.role,
                     people.stage_name, people.first_name , people.middle_name, people.last_name
                     from movie_people
                     JOIN people ON people.people_id = movie_people.people_id
                     JOIN movies ON movies.movie_id = movie_people.movie_id
-                    where movie_people.role ='producer'
-                    AND (people.stage_name LIKE '%".$producer."%'
-                    OR people.first_name LIKE '%".$producer."%'
-                    OR people.middle_name LIKE '%".$producer."%'
-                    OR people.last_name LIKE '%".$producer."%')") ;
+                    where movie_people.role =\'producer\'
+                    AND (people.stage_name LIKE ?
+                    OR people.first_name LIKE ?
+                    OR people.middle_name LIKE ?
+                    OR people.last_name LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]) ;
                     $count = 0;
                     if(mysqli_num_rows($query)>0){ ?>
                       <h3 style = "color: #01B0F1;">Songs Result</h3>
@@ -821,10 +824,10 @@ $query = $stmt->get_result();
                       <?php
                         while($row = mysqli_fetch_assoc($query)){
                         $movie_id = $row['movie_id'];
-                        $query1 = mysqli_query($db,"select songs.title, songs.lyrics, songs.theme
+                        $query1 = db_query($db, ['sql' => 'select songs.title, songs.lyrics, songs.theme
                         from songs
                         JOIN movie_song ON movie_song.song_id = songs.song_id
-                        WHERE movie_song.movie_id LIKE '%".$movie_id."%'");
+                        WHERE movie_song.movie_id LIKE ?', 'params' => ['%' . $movie_id . '%']]);
                         if(mysqli_num_rows($query1)>0){
                         while($row1 = mysqli_fetch_assoc($query1)){
                           $count++;
@@ -832,10 +835,10 @@ $query = $stmt->get_result();
 
 
                             <tr>
-                              <td><?php echo $count; ?></td>
-                            <td><?php echo $row1['title']; ?></td>
-                            <td><?php echo $row1['lyrics']; ?></td>
-                            <td><?php echo $row1['theme']; ?></td>
+                              <td><?php echo h($count); ?></td>
+                            <td><?php echo h($row1['title']); ?></td>
+                            <td><?php echo h($row1['lyrics']); ?></td>
+                            <td><?php echo h($row1['theme']); ?></td>
                             <td><?php echo "Producer"; ?></td>
                           </tr>
 

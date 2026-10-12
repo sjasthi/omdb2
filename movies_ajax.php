@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
 require_once('initialize.php');
 
@@ -11,7 +14,7 @@ $data = array();
 // If a valid year was supplied, only return movies from that year.
 if ($year !== '' && preg_match('/^\d{4}$/', $year)) {
 
-    $stmt = $db->prepare("
+    $stmt = db_prepare($db, "
         SELECT
             movie_id,
             native_name,
@@ -41,7 +44,7 @@ if ($year !== '' && preg_match('/^\d{4}$/', $year)) {
 } else {
 
     // Normal Movies page: return every movie.
-    $stmt = $db->prepare("
+    $stmt = db_prepare($db, "
         SELECT
             movie_id,
             native_name,

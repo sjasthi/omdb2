@@ -1,8 +1,13 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 require_once('initialize.php');
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -10,12 +15,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-if (($_SESSION['role'] ?? '') !== 'ADMIN') {
-    http_response_code(403);
-    echo "<h2>Access Denied</h2>";
-    echo "<p>Administrator access is required.</p>";
-    exit();
-}
+
 
 $nav_selected = "GAMES";
 $left_buttons = "YES";
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ORDER BY mn.length ASC, m.movie_id ASC
             ";
 
-            $result = $db->query($sql);
+            $result = db_query($db, $sql);
 
             if ($result === false) {
                 $error = 'Unable to search movie base-character data.';
@@ -184,7 +184,7 @@ include("./nav.php");
             </div>
         <?php } ?>
 
-        <form id="basecharAdmin" action="games_base_chars_admin.php" method="post">
+        <form id="basecharAdmin" action="games_base_chars_admin.php" method="post"><?php echo csrf_field(); ?>
             <div class="form-group">
                 <label for="basecharinput">Telugu word</label>
                 <input
@@ -221,10 +221,10 @@ include("./nav.php");
                 </span>
                 <br>
                 <strong>Logical length:</strong>
-                <?php echo (int)$logicalLength; ?>
+                <?php echo h((int)$logicalLength); ?>
                 <br>
                 <strong>Matches:</strong>
-                <?php echo count($matches); ?>
+                <?php echo h(count($matches)); ?>
             </div>
         <?php } ?>
 
@@ -246,7 +246,7 @@ include("./nav.php");
             <tbody>
                 <?php foreach ($matches as $row) { ?>
                     <tr>
-                        <td><?php echo (int)$row['movie_id']; ?></td>
+                        <td><?php echo h((int)$row['movie_id']); ?></td>
                         <td><?php echo htmlspecialchars($row['native_name'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($row['english_name'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($row['year_made'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></td>

@@ -1,7 +1,12 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -55,10 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
 
         // Remove movie/song relationships.
-        $stmt = mysqli_prepare(
-            $db,
-            "DELETE FROM movie_song WHERE song_id = ?"
-        );
+        $stmt = db_prepare($db, "DELETE FROM movie_song WHERE song_id = ?");
 
         mysqli_stmt_bind_param($stmt, "i", $song_id);
 
@@ -69,10 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_close($stmt);
 
         // Remove people/song relationships.
-        $stmt = mysqli_prepare(
-            $db,
-            "DELETE FROM song_people WHERE song_id = ?"
-        );
+        $stmt = db_prepare($db, "DELETE FROM song_people WHERE song_id = ?");
 
         mysqli_stmt_bind_param($stmt, "i", $song_id);
 
@@ -83,10 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_close($stmt);
 
         // Delete the song.
-        $stmt = mysqli_prepare(
-            $db,
-            "DELETE FROM songs WHERE song_id = ?"
-        );
+        $stmt = db_prepare($db, "DELETE FROM songs WHERE song_id = ?");
 
         mysqli_stmt_bind_param($stmt, "i", $song_id);
 
@@ -137,13 +133,10 @@ if (!$song_id || $song_id < 1) {
     exit();
 }
 
-$stmt = mysqli_prepare(
-    $db,
-    "SELECT song_id, title
+$stmt = db_prepare($db, "SELECT song_id, title
      FROM songs
      WHERE song_id = ?
-     LIMIT 1"
-);
+     LIMIT 1");
 
 mysqli_stmt_bind_param(
     $stmt,
@@ -206,7 +199,7 @@ function escape_html($value)
 
         <p>
             <strong>Song ID:</strong>
-            <?php echo (int)$song_id; ?>
+            <?php echo h((int)$song_id); ?>
         </p>
 
         <p style="color: #b30000;">
@@ -223,7 +216,7 @@ function escape_html($value)
             <input
                 type="hidden"
                 name="song_id"
-                value="<?php echo (int)$song_id; ?>"
+                value="<?php echo h((int)$song_id); ?>"
             >
 
             <input

@@ -1,6 +1,7 @@
 <?php
-
-session_start();
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
@@ -49,17 +50,14 @@ if (!isset($_SESSION['username'])) {
 
 $role = 'Lead Actor';
 
-$stmt = mysqli_prepare(
-    $db,
-    "SELECT movies.native_name, movies.year_made
+$stmt = db_prepare($db, "SELECT movies.native_name, movies.year_made
      FROM movies
      INNER JOIN movie_people
         ON movies.movie_id = movie_people.movie_id
      INNER JOIN people
         ON people.people_id = movie_people.people_id
      WHERE movie_people.role = ?
-       AND people.stage_name = ?"
-);
+       AND people.stage_name = ?");
 
 mysqli_stmt_bind_param(
     $stmt,
@@ -77,9 +75,9 @@ $result = mysqli_stmt_get_result($stmt);
                     // Add four more rows of data which you are getting from the database
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
-                                <td>'.$row["native_name"].'</td>
-                                <td>'.$row["year_made"].' </span> </td>
-                              
+                                <td>' . h($row["native_name"]) . '</td>
+                                <td>' . h($row["year_made"]) . ' </span> </td>
+
 
                             </tr>';
                     }//end while
