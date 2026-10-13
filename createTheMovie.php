@@ -1,6 +1,11 @@
 <?php
-
-session_start();
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
 
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
@@ -44,10 +49,7 @@ $nativeJSON = strtolower(str_replace(" ", "", $native));
 // Get next movie ID
 // --------------------------------------------------
 
-$result = mysqli_query(
-    $db,
-    "SELECT movie_id FROM movies ORDER BY movie_id DESC LIMIT 1"
-);
+$result = db_query($db, "SELECT movie_id FROM movies ORDER BY movie_id DESC LIMIT 1");
 
 if (!$result) {
     exit("Unable to determine the next movie ID.");
@@ -62,12 +64,9 @@ $id = $row ? ((int)$row['movie_id'] + 1) : 1;
 // Insert movie using a prepared statement
 // --------------------------------------------------
 
-$stmt = mysqli_prepare(
-    $db,
-    "INSERT INTO movies
+$stmt = db_prepare($db, "INSERT INTO movies
         (movie_id, native_name, english_name, year_made)
-     VALUES (?, ?, ?, ?)"
-);
+     VALUES (?, ?, ?, ?)");
 
 if (!$stmt) {
     exit("Unable to prepare movie insert.");
@@ -106,7 +105,7 @@ $jsonLog =
     urlencode($nativeJSON) .
     "&language=Telugu";
 
-$jsonfile = @file_get_contents($jsonLog);
+$jsonfile = @file_get_contents($jsonLog, false, stream_context_create(['http' => ['timeout' => 3]]));
 
 if ($jsonfile !== false) {
     $jsonStart = strstr($jsonfile, '{');
@@ -131,7 +130,7 @@ $jsonLength =
     urlencode($nativeJSON) .
     "&language=English";
 
-$jsonfile = @file_get_contents($jsonLength);
+$jsonfile = @file_get_contents($jsonLength, false, stream_context_create(['http' => ['timeout' => 3]]));
 
 if ($jsonfile !== false) {
     $jsonStart = strstr($jsonfile, '{');
@@ -150,12 +149,9 @@ if ($jsonfile !== false) {
 // Insert movie number information
 // --------------------------------------------------
 
-$stmt = mysqli_prepare(
-    $db,
-    "INSERT INTO movie_numbers
+$stmt = db_prepare($db, "INSERT INTO movie_numbers
         (movie_id, length, base_chars)
-     VALUES (?, ?, ?)"
-);
+     VALUES (?, ?, ?)");
 
 if ($stmt) {
 

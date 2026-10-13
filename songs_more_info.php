@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 $nav_selected = "SONGS";
 $left_buttons = "YES";
 $left_selected = "NO";
@@ -12,7 +15,7 @@ require 'bin/functions.php';
 
 <?php
 if (isset($_GET['song_id'])) {
-  $song_id = mysqli_real_escape_string($db, $_GET['song_id']);
+  $song_id = $_GET['song_id'];
 }
 ?>
 
@@ -39,20 +42,20 @@ if (isset($_GET['song_id'])) {
           <tbody>
 
     <?php
-    $sql_A1 = "SELECT song_id, title, lyrics, theme
+    $sql_A1 = ['sql' => 'SELECT song_id, title, lyrics, theme
               FROM songs
-              WHERE song_id =" . $song_id;
+              WHERE song_id =?', 'params' => [$song_id]];
 
-    if (!$sql_A1_result = $db->query($sql_A1)) {
-      die('There was an error running query[' . $connection->error . ']');
+    if (!$sql_A1_result = db_query($db, $sql_A1)) {
+      security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
     if ($sql_A1_result->num_rows > 0) {
       $a1_tuple = $sql_A1_result->fetch_assoc(); ?>
-    <td><?php echo $a1_tuple["song_id"] ?></td>
-    <td><?php echo $a1_tuple["title"] ?></td>
-    <td><?php echo $a1_tuple["lyrics"] ?></td>
-    <td><?php echo $a1_tuple["theme"]?></td>
+    <td><?php echo h($a1_tuple["song_id"]) ?></td>
+    <td><?php echo h($a1_tuple["title"]) ?></td>
+    <td><?php echo h($a1_tuple["lyrics"]) ?></td>
+    <td><?php echo h($a1_tuple["theme"])?></td>
     <?php } //end if
     else {
       echo "0 results";
@@ -91,19 +94,19 @@ if (isset($_GET['song_id'])) {
     <?php
 
     //TODO:
-    $sql_A2 =  "SELECT song_id, people_id, role
+    $sql_A2 =  ['sql' => 'SELECT song_id, people_id, role
                  FROM song_people
-                 WHERE song_id =" . $song_id;
+                 WHERE song_id =?', 'params' => [$song_id]];
 
-    if (!$sql_A2_result = $db->query($sql_A2)) {
-      die('There was an error running query[' . $connection->error . ']');
+    if (!$sql_A2_result = db_query($db, $sql_A2)) {
+      security_fail(500, 'Unable to complete this request. Please try again later.');
     }
 
     if ($sql_A2_result->num_rows > 0) {
       $a2_tuple = $sql_A2_result->fetch_assoc(); ?>
-      <td><?php echo $a2_tuple["song_id"] ?></td>
-      <td><?php echo $a2_tuple["people_id"] ?></td>
-      <td><?php echo $a2_tuple["role"] ?></td>
+      <td><?php echo h($a2_tuple["song_id"]) ?></td>
+      <td><?php echo h($a2_tuple["people_id"]) ?></td>
+      <td><?php echo h($a2_tuple["role"]) ?></td>
 
   <?php  } //end if
     else {

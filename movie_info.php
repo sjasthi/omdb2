@@ -1,4 +1,6 @@
-
+<?php
+require_once __DIR__ . '/security.php';
+?>
 <?php
 $nav_selected = "MOVIES";
 $left_buttons = "YES";
@@ -11,7 +13,7 @@ require 'bin/functions.php';
 
 <?php
 if (isset($_GET['movie_id'])) {
-  $movie_id = mysqli_real_escape_string($db, $_GET['movie_id']);
+  $movie_id = $_GET['movie_id'];
 }
 ?>
         
@@ -55,10 +57,10 @@ if (isset($_GET['movie_id'])) {
     $song_people_role = [];
 
     // query string for the Query A.1
-    $sql_A1 = "SELECT native_name, english_name, year_made
+    $sql_A1 = ['sql' => 'SELECT native_name, english_name, year_made
               FROM movies
-              WHERE movie_id =".$movie_id.";";
-    $result = $db->query($sql_A1);
+              WHERE movie_id =?;', 'params' => [$movie_id]];
+    $result = db_query($db, $sql_A1);
           
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -70,10 +72,10 @@ if (isset($_GET['movie_id'])) {
     $result->close();
 
 
-    $sql_A1_2 = "SELECT *
+    $sql_A1_2 = ['sql' => 'SELECT *
                     FROM movie_numbers
-                    WHERE movie_id =".$movie_id.";";
-    $result = $db->query($sql_A1_2);
+                    WHERE movie_id =?;', 'params' => [$movie_id]];
+    $result = db_query($db, $sql_A1_2);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -89,10 +91,10 @@ if (isset($_GET['movie_id'])) {
     $result->close();
 
 
-    $sql_A2 = "SELECT language, country, genre, plot
+    $sql_A2 = ['sql' => 'SELECT language, country, genre, plot
               FROM movie_data
-              WHERE movie_id =".$movie_id.";";
-    $result = $db->query($sql_A2);
+              WHERE movie_id =?;', 'params' => [$movie_id]];
+    $result = db_query($db, $sql_A2);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -105,11 +107,11 @@ if (isset($_GET['movie_id'])) {
     $result->close();
     
 
-    $sql_A3 = "SELECT movie_media_id, m_link, m_link_type
+    $sql_A3 = ['sql' => 'SELECT movie_media_id, m_link, m_link_type
               FROM movie_media
-              WHERE movie_id =".$movie_id.";";
+              WHERE movie_id =?;', 'params' => [$movie_id]];
 
-    $result = $db->query($sql_A3);
+    $result = db_query($db, $sql_A3);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -121,9 +123,9 @@ if (isset($_GET['movie_id'])) {
     $result->close();
   
 
-    $sql_A4 = "SELECT * FROM movie_keywords WHERE movie_id = ".$movie_id.";";
+    $sql_A4 = ['sql' => 'SELECT * FROM movie_keywords WHERE movie_id = ?;', 'params' => [$movie_id]];
     
-    $result = $db->query($sql_A4);
+    $result = db_query($db, $sql_A4);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -133,9 +135,9 @@ if (isset($_GET['movie_id'])) {
     $result->close();
    
 
-    $sql_B1 = "SELECT * from people natural join movie_people WHERE movie_people.movie_id =".$movie_id.";";
+    $sql_B1 = ['sql' => 'SELECT * from people natural join movie_people WHERE movie_people.movie_id =?;', 'params' => [$movie_id]];
 
-    $result = $db->query($sql_B1);
+    $result = db_query($db, $sql_B1);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -153,9 +155,9 @@ if (isset($_GET['movie_id'])) {
     $result->close();
 
 
-    $sql_C1 = "SELECT * from songs natural join movie_song WHERE movie_song.movie_id =".$movie_id.";";
+    $sql_C1 = ['sql' => 'SELECT * from songs natural join movie_song WHERE movie_song.movie_id =?;', 'params' => [$movie_id]];
   
-    $result = $db->query($sql_C1);
+    $result = db_query($db, $sql_C1);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -170,9 +172,9 @@ if (isset($_GET['movie_id'])) {
 if(count($song_id) > 0){
 
 foreach($song_id as $song){
-    $sql_C = "SELECT people.stage_name, song_people.role from people natural join song_people natural join movie_song WHERE movie_song.song_id = ".$song." and movie_song.movie_id = ".$movie_id.";";
+    $sql_C = ['sql' => 'SELECT people.stage_name, song_people.role from people natural join song_people natural join movie_song WHERE movie_song.song_id = ? and movie_song.movie_id = ?;', 'params' => [$song, $movie_id]];
 
-    $result = $db->query($sql_C);
+    $result = db_query($db, $sql_C);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -184,9 +186,9 @@ foreach($song_id as $song){
     $result->close();
 
 }
-    $sql_C3 = "SELECT * from movie_quotes WHERE movie_id =".$movie_id.";";
+    $sql_C3 = ['sql' => 'SELECT * from movie_quotes WHERE movie_id =?;', 'params' => [$movie_id]];
 
-    $result = $db->query($sql_C3);
+    $result = db_query($db, $sql_C3);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -197,9 +199,9 @@ foreach($song_id as $song){
     $result->close();
 
 
-    $sql_C4 = "SELECT * from movie_quotes WHERE movie_id =".$movie_id.";";
+    $sql_C4 = ['sql' => 'SELECT * from movie_quotes WHERE movie_id =?;', 'params' => [$movie_id]];
 
-    $result = $db->query($sql_C4);
+    $result = db_query($db, $sql_C4);
 
 
     if ($result->num_rows > 0) {
@@ -218,10 +220,10 @@ var flag = true;
 <div class="container" id="container">
   <div class="cellphone-container">
       <div class="movie">
-        <h1><?php echo $native_name;?></h1>
+        <h1><?php echo h($native_name);?></h1>
         <div class="movie-img">
         <?php if (isset($m_link[0]) && !empty(trim($m_link[0]))) { ?>
-        <img src="posters/<?php echo $m_link[0].'.'.$m_link_type[0];?>" alt="<?php echo $m_link[0];?>" class="movie-image" id="movie-image" onclick="if(flag == true){ enlargeImg();} else { resetImg();}" style="width:300px;height:300px;"></img>
+        <img src="posters/<?php echo h($m_link[0]) . '.' . h($m_link_type[0]);?>" alt="<?php echo h($m_link[0]);?>" class="movie-image" id="movie-image" onclick="if(flag == true){ enlargeImg();} else { resetImg();}" style="width:300px;height:300px;"></img>
         <?php } else { ?>
             <img class="movie-image" id="movie-image" src="images/no-image.png" alt="No Image" style="width:300px;height:300px;"></img>
         <?php } ?>
@@ -233,42 +235,42 @@ var flag = true;
                 <button type="button" class="collapsible">SUMMARY</button>
                <ul class="movie-section">
                 <?php if(!empty(trim($english_name))){?>
-                    <li>English Name: <?php echo $english_name; ?></li>
+                    <li>English Name: <?php echo h($english_name); ?></li>
                 <?php } else {?>
                     <li>English Name: N/A</li>
                 <?php } ?>
                 <?php if(!empty(trim($year_made))){?>
-                    <li>Year Released: <?php echo $year_made; ?></li>
+                    <li>Year Released: <?php echo h($year_made); ?></li>
                 <?php } else {?>
                     <li>Year Released: N/A</li>
                 <?php } ?>
                 <?php if(!empty(trim($language))){?>
-                    <li>Language: <?php echo $language; ?></li>
+                    <li>Language: <?php echo h($language); ?></li>
                 <?php } else {?>
                     <li>Language: N/A</li>
                 <?php } ?>
                 <?php if(!empty(trim($country))){?>
-                    <li>Country: <?php echo $country; ?></li>
+                    <li>Country: <?php echo h($country); ?></li>
                 <?php } else {?>
                     <li>Country: N/A</li>
                 <?php } ?>
                 <?php if(!empty(trim($genre))){?>
-                    <li>Genre: <?php echo $genre; ?></li>
+                    <li>Genre: <?php echo h($genre); ?></li>
                 <?php } else {?>
                     <li>Genre: N/A</li>
                 <?php } ?>
                 <?php if(!empty(trim($running_time))){?>
-                    <li>Run Time: <?php echo $running_time; ?></li>
+                    <li>Run Time: <?php echo h($running_time); ?></li>
                 <?php } else {?>
                     <li>Run Time: N/A</li>
                 <?php } ?>
                 <?php if(!empty(trim($budget))){?>
-                    <li>Budget: <?php echo $budget; ?></li>
+                    <li>Budget: <?php echo h($budget); ?></li>
                 <?php } else {?>
                     <li>Budget: N/A</li>
                 <?php } ?>
                 <?php if(!empty(trim($box_office))){?>
-                    <li>Box Office: <?php echo $box_office; ?></li>
+                    <li>Box Office: <?php echo h($box_office); ?></li>
                 <?php } else {?>
                     <li>Box Office: N/A</li>
                 <?php } ?>
@@ -282,7 +284,7 @@ var flag = true;
                 <ul class="movie-section">
                 <?php if(!empty($plot)){ ?>
                     <?php if(!empty(trim($plot))){ ?>
-                        <p class="movie-description"><?php echo $plot; ?></p>
+                        <p class="movie-description"><?php echo h($plot); ?></p>
                     <?php } else { ?>
                         <p class="movie-description">N/A</p>
                     <?php } ?>
@@ -304,14 +306,14 @@ var flag = true;
                     } else {
                         for($i = 0; $i < count($people_id); $i++){
                             if(count($stage_name) > 0 && !empty(trim($stage_name[$i]))){
-                                echo "<p>Stage Name: ".$stage_name[$i];
+                                echo "<p>Stage Name: " . h($stage_name[$i]);
                                 if(count($role) > 0 && !empty(trim($role[$i]))){
-                                    echo "<li>Role: ".$role[$i]."</li>";
+                                    echo "<li>Role: " . h($role[$i]) . "</li>";
                                 } else {
                                         echo "<li>Role: N/A</li>";
                                 }
                                 if(count($screen_name) > 0 && !empty(trim($screen_name[$i]))){
-                                    echo "<li>Billing: ".$screen_name[$i]."</li><br>";
+                                    echo "<li>Billing: " . h($screen_name[$i]) . "</li><br>";
                                 } else {
                                     echo "<li>Billing: N/A</li><br>";
                                 }
@@ -331,14 +333,14 @@ var flag = true;
                   <?php
                     if(count($song_id) > 0){
                       for($i = 0; $i < count($song_id); $i++){
-                          echo "<p>".$title[$i]." - by ".$song_people[$i].", ".$song_people_role[$i];
+                          echo "<p>" . h($title[$i]) . " - by " . h($song_people[$i]) . ", " . h($song_people_role[$i]);
                           if(count($lyrics) > 0 && !empty(trim($lyrics[$i]))){
-                              echo "<li>Lyrics: ".$lyrics[$i]."</li></p>";
+                              echo "<li>Lyrics: " . h($lyrics[$i]) . "</li></p>";
                           } else {
                               echo "<li>Lyrics: N/A</li>";
                           }
                           if(count($theme) > 0 && !empty(trim($theme[$i]))){
-                              echo "<li>Theme: ".$theme[$i]."</li></p>";
+                              echo "<li>Theme: " . h($theme[$i]) . "</li></p>";
                           } else{
                               echo "<li>Theme: N/A</li>";
                           }

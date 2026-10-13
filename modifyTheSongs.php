@@ -1,7 +1,14 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
 include("./nav.php");
   if(isset($_POST['song_id'])){
-    $song_id = mysqli_real_escape_string($db, $_POST['song_id']);
+    $song_id = $_POST['song_id'];
     $title = $_POST['title'];
     $lyrics = $_POST['lyrics'];
     $theme = $_POST['theme'];
@@ -12,7 +19,7 @@ include("./nav.php");
     $s_link_update = [];
     $s_link_type_update = [];
       
-    echo $song_id;
+
     foreach($_POST as $k => $v) {
       if(strpos($k, 'song_trivia_name_update') === 0) {
           $song_trivia_name_update[] = $v;
@@ -36,31 +43,31 @@ include("./nav.php");
 
       //Songs Update
       if(isset($_POST['title'])){
-          $sql = "UPDATE songs SET
-          title='$title', lyrics='$lyrics', theme='$theme' WHERE song_id=$song_id";
-          mysqli_query($db , $sql);
+          $sql = ['sql' => 'UPDATE songs SET
+          title=?, lyrics=?, theme=? WHERE song_id=?', 'params' => [$title, $lyrics, $theme, $song_id]];
+          db_query($db, $sql);
       }
       
       if(!empty($song_trivia_id)){
           for ($i = 0; $i < sizeof($song_trivia_id); $i++){
-              $sql2 = "UPDATE song_trivia SET song_trivia_name = '$song_trivia_name_update[$i]' WHERE song_id = '$song_id' and song_trivia_id = '$song_trivia_id[$i]'";
-              mysqli_query($db, $sql2);
+              $sql2 = ['sql' => 'UPDATE song_trivia SET song_trivia_name = ? WHERE song_id = ? and song_trivia_id = ?', 'params' => [$song_trivia_name_update[$i], $song_id, $song_trivia_id[$i]]];
+              db_query($db, $sql2);
           }
       }
       
       //Song_Keywords Update
       if(!empty($song_keyword_update)){
           for ($i = 0; $i < sizeof($song_keyword_update); $i++){
-              $sql3= "UPDATE song_keywords SET keyword = '$song_keyword_update[$i]' WHERE song_id = '$song_id'";
-              mysqli_query($db, $sql3);
+              $sql3= ['sql' => 'UPDATE song_keywords SET keyword = ? WHERE song_id = ?', 'params' => [$song_keyword_update[$i], $song_id]];
+              db_query($db, $sql3);
           }
       }
       
       //Song_Media Update
       if(!empty($song_media_id)){
           for ($i = 0; $i < sizeof($song_media_id); $i++){
-              $sql4 = "UPDATE song_media SET s_link = '$s_link_update[$i]', s_link_type = '$s_link_type_update[$i]' WHERE song_id = '$song_id' and song_media_id = '$song_media_id[$i]'";
-               mysqli_query($db, $sql4);
+              $sql4 = ['sql' => 'UPDATE song_media SET s_link = ?, s_link_type = ? WHERE song_id = ? and song_media_id = ?', 'params' => [$s_link_update[$i], $s_link_type_update[$i], $song_id, $song_media_id[$i]]];
+               db_query($db, $sql4);
           }
       }
       

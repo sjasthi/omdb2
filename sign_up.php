@@ -1,7 +1,12 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 
 // set the current page to one of the main buttons
@@ -44,9 +49,9 @@ table.center {
 
 <div class="container">
 
-    <h1 style="color: #01B0F1;">Sign up</h1>
+    <h1 style="color: #01B0F1;">Create User Account</h1>
 
-    <form action="sign_up.php" method="POST">
+    <form action="sign_up.php" method="POST"><?php echo csrf_field(); ?>
 
         <div class="form-group">
             <label for="fName">First Name</label>
@@ -130,7 +135,7 @@ table.center {
         </div>
 
         <button type="submit" class="btn btn-primary">
-            Sign Up
+            Create User Account
         </button>
 
     </form>
@@ -189,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
 
         // Check for duplicate email.
-        $check = $db->prepare("
+        $check = db_prepare($db, "
             SELECT id
             FROM users
             WHERE email = ?
@@ -214,15 +219,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             );
 
             // Prepared statement prevents SQL injection.
-            $stmt = $db->prepare("
+            $stmt = db_prepare($db, "
                 INSERT INTO users
                 (
                     password,
                     email,
                     first_name,
-                    last_name
+                    last_name,
+                    role
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, 'USER')
             ");
 
             $stmt->bind_param(
@@ -259,9 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($error !== '') {
 
-        echo "<p style='color:red;'>"
-            . htmlspecialchars($error)
-            . "</p>";
+        echo "<p style='color:red;'>" . h($error) . "</p>";
     }
 }
 

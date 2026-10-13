@@ -1,6 +1,7 @@
 <?php
-  session_start();
-
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "PEOPLE";
   $left_buttons = "YES";
   $left_selected = "PEOPLE";
@@ -20,7 +21,7 @@
 
 
           <?php
-            if(isset($_SESSION['username'])){
+            if(is_admin()){
               ?>
 
           <button title="Create Person"><a class="btn btn-sm" href="create_people.php"><i class = "fa fa-plus"></i></a></button>
@@ -67,14 +68,15 @@
 
           
             columnDefs: [
+      { targets: [0, 1, 2, 3, 4, 5, 6], render: $.fn.dataTable.render.text() },
       {  targets: 7,
          render: function (data, type, row) {
-            return '<a title="View" class="btn btn-info btn-sm" href="people_info.php?people_id='+row.people_id+'"><i class="fa fa-eye"></i></a>'
-                               + '<a title="Modify" class="btn btn-warning btn-sm" href="modify_people.php?people_id='+row.people_id+'"><i class="fa fa-pencil"></i></a>'
-                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_people.php?people_id='+row.people_id+'"><i class="fa fa-close"></i></a>'
-                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?people_id='+row.people_id+'"><i class="fa fa-music"></i></a>'
-                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?people_id='+row.people_id+'"><i class = "fa fa-id-badge"></i></a>'
-                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?people_id='+row.people_id+'"><i class="fa fa-database"></i></a>';
+            return '<a title="View" class="btn btn-info btn-sm" href="people_info.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-eye"></i></a>'
+                               + (<?php echo is_admin() ? 'true' : 'false'; ?> ? '<a title="Modify" class="btn btn-warning btn-sm" href="modify_people.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-pencil"></i></a>'
+                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_people.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-close"></i></a>'
+                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-music"></i></a>'
+                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?people_id='+encodeURIComponent(row.people_id)+'"><i class = "fa fa-id-badge"></i></a>'
+                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-database"></i></a>' : '');
          }
 
       }

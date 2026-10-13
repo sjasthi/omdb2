@@ -1,6 +1,7 @@
 <?php
-
-session_start();
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
@@ -51,7 +52,7 @@ if (!isset($_SESSION['username'])) {
                $stage_name = $_GET['name'] ?? "";
 
 // Prepared statement prevents SQL injection.
-$stmt = $db->prepare("
+$stmt = db_prepare($db, "
     SELECT
         movies.native_name,
         movies.year_made,
@@ -79,9 +80,9 @@ $result = $stmt->get_result();
                     // Add four more rows of data which you are getting from the database
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
-                                <td>'.$row["native_name"].'</td>
-                                <td>'.$row["year_made"].'</td>
-                                <td>'.$row["title"].'</td>
+                                <td>' . h($row["native_name"]) . '</td>
+                                <td>' . h($row["year_made"]) . '</td>
+                                <td>' . h($row["title"]) . '</td>
 
 
                             </tr>';

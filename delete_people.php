@@ -1,7 +1,12 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -53,10 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit("Invalid security token.");
     }
 
-    $stmt = mysqli_prepare(
-        $db,
-        "DELETE FROM people WHERE people_id = ?"
-    );
+    $stmt = db_prepare($db, "DELETE FROM people WHERE people_id = ?");
 
     mysqli_stmt_bind_param(
         $stmt,
@@ -105,9 +107,7 @@ if (!$people_id || $people_id < 1) {
 /*
  * Load the person so we can show who is being deleted.
  */
-$stmt = mysqli_prepare(
-    $db,
-    "SELECT
+$stmt = db_prepare($db, "SELECT
         people_id,
         stage_name,
         first_name,
@@ -115,8 +115,7 @@ $stmt = mysqli_prepare(
         last_name
      FROM people
      WHERE people_id = ?
-     LIMIT 1"
-);
+     LIMIT 1");
 
 mysqli_stmt_bind_param(
     $stmt,
@@ -187,7 +186,7 @@ $display_name = trim(
 
         <p>
             <strong>People ID:</strong>
-            <?php echo (int)$people_id; ?>
+            <?php echo h((int)$people_id); ?>
         </p>
 
         <p style="color: #b30000;">
@@ -203,7 +202,7 @@ $display_name = trim(
             <input
                 type="hidden"
                 name="people_id"
-                value="<?php echo (int)$people_id; ?>"
+                value="<?php echo h((int)$people_id); ?>"
             >
 
             <input

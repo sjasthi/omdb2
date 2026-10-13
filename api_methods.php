@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
 	// For finding the length of string
 	function api_getLength($string,$language){

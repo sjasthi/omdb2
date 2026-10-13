@@ -1,86 +1,89 @@
+<?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
+
+?>
 
 <?php
-  session_start();
- if (!isset($_SESSION['username']))
-      { 
-       header("Location: login.php");
-       exit();
-      }     
-?><?php $page_title = 'The Cow Layer'; ?>
-<?php
-    $nav_selected = "MOVIES";
-    $left_buttons = "YES";
-    $left_selected = "NO";
-  
-    include("./nav.php");
-    
-    $movie_id = filter_input(INPUT_GET, 'movie_id', FILTER_VALIDATE_INT);
-
+if (!isset($_SESSION['username']))
+     {
+      header("Location: login.php");
+      exit();
+     }
+$page_title = 'The Cow Layer';
+$nav_selected = "MOVIES";
+$left_buttons = "YES";
+$left_selected = "NO";
+include("./nav.php");
+$movie_id = filter_input(INPUT_GET, 'movie_id', FILTER_VALIDATE_INT);
 if (!$movie_id) {
     header("Location: movies.php");
     exit();
 }
-
-  ?>
+?>
 
 <!DOCTYPE html>
 <html>
-<form id="movieModify" action="modifyTheMovies.php" method= "POST">
+<form id="movieModify" action="modifyTheMovies.php" method= "POST"><?php echo csrf_field(); ?>
 
 <h1>Modify a movie</h1>
-<?PHP
-  $native_name = "";
-  $english_name = "";
-  $year_made = "";
-  $id = "";
-  $stmt = mysqli_prepare(
-    $db,
-    "SELECT movie_id, native_name, english_name, year_made
+<?php
+$native_name = "";
+$english_name = "";
+$year_made = "";
+$id = "";
+$stmt = db_prepare($db, "SELECT movie_id, native_name, english_name, year_made
      FROM movies
-     WHERE movie_id = ?"
-);
-
+     WHERE movie_id = ?");
 mysqli_stmt_bind_param($stmt, "i", $movie_id);
 mysqli_stmt_execute($stmt);
-
 $result = mysqli_stmt_get_result($stmt);
-
 if ($row = mysqli_fetch_assoc($result)) {
     $native_name = $row['native_name'];
     $english_name = $row['english_name'];
     $year_made = $row['year_made'];
     $id = $row['movie_id'];
 }
-
 mysqli_stmt_close($stmt);
-    
-    ?>
+?>
 <div class="tab">
 
   <p>
     <input name="native_name_update"
-           value="<?php echo htmlspecialchars($native_name); ?>"
+           value="<?php
+echo h($native_name);
+?>"
            placeholder="Modify Native Name"
            class="form-control">
   </p>
 
   <p>
     <input name="english_name_update"
-           value="<?php echo htmlspecialchars($english_name); ?>"
+           value="<?php
+echo h($english_name);
+?>"
            placeholder="Modify English Name"
            class="form-control">
   </p>
 
   <p>
     <input name="year_update"
-           value="<?php echo htmlspecialchars($year_made); ?>"
+           value="<?php
+echo h($year_made);
+?>"
            placeholder="Modify Year"
            class="form-control">
   </p>sss
 
   <input type="hidden"
          name="movie_id"
-         value="<?php echo htmlspecialchars($id); ?>">
+         value="<?php
+echo h($id);
+?>">
 
 </div>
 <div style="overflow:auto;">
@@ -197,3 +200,4 @@ db_disconnect($db);
 include("./footer.php");
 ?>
 </html>
+<?php

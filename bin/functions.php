@@ -1,3 +1,4 @@
+<?php require_once dirname(__DIR__) . '/security.php'; ?>
 <script type="text/javascript">
 
 
@@ -42,13 +43,5 @@ var divElement = document.getElementById(id);
 //**************************** end toggleview *******************************
 </script>
 <?php
-function verifyLogin($page){
-  if(isset($_SESSION['role'])) {
-    return;          
-  } else{
-    echo '<script>window.location.href = "loginForm.php";</script>';
-    // header('Location: loginForm.php'); // old version does not work since headers already set
-    exit();
-  }
-}
+function verifyLogin($page) { require_login(); }
 ?>

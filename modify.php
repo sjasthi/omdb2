@@ -1,6 +1,11 @@
 <?php
-  session_start();
- if (!isset($_SESSION['username']))
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
+  if (!isset($_SESSION['username']))
       { 
        header("Location: login.php");
        exit();
@@ -41,7 +46,7 @@
 <body >
 <?php
 if(isset($_GET['movie_id'])){
-    echo '<form id="movieModify" class="movieModify" action="modifyTheMovies.php" method= "POST">';
+    echo '<form id="movieModify" class="movieModify" action="modifyTheMovies.php" method= "POST">' . csrf_field();
 
     echo '<h1>Modify a movie</h1>';
 
@@ -68,7 +73,7 @@ if(isset($_GET['movie_id'])){
   $movie_trivia_id = [];
   $movie_trivia_name = [];
 
-    $sql = mysqli_query($db,"SELECT * FROM movies WHERE movie_id = '$movie_id'");
+    $sql = db_query($db, ['sql' => 'SELECT * FROM movies WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql)>0){
       while($row = mysqli_fetch_assoc($sql)){
         $native_name = $row['native_name'];
@@ -77,7 +82,7 @@ if(isset($_GET['movie_id'])){
         $id = $row['movie_id'];
       }
     }
-    $sql2 = mysqli_query($db,"SELECT * FROM movie_numbers WHERE movie_id = '$movie_id'");
+    $sql2 = db_query($db, ['sql' => 'SELECT * FROM movie_numbers WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql2)>0){
       while($row = mysqli_fetch_assoc($sql2)){
         $running_time = $row['running_time'];
@@ -85,7 +90,7 @@ if(isset($_GET['movie_id'])){
         $box_office = $row['box_office'];
       }
     }
-    $sql3 = mysqli_query($db,"SELECT * FROM movie_data WHERE movie_id = '$movie_id'");
+    $sql3 = db_query($db, ['sql' => 'SELECT * FROM movie_data WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql3)>0){
       while($row = mysqli_fetch_assoc($sql3)){
         $language = $row['language'];
@@ -95,20 +100,20 @@ if(isset($_GET['movie_id'])){
         $tag_line = $row['tag_line'];
       }
     }
-    $sql4 = mysqli_query($db,"SELECT * FROM movie_keywords WHERE movie_id = '$movie_id'");
+    $sql4 = db_query($db, ['sql' => 'SELECT * FROM movie_keywords WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql4)>0){
       while($row = mysqli_fetch_assoc($sql4)){
         $keyword[] = $row['keyword'];
       }
     }
-    $sql5 = mysqli_query($db,"SELECT * FROM movie_anagrams WHERE movie_id = '$movie_id'");
+    $sql5 = db_query($db, ['sql' => 'SELECT * FROM movie_anagrams WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql5)>0){
       while($row = mysqli_fetch_assoc($sql5)){
         $anagram[] = $row['anagram'];
         $anagram_id[] = $row['anagram_id'];
       }
     }
-    $sql6 = mysqli_query($db,"SELECT * FROM movie_media WHERE movie_id = '$movie_id'");
+    $sql6 = db_query($db, ['sql' => 'SELECT * FROM movie_media WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql6)>0){
       while($row = mysqli_fetch_assoc($sql6)){
         $movie_media_id[] = $row['movie_media_id'];
@@ -116,14 +121,14 @@ if(isset($_GET['movie_id'])){
         $m_link_type[] = $row['m_link_type'];
       }
     }
-    $sql7 = mysqli_query($db,"SELECT * FROM movie_quotes WHERE movie_id = '$movie_id'");
+    $sql7 = db_query($db, ['sql' => 'SELECT * FROM movie_quotes WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql7)>0){
       while($row = mysqli_fetch_assoc($sql7)){
         $movie_quote_id[] = $row['movie_quote_id'];
         $movie_quote_name[] = $row['movie_quote_name'];
       }
     }
-    $sql8 = mysqli_query($db,"SELECT * FROM movie_trivia WHERE movie_id = '$movie_id'");
+    $sql8 = db_query($db, ['sql' => 'SELECT * FROM movie_trivia WHERE movie_id = ?', 'params' => [$movie_id]]);
     if(mysqli_num_rows($sql8)>0){
       while($row = mysqli_fetch_assoc($sql8)){
         $movie_trivia_id[] = $row['movie_trivia_id'];
@@ -133,68 +138,68 @@ if(isset($_GET['movie_id'])){
     ?>
   
     <label for="native_name"> Native Name </label>
-    <p><input name= "native_name_update" id="native_name" value="<?php echo $native_name; ?>" placeholder="Modify Native Name" class="form-control" <?php echo $movieModify; ?> oninput="this.className =''"></p>
+    <p><input name= "native_name_update" id="native_name" value="<?php echo h($native_name); ?>" placeholder="Modify Native Name" class="form-control" <?php echo h($movieModify); ?> oninput="this.className =''"></p>
     <label for="english_name"> English Name </label>
-    <p><input name= "english_name_update" id="english_name" value="<?php echo $english_name; ?>" placeholder="Modify English Name" class="form-control" oninput="this.className = ''"></p>
+    <p><input name= "english_name_update" id="english_name" value="<?php echo h($english_name); ?>" placeholder="Modify English Name" class="form-control" oninput="this.className = ''"></p>
     <label for="year"> Year </label>
-    <p><input name= "year_update" id="year" value="<?php echo $year_made; ?>" class="form-control" placeholder="Modify Year" oninput="this.className = ''"></p>
+    <p><input name= "year_update" id="year" value="<?php echo h($year_made); ?>" class="form-control" placeholder="Modify Year" oninput="this.className = ''"></p>
     <label for="running_time"> Running Time </label>
-    <p><input name= "running_time_update" id="running_time" value="<?php echo $running_time; ?>" placeholder="Modify Running Time" class="form-control" oninput="this.className =''"></p>
+    <p><input name= "running_time_update" id="running_time" value="<?php echo h($running_time); ?>" placeholder="Modify Running Time" class="form-control" oninput="this.className =''"></p>
     <label for="budget"> Budget </label>
-    <p><input name= "budget_update" id="budget" value="<?php echo $budget; ?>" placeholder="Modify Budget" class="form-control" oninput="this.className = ''"></p>
+    <p><input name= "budget_update" id="budget" value="<?php echo h($budget); ?>" placeholder="Modify Budget" class="form-control" oninput="this.className = ''"></p>
     <label for="box_office"> Box Office </label>
-    <p><input name= "box_office_update" id="box_office" value="<?php echo $box_office; ?>" class="form-control" placeholder="Modify Box Office" oninput="this.className = ''"></p>
+    <p><input name= "box_office_update" id="box_office" value="<?php echo h($box_office); ?>" class="form-control" placeholder="Modify Box Office" oninput="this.className = ''"></p>
     <label for="language"> Language </label>
-    <p><input name= "language_update" id="language" value="<?php echo $language; ?>" placeholder="Modify Language" class="form-control" oninput="this.className = ''"></p>
+    <p><input name= "language_update" id="language" value="<?php echo h($language); ?>" placeholder="Modify Language" class="form-control" oninput="this.className = ''"></p>
     <label for="country"> Country </label>
-    <p><input name= "country_update" id="country" value="<?php echo $country; ?>" class="form-control" placeholder="Modify Country" oninput="this.className = ''"></p>
+    <p><input name= "country_update" id="country" value="<?php echo h($country); ?>" class="form-control" placeholder="Modify Country" oninput="this.className = ''"></p>
     <label for="genre"> Genre </label>
-    <p><input name= "genre_update" id="genre" value="<?php echo $genre; ?>" placeholder="Modify Genre" class="form-control" oninput="this.className =''"></p>
+    <p><input name= "genre_update" id="genre" value="<?php echo h($genre); ?>" placeholder="Modify Genre" class="form-control" oninput="this.className =''"></p>
     <label for="plot"> Plot </label>
-    <p><input name= "plot_update" id="plot" value="<?php echo $plot; ?>" placeholder="Modify Plot" class="form-control" oninput="this.className = ''"></p>
+    <p><input name= "plot_update" id="plot" value="<?php echo h($plot); ?>" placeholder="Modify Plot" class="form-control" oninput="this.className = ''"></p>
     <label for="tag_line"> Tag Line </label>
-    <p><input name= "tag_line_update" id="tag_line" value="<?php echo $tag_line; ?>" class="form-control" placeholder="Modify Tag Line" oninput="this.className = ''"></p>
+    <p><input name= "tag_line_update" id="tag_line" value="<?php echo h($tag_line); ?>" class="form-control" placeholder="Modify Tag Line" oninput="this.className = ''"></p>
    
 <?php
     if(sizeof($anagram_id) > 0){
         for($i = 0; $i < sizeof($anagram_id); $i++){
-            echo '<label for="anagram'.$i.'"> Anagram #'.($i+1).' </label>';
-            echo '<p><input id="anagram'.$i.'" name= "anagram_update'.$i.'" value="'.$anagram[$i].'" class="form-control" placeholder="Modify Anagram for '.$anagram_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="anagram_id'.$i.'" value="'.$anagram_id[$i].'"><br>';
+            echo '<label for="anagram' . h($i) . '"> Anagram #' . h($i+1) . ' </label>';
+            echo '<p><input id="anagram' . h($i) . '" name= "anagram_update' . h($i) . '" value="' . h($anagram[$i]) . '" class="form-control" placeholder="Modify Anagram for ' . h($anagram_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="anagram_id' . h($i) . '" value="' . h($anagram_id[$i]) . '"><br>';
         }
     }
     if(sizeof($keyword) > 0){
         for($i = 0; $i < sizeof($keyword); $i++){
-            echo '<label for="keyword'.$i.'"> Keyword #'.($i+1).' </label>';
-            echo '<p><input id="keyword'.$i.'" name= "keyword_update'.$i.'" value="'.$keyword[$i].'" class="form-control" placeholder="Modify Keyword" oninput="this.className = """></p><br>';
+            echo '<label for="keyword' . h($i) . '"> Keyword #' . h($i+1) . ' </label>';
+            echo '<p><input id="keyword' . h($i) . '" name= "keyword_update' . h($i) . '" value="' . h($keyword[$i]) . '" class="form-control" placeholder="Modify Keyword" oninput="this.className = """></p><br>';
         }
     }
     if(sizeof($movie_media_id) > 0){
         for($i = 0; $i < sizeof($movie_media_id); $i++){
-            echo '<label for="m_link'.$i.'"> Media Link #'.($i+1).' </label>';
-            echo '<p><input id="m_link'.$i.'" name= "m_link_update'.$i.'" value="'.$m_link[$i].'" class="form-control" placeholder="Modify Media Link for '.$movie_media_id[$i].'" oninput="this.className = """></p>';
-            echo '<label for="m_link_type'.$i.'"> Media Link Type #'.($i+1).' </label>';
-            echo '<p><input id="m_link_type'.$i.'" name= "m_link_type_update'.$i.'" value="'.$m_link_type[$i].'" class="form-control" placeholder="Modify Media Link type for '.$movie_media_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="movie_media_id'.$i.'" value="'.$movie_media_id[$i].'"><br>';
+            echo '<label for="m_link' . h($i) . '"> Media Link #' . h($i+1) . ' </label>';
+            echo '<p><input id="m_link' . h($i) . '" name= "m_link_update' . h($i) . '" value="' . h($m_link[$i]) . '" class="form-control" placeholder="Modify Media Link for ' . h($movie_media_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<label for="m_link_type' . h($i) . '"> Media Link Type #' . h($i+1) . ' </label>';
+            echo '<p><input id="m_link_type' . h($i) . '" name= "m_link_type_update' . h($i) . '" value="' . h($m_link_type[$i]) . '" class="form-control" placeholder="Modify Media Link type for ' . h($movie_media_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="movie_media_id' . h($i) . '" value="' . h($movie_media_id[$i]) . '"><br>';
         }
     }
     if(sizeof($movie_quote_id) > 0){
         for($i = 0; $i < sizeof($movie_quote_id); $i++){
-            echo '<label for="quote'.$i.'"> Quote #'.($i+1).' </label>';
-            echo '<p><input id="quote'.$i.'" name= "movie_quote_name_update'.$i.'" value="'.$movie_quote_name[$i].'" class="form-control" placeholder="Modify Quote for '.$movie_quote_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="movie_quote_id'.$i.'" value="'.$movie_quote_id[$i].'"><br>';
+            echo '<label for="quote' . h($i) . '"> Quote #' . h($i+1) . ' </label>';
+            echo '<p><input id="quote' . h($i) . '" name= "movie_quote_name_update' . h($i) . '" value="' . h($movie_quote_name[$i]) . '" class="form-control" placeholder="Modify Quote for ' . h($movie_quote_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="movie_quote_id' . h($i) . '" value="' . h($movie_quote_id[$i]) . '"><br>';
         }
     }
     if(sizeof($movie_trivia_id) > 0){
         for($i = 0; $i < sizeof($movie_trivia_id); $i++){
-            echo '<label for="trivia'.$i.'"> Trivia #'.($i+1).' </label>';
-            echo '<p><input id="trivia'.$i.'" name= "movie_trivia_name_update'.$i.'" value="'.$movie_trivia_name[$i].'" class="form-control" placeholder="Modify Trivia for '.$movie_trivia_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="movie_trivia_id'.$i.'" value="'.$movie_trivia_id[$i].'"><br>';
+            echo '<label for="trivia' . h($i) . '"> Trivia #' . h($i+1) . ' </label>';
+            echo '<p><input id="trivia' . h($i) . '" name= "movie_trivia_name_update' . h($i) . '" value="' . h($movie_trivia_name[$i]) . '" class="form-control" placeholder="Modify Trivia for ' . h($movie_trivia_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="movie_trivia_id' . h($i) . '" value="' . h($movie_trivia_id[$i]) . '"><br>';
         }
     }
 ?>
     
-    <input type="hidden" name="movie_id" value="<?php echo $id; ?>">
+    <input type="hidden" name="movie_id" value="<?php echo h($id); ?>">
 
     <div style="overflow:auto;">
         <div  class="text-left">
@@ -211,7 +216,7 @@ if(isset($_GET['movie_id'])){
 }
 
 if(isset($_GET['song_id'])){
-    echo '<form id="movieModify" class="addSong" action="modifyTheSongs.php" method= "POST">';
+    echo '<form id="movieModify" class="addSong" action="modifyTheSongs.php" method= "POST">' . csrf_field();
     echo '<h1>Modify a Song</h1>';
 
     $title = "";
@@ -224,7 +229,7 @@ if(isset($_GET['song_id'])){
     $s_link = [];
     $s_link_type = [];
     
-    $sql = mysqli_query($db, "SELECT * FROM songs WHERE song_id = '".$song_id."'");
+    $sql = db_query($db, ['sql' => 'SELECT * FROM songs WHERE song_id = ?', 'params' => [$song_id]]);
     if(mysqli_num_rows($sql)>0){
         while($row = mysqli_fetch_assoc($sql)){
           $song_id = $row['song_id'];
@@ -234,7 +239,7 @@ if(isset($_GET['song_id'])){
         }
     }
     
-    $sql2 = mysqli_query($db,"SELECT * FROM song_trivia WHERE song_id = '".$song_id."'");
+    $sql2 = db_query($db, ['sql' => 'SELECT * FROM song_trivia WHERE song_id = ?', 'params' => [$song_id]]);
     if(mysqli_num_rows($sql2)>0){
       while($row = mysqli_fetch_assoc($sql2)){
         $song_trivia_id[] = $row['song_trivia_id'];
@@ -242,14 +247,14 @@ if(isset($_GET['song_id'])){
       }
     }
     
-    $sql3 = mysqli_query($db,"SELECT * FROM song_keywords WHERE song_id = '".$song_id."'");
+    $sql3 = db_query($db, ['sql' => 'SELECT * FROM song_keywords WHERE song_id = ?', 'params' => [$song_id]]);
     if(mysqli_num_rows($sql3)>0){
       while($row = mysqli_fetch_assoc($sql3)){
         $keyword[] = $row['keyword'];
       }
     }
     
-    $sql4 = mysqli_query($db,"SELECT * FROM song_media WHERE song_id = '".$song_id."'");
+    $sql4 = db_query($db, ['sql' => 'SELECT * FROM song_media WHERE song_id = ?', 'params' => [$song_id]]);
     if(mysqli_num_rows($sql4)>0){
       while($row = mysqli_fetch_assoc($sql4)){
         $song_media_id[] = $row['song_media_id'];
@@ -260,36 +265,36 @@ if(isset($_GET['song_id'])){
 ?>
         
     <label for="title"> Title </label>
-    <p><input type="text" name="title" class="form-control" id="title" value="<?php echo $title; ?>" <?php echo $addSong; ?> ></p>
+    <p><input type="text" name="title" class="form-control" id="title" value="<?php echo h($title); ?>" <?php echo h($addSong); ?> ></p>
     <label for="lyrics">Lyrics</label>
-    <p><input type="text" name="lyrics" class="form-control" id="lyrics" value="<?php echo $lyrics; ?>"></p>
+    <p><input type="text" name="lyrics" class="form-control" id="lyrics" value="<?php echo h($lyrics); ?>"></p>
     <label for="theme">Theme</label>
-    <p><input type="text" name="theme" class="form-control" id="theme" value=" <?php echo $theme; ?> "></p>
+    <p><input type="text" name="theme" class="form-control" id="theme" value=" <?php echo h($theme); ?> "></p>
         
-    <input type="hidden" name="song_id" value="<?php echo $song_id; ?>">
+    <input type="hidden" name="song_id" value="<?php echo h($song_id); ?>">
         
 <?php
     if(sizeof($song_trivia_id) > 0){
         for($i = 0; $i < sizeof($song_trivia_id); $i++){
-            echo '<label for="trivia'.$i.'"> Trivia #'.($i+1).' </label>';
-            echo '<p><input id="trivia'.$i.'" name= "song_trivia_name_update'.$i.'" value="'.$song_trivia_name[$i].'" class="form-control" placeholder="Modify Trivia for '.$song_trivia_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="song_trivia_id'.$i.'" value="'.$song_trivia_id[$i].'"><br>';
+            echo '<label for="trivia' . h($i) . '"> Trivia #' . h($i+1) . ' </label>';
+            echo '<p><input id="trivia' . h($i) . '" name= "song_trivia_name_update' . h($i) . '" value="' . h($song_trivia_name[$i]) . '" class="form-control" placeholder="Modify Trivia for ' . h($song_trivia_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="song_trivia_id' . h($i) . '" value="' . h($song_trivia_id[$i]) . '"><br>';
         }
     }
     if(sizeof($keyword) > 0){
         for($i = 0; $i < sizeof($keyword); $i++){
-            echo '<label for="keyword'.$i.'"> Keyword #'.($i+1).' </label>';
-            echo '<p><input id="keyword'.$i.'" name= "song_keyword_update'.$i.'" value="'.$keyword[$i].'" class="form-control" placeholder="Modify Keyword" oninput="this.className = """></p>';
+            echo '<label for="keyword' . h($i) . '"> Keyword #' . h($i+1) . ' </label>';
+            echo '<p><input id="keyword' . h($i) . '" name= "song_keyword_update' . h($i) . '" value="' . h($keyword[$i]) . '" class="form-control" placeholder="Modify Keyword" oninput="this.className = """></p>';
         }
     }
     
     if(sizeof($song_media_id) > 0){
         for($i = 0; $i < sizeof($song_media_id); $i++){
-            echo '<label for="s_link'.$i.'"> Song Link #'.($i+1).' </label>';
-            echo '<p><input id="s_link'.$i.'" name= "s_link_update'.$i.'" value="'.$s_link[$i].'" class="form-control" placeholder="Modify Media Link for '.$song_media_id[$i].'" oninput="this.className = """></p>';
-            echo '<label for="s_link_type'.$i.'"> Media Link Type #'.($i+1).' </label>';
-            echo '<p><input id="s_link_type'.$i.'" name= "s_link_type_update'.$i.'" value="'.$s_link_type[$i].'" class="form-control" placeholder="Modify Media Link type for '.$song_media_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="song_media_id'.$i.'" value="'.$song_media_id[$i].'"><br>';
+            echo '<label for="s_link' . h($i) . '"> Song Link #' . h($i+1) . ' </label>';
+            echo '<p><input id="s_link' . h($i) . '" name= "s_link_update' . h($i) . '" value="' . h($s_link[$i]) . '" class="form-control" placeholder="Modify Media Link for ' . h($song_media_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<label for="s_link_type' . h($i) . '"> Media Link Type #' . h($i+1) . ' </label>';
+            echo '<p><input id="s_link_type' . h($i) . '" name= "s_link_type_update' . h($i) . '" value="' . h($s_link_type[$i]) . '" class="form-control" placeholder="Modify Media Link type for ' . h($song_media_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="song_media_id' . h($i) . '" value="' . h($song_media_id[$i]) . '"><br>';
         }
     }
 ?>
@@ -309,7 +314,7 @@ if(isset($_GET['song_id'])){
 }
 
 if(isset($_GET['people_id'])){
-    echo '<form id="movieModify" class="addPerson" action="modifyThePeople.php" method= "POST">';
+    echo '<form id="movieModify" class="addPerson" action="modifyThePeople.php" method= "POST">' . csrf_field();
     echo '<h1>Modify People</h1>';
 
     $stage_name = "";
@@ -326,7 +331,7 @@ if(isset($_GET['people_id'])){
     $song_id = [];
     $song_role = [];
     
-    $sql = mysqli_query($db, "SELECT * FROM people WHERE people_id = '".$people_id."'");
+    $sql = db_query($db, ['sql' => 'SELECT * FROM people WHERE people_id = ?', 'params' => [$people_id]]);
     if(mysqli_num_rows($sql)>0){
         while($row = mysqli_fetch_assoc($sql)){
           $people_id = $row['people_id'];
@@ -339,7 +344,7 @@ if(isset($_GET['people_id'])){
         }
     }
     
-    $sql2 = mysqli_query($db,"SELECT * FROM movie_people WHERE people_id = '".$people_id."'");
+    $sql2 = db_query($db, ['sql' => 'SELECT * FROM movie_people WHERE people_id = ?', 'params' => [$people_id]]);
     if(mysqli_num_rows($sql2)>0){
       while($row = mysqli_fetch_assoc($sql2)){
         $movie_id[] = $row['movie_id'];
@@ -348,7 +353,7 @@ if(isset($_GET['people_id'])){
       }
     }
     
-    $sql3 = mysqli_query($db,"SELECT * FROM people_trivia WHERE people_id = '".$people_id."'");
+    $sql3 = db_query($db, ['sql' => 'SELECT * FROM people_trivia WHERE people_id = ?', 'params' => [$people_id]]);
     if(mysqli_num_rows($sql3)>0){
       while($row = mysqli_fetch_assoc($sql3)){
         $people_trivia_id[] = $row['people_trivia_id'];
@@ -356,7 +361,7 @@ if(isset($_GET['people_id'])){
       }
     }
     
-    $sql4 = mysqli_query($db,"SELECT * FROM song_people WHERE people_id = '".$people_id."'");
+    $sql4 = db_query($db, ['sql' => 'SELECT * FROM song_people WHERE people_id = ?', 'params' => [$people_id]]);
     if(mysqli_num_rows($sql4)>0){
       while($row = mysqli_fetch_assoc($sql4)){
         $song_id[] = $row['song_id'];
@@ -366,43 +371,43 @@ if(isset($_GET['people_id'])){
 ?>
         
     <label for="stage_name">Stage Name</label>
-    <p><input type="text" name="stage_name" class="form-control" id="stage_name" value="<?php echo $stage_name; ?>" <?php echo $addPerson; ?> ></p>
+    <p><input type="text" name="stage_name" class="form-control" id="stage_name" value="<?php echo h($stage_name); ?>" <?php echo h($addPerson); ?> ></p>
     <label for="first_name">First Name</label>
-    <p><input type="text" name="first_name" class="form-control" id="first_name" value="<?php echo $first_name; ?>"></p>
+    <p><input type="text" name="first_name" class="form-control" id="first_name" value="<?php echo h($first_name); ?>"></p>
     <label for="middle_name">Middle Name</label>
-    <p><input type="text" name="middle_name" class="form-control" id="middle_name" value="<?php echo $middle_name; ?>"></p>
+    <p><input type="text" name="middle_name" class="form-control" id="middle_name" value="<?php echo h($middle_name); ?>"></p>
     <label for="last_name">Last Name</label>
-    <p><input type="text" name="last_name" class="form-control" id="last_name" value="<?php echo $last_name; ?>"></p>
+    <p><input type="text" name="last_name" class="form-control" id="last_name" value="<?php echo h($last_name); ?>"></p>
     <label for="gender">Gender</label>
-    <p><input type="text" name="gender" class="form-control" id="gender" value="<?php echo $gender; ?>"></p>
+    <p><input type="text" name="gender" class="form-control" id="gender" value="<?php echo h($gender); ?>"></p>
     <label for="image_name">Image Name</label>
-    <p><input type="text" name="image_name" class="form-control" id="image_name" value="<?php echo $image_name; ?>"></p>
+    <p><input type="text" name="image_name" class="form-control" id="image_name" value="<?php echo h($image_name); ?>"></p>
         
-    <input type="hidden" name="people_id" value="<?php echo $people_id; ?>">
+    <input type="hidden" name="people_id" value="<?php echo h($people_id); ?>">
         
 <?php
     if(sizeof($movie_id) > 0){
         for($i = 0; $i < sizeof($movie_id); $i++){
-            echo '<label for="screen_name'.$i.'"> Movie #'.($i+1).': Screen Name </label>';
-            echo '<p><input id="screen_name'.$i.'" name= "screen_name_update'.$i.'" value="'.$screen_name[$i].'" class="form-control" placeholder="Modify Screen Name for '.$movie_id[$i].'" oninput="this.className = """></p>';
-            echo '<label for="role'.$i.'"> Movie #'.($i+1).': Role </label>';
-            echo '<p><input id="role'.$i.'" name= "role_update'.$i.'" value="'.$role[$i].'" class="form-control" placeholder="Modify Role for '.$movie_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="movie_id'.$i.'" value="'.$movie_id[$i].'"><br>';
+            echo '<label for="screen_name' . h($i) . '"> Movie #' . h($i+1) . ': Screen Name </label>';
+            echo '<p><input id="screen_name' . h($i) . '" name= "screen_name_update' . h($i) . '" value="' . h($screen_name[$i]) . '" class="form-control" placeholder="Modify Screen Name for ' . h($movie_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<label for="role' . h($i) . '"> Movie #' . h($i+1) . ': Role </label>';
+            echo '<p><input id="role' . h($i) . '" name= "role_update' . h($i) . '" value="' . h($role[$i]) . '" class="form-control" placeholder="Modify Role for ' . h($movie_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="movie_id' . h($i) . '" value="' . h($movie_id[$i]) . '"><br>';
         }
     }
     if(sizeof($people_trivia_id) > 0){
         for($i = 0; $i < sizeof($people_trivia_id); $i++){
-            echo '<label for="people_trivia_name'.$i.'"> People Trivia #'.($i+1).' </label>';
-            echo '<p><input id="people_trivia_name'.$i.'" name= "people_trivia_name_update'.$i.'" value="'.$people_trivia_name[$i].'" class="form-control" placeholder="Modify Keyword for '.$people_trivia_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="people_trivia_id'.$i.'" value="'.$people_trivia_id[$i].'"><br>';
+            echo '<label for="people_trivia_name' . h($i) . '"> People Trivia #' . h($i+1) . ' </label>';
+            echo '<p><input id="people_trivia_name' . h($i) . '" name= "people_trivia_name_update' . h($i) . '" value="' . h($people_trivia_name[$i]) . '" class="form-control" placeholder="Modify Keyword for ' . h($people_trivia_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="people_trivia_id' . h($i) . '" value="' . h($people_trivia_id[$i]) . '"><br>';
         }
     }
     
     if(sizeof($song_id) > 0){
         for($i = 0; $i < sizeof($song_id); $i++){
-            echo '<label for="song_role'.$i.'"> Song #'.($i+1).' </label>';
-            echo '<p><input id="song_role'.$i.'" name= "song_role_update'.$i.'" value="'.$song_role[$i].'" class="form-control" placeholder="Modify Song Role for '.$song_id[$i].'" oninput="this.className = """></p>';
-            echo '<input type="hidden" name="song_id'.$i.'" value="'.$song_id[$i].'"><br>';
+            echo '<label for="song_role' . h($i) . '"> Song #' . h($i+1) . ' </label>';
+            echo '<p><input id="song_role' . h($i) . '" name= "song_role_update' . h($i) . '" value="' . h($song_role[$i]) . '" class="form-control" placeholder="Modify Song Role for ' . h($song_id[$i]) . '" oninput="this.className = """></p>';
+            echo '<input type="hidden" name="song_id' . h($i) . '" value="' . h($song_id[$i]) . '"><br>';
         }
     }
 ?>

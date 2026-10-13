@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
   $nav_selected = "MOVIES"; 
   $left_buttons = "YES"; 
@@ -39,19 +42,19 @@
               <?php
 
 $sql = "SELECT * from movies ORDER BY year_made ASC;";
-$result = $db->query($sql);
+$result = db_query($db, $sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
-                                <td>'.$row["movie_id"].'</td>
-                                <td>'.$row["native_name"].' </span> </td>
-                                <td>'.$row["english_name"].'</td>
-                                <td>'.$row["year_made"].'</td>
-                                <td><a title="Display" class="btn btn-info btn-sm" href="movie_info.php?movie_id='.$row["movie_id"].'"><i class="fa fa-search"></i></a>
-                                    <a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='.$row["movie_id"].'"><i class="fa fa-pencil"></i></a>
-                                    <a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='.$row["movie_id"].'"><i class="fa fa-close"></i></a></td>
+                                <td>' . h($row["movie_id"]) . '</td>
+                                <td>' . h($row["native_name"]) . ' </span> </td>
+                                <td>' . h($row["english_name"]) . '</td>
+                                <td>' . h($row["year_made"]) . '</td>
+                                <td><a title="Display" class="btn btn-info btn-sm" href="movie_info.php?movie_id=' . h($row["movie_id"]) . '"><i class="fa fa-search"></i></a>
+                                    <a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id=' . h($row["movie_id"]) . '"><i class="fa fa-pencil"></i></a>
+                                    <a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id=' . h($row["movie_id"]) . '"><i class="fa fa-close"></i></a></td>
                             </tr>';
                     }//end while
                 }//end if

@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "search_data";
   $left_buttons = "YES";
   $left_selected = "search_data";
@@ -31,7 +34,7 @@
         <h3 style = "color: #01B0F1;">Search Songs</h3>
 
 
-      <form method="post" action="advance_song_search.php">
+      <form method="post" action="advance_song_search.php"><?php echo csrf_field(); ?>
 
         <div class="form-group">
           <label for="song_search">Search Songs</label>
@@ -83,7 +86,7 @@
 
 
 
-  <form method="post" action="advance_movie_search.php">
+  <form method="post" action="advance_movie_search.php"><?php echo csrf_field(); ?>
 
     <div class="form-group">
       <label for="movie_search">Search Movie</label>
@@ -125,7 +128,7 @@
 if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
     <h3 style = "color: #01B0F1;">Search Peoples</h3>
 
-  <form method="post" action="advance_people_search.php">
+  <form method="post" action="advance_people_search.php"><?php echo csrf_field(); ?>
     <div class="form-group">
       <label for="search_people">Search People</label>
     <input type="text" id="search_people" class="form-control" name="people_search" placeholder="Enter People to search its record...">
@@ -135,9 +138,9 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
 
       <select name="stage_name" id='selUser' class="form-control">
         <?php
-        $query = mysqli_query($db,"select * from people");
+        $query = db_query($db, "select * from people");
         while($options = mysqli_fetch_assoc($query)){ ?>
-          <option value="<?php echo $options['stage_name']?>"><?php echo $options['stage_name'];?></option>
+          <option value="<?php echo h($options['stage_name'])?>"><?php echo h($options['stage_name']);?></option>
 
         <?php }
         ?>
@@ -170,7 +173,7 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
   $people = $_POST['people_search'];
 
   // Prepared statement prevents SQL injection.
-  $stmt = $db->prepare("
+  $stmt = db_prepare($db, "
       SELECT *
       FROM people
       WHERE stage_name LIKE ?
@@ -216,12 +219,12 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
                       {
                         $count++;
                         echo '<tr>';
-                        echo '<td>'.$count.'</td>';
-                        echo '<td>'.$row['stage_name'].'</td>';
-                        echo '<td>'.$row['first_name'].'</td>';
-                        echo '<td>'.$row['middle_name'].'</td>';
-                        echo '<td>'.$row['last_name'].'</td>';
-                        echo '<td>'.$row['gender'].'</td>';
+                        echo '<td>' . h($count) . '</td>';
+                        echo '<td>' . h($row['stage_name']) . '</td>';
+                        echo '<td>' . h($row['first_name']) . '</td>';
+                        echo '<td>' . h($row['middle_name']) . '</td>';
+                        echo '<td>' . h($row['last_name']) . '</td>';
+                        echo '<td>' . h($row['gender']) . '</td>';
                         echo '</tr>';
                       }
                       ?>
@@ -236,13 +239,13 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
             ?>
             <h3 style = "color: #01B0F1;">Search Result</h3>
             <?php
-            $query =mysqli_query($db,"select people.stage_name, people.first_name, people.middle_name, people.last_name,
+            $query =db_query($db, ['sql' => 'select people.stage_name, people.first_name, people.middle_name, people.last_name,
             people.gender,movie_people.role,movies.native_name,movies.english_name,movies.year_made
             from movie_people
             JOIN people ON people.people_id = movie_people.people_id
             JOIN movies ON movies.movie_id = movie_people.movie_id
-            WHERE people.stage_name LIKE '%".$stage_name."%'
-            AND movie_people.role LIKE '%".$role."%' ");
+            WHERE people.stage_name LIKE ?
+            AND movie_people.role LIKE ? ', 'params' => ['%' . $stage_name . '%', '%' . $role . '%']]);
 
             if(mysqli_num_rows($query)>0){
             $count ='0';
@@ -267,14 +270,14 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
                 $count++;
               ?>
               <tr>
-                <td><?php echo $count; ?></td>
-                <td><?php echo $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];?></td>
-                <td><?php echo $row['stage_name']; ?></td>
-                <td><?php echo $row['gender']; ?></td>
-                <td><?php echo $row['role']; ?></td>
-                <td><?php echo $row['native_name']; ?></td>
-                <td><?php echo $row['english_name']; ?></td>
-                <td><?php echo $row['year_made']; ?></td>
+                <td><?php echo h($count); ?></td>
+                <td><?php echo h($row['first_name']) . ' ' . h($row['middle_name']) . ' ' . h($row['last_name']);?></td>
+                <td><?php echo h($row['stage_name']); ?></td>
+                <td><?php echo h($row['gender']); ?></td>
+                <td><?php echo h($row['role']); ?></td>
+                <td><?php echo h($row['native_name']); ?></td>
+                <td><?php echo h($row['english_name']); ?></td>
+                <td><?php echo h($row['year_made']); ?></td>
               </tr>
             <?php } ?>
             </tbody>
@@ -298,14 +301,14 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
           ?>
           <h3 style = "color: #01B0F1;">Search Result</h3>
           <?php
-          $query =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+          $query =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
           people.first_name,people.middle_name,people.last_name
           from movie_people
           JOIN people ON people.people_id = movie_people.people_id
           JOIN movies ON movies.movie_id = movie_people.movie_id
-          WHERE movie_people.role='lead_actress'
-          AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-          OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name LIKE '%".$lead_actress."%')");
+          WHERE movie_people.role=\'lead_actress\'
+          AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+          OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
           if(mysqli_num_rows($query)>0){
           $count ='0';
           ?>
@@ -326,12 +329,12 @@ if(!isset($_POST['songs']) AND !isset($_POST['movies'])){ ?>
               $count++;
             ?>
             <tr>
-              <td><?php echo $count; ?></td>
-              <td><?php echo $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];?></td>
-              <td><?php echo $row['native_name']; ?></td>
-              <td><?php echo $row['english_name']; ?></td>
-              <td><?php echo $row['year_made']; ?></td>
-              <td><?php echo $row['role']; ?></td>
+              <td><?php echo h($count); ?></td>
+              <td><?php echo h($row['first_name']) . ' ' . h($row['middle_name']) . ' ' . h($row['last_name']);?></td>
+              <td><?php echo h($row['native_name']); ?></td>
+              <td><?php echo h($row['english_name']); ?></td>
+              <td><?php echo h($row['year_made']); ?></td>
+              <td><?php echo h($row['role']); ?></td>
             </tr>
           <?php } ?>
           </tbody>

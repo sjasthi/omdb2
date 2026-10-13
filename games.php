@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "GAMES";
   $left_buttons = "YES";
   $left_selected = "ANAGRAMADMIN";
@@ -21,7 +24,7 @@
 
 <!DOCTYPE html>
 <html>
-<form id="basecharAdmin" action="games.php" method= "POST">
+<form id="basecharAdmin" action="games.php" method= "POST"><?php echo csrf_field(); ?>
 
 <h2>Welcome to the Base Characters Game!</h1>
 <h4>Enter a word to find its base characters and all the movies that contain them.</h3>
@@ -44,8 +47,8 @@ if (isset($_POST['basecharinput']) && !empty($_POST['basecharinput'])){
     $decoder = json_decode(strstr($jsonfile, '{'));
     $length = intval($decoder->data);
     
-    echo "<p>The base characters of ".$basecharinput." are: ";
-    echo "<b style='color:red'>".$base_chars."</b>";
+    echo "<p>The base characters of " . h($basecharinput) . " are: ";
+    echo "<b style='color:red'>" . h($base_chars) . "</b>";
     echo "</p>";
    }
 ?>
@@ -78,36 +81,29 @@ if (isset($_POST['basecharinput']) && !empty($_POST['basecharinput'])){
 
 <?php
     if(isset($base_chars)){
-        $query_conditions = "";
-        $query_conditions2 = "";
-        $characters = mb_count_chars($base_charRaw);
-        $count = count($characters);
-        foreach ($characters as $key => $value){
-            if($count > 1){
-               $query_conditions .= "(char_length(base_chars) - char_length(replace(base_chars, '".$key."', ''))/char_length('".$key."')) = ".$value." and ";
-                $count = $count - 1;
-            } else {
-                $query_conditions .= "(char_length(base_chars) - char_length(replace(base_chars, '".$key."', ''))/char_length('".$key."')) = ".$value."";
-            }
+        $conditions = [];
+        $params = [];
+        foreach (mb_count_chars($base_charRaw) as $character => $count) {
+            $conditions[] = "(CHAR_LENGTH(base_chars) - CHAR_LENGTH(REPLACE(base_chars, ?, ''))) / CHAR_LENGTH(?) = ?";
+            array_push($params, $character, $character, (int)$count);
         }
-        if(isset($_POST['length'])){
-            $query_conditions2 = " and length = $length";
+        if (isset($_POST['length'])) {
+            $conditions[] = 'length = ?';
+            $params[] = (int)$length;
         }
-        
-    $sql = "SELECT movies.*, movie_numbers.length as length, movie_numbers.base_chars as base_chars from movies inner join movie_numbers on movies.movie_id = movie_numbers.movie_id where ".$query_conditions." ".$query_conditions2." ORDER BY length asc;";
-
-    $result = $db->query($sql);
-        
+        $sql = 'SELECT movies.*, movie_numbers.length, movie_numbers.base_chars FROM movies INNER JOIN movie_numbers ON movies.movie_id = movie_numbers.movie_id WHERE '
+            . ($conditions ? implode(' AND ', $conditions) : '1 = 0') . ' ORDER BY length ASC';
+        $result = db_query($db, $sql, $params);
         if ($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 echo '<tr>
-                        <td>'.$row["movie_id"].'</td>
-                        <td>'.$row["native_name"].' </span> </td>
-                        <td>'.$row["english_name"].'</td>
-                        <td>'.$row["year_made"].'</td>
-                        <td>'.$row["length"].'</td>
-                        <td>'.$row["base_chars"].'</td>
+                        <td>' . h($row["movie_id"]) . '</td>
+                        <td>' . h($row["native_name"]) . ' </span> </td>
+                        <td>' . h($row["english_name"]) . '</td>
+                        <td>' . h($row["year_made"]) . '</td>
+                        <td>' . h($row["length"]) . '</td>
+                        <td>' . h($row["base_chars"]) . '</td>
                     </tr>';
             }//end while
         }//end if

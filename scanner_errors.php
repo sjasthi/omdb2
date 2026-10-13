@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "SCANNER";
   $left_buttons = "YES";
   $left_selected = "ERRORS";

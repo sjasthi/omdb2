@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "search_data";
   $left_buttons = "YES";
   $left_selected = "search_data";
@@ -37,7 +40,7 @@
         <h3 style = "color: #01B0F1;">Search Songs</h3>
 
 
-      <form method="post" action="advance_song_search.php">
+      <form method="post" action="advance_song_search.php"><?php echo csrf_field(); ?>
 
         <div class="form-group">
           <label for="song_search">Search Songs</label>
@@ -87,7 +90,7 @@
       <?php }
       if(!isset($_POST['songs']) AND !isset($_POST['people'])){ ?>
           <!-- <h3 style = "color: #01B0F1;">Search Movies</h3>
-        <form method="post" action="search_data.php">
+        <form method="post" action="search_data.php"><?php echo csrf_field(); ?>
           <input type="text" name="movie_search" placeholder="Enter movie to search its record...">
           <button type="submit" name="movie_search_button"><i class="fa fa-search" aria-hidden="true"></i></button>
         </form>
@@ -99,7 +102,7 @@
 
 
 
-        <form method="post" action="advance_movie_search.php">
+        <form method="post" action="advance_movie_search.php"><?php echo csrf_field(); ?>
 
           <div class="form-group">
             <label for="movie_search">Search Movie</label>
@@ -144,7 +147,7 @@ if(isset($_POST['people'])){ ?>
   <h3 style = "color: #01B0F1;">Search Peoples</h3>
 
 
-  <form method="post" action="advance_people_search.php">
+  <form method="post" action="advance_people_search.php"><?php echo csrf_field(); ?>
 
     <div class="form-group">
       <label for="search_people">Search People</label>
@@ -155,9 +158,9 @@ if(isset($_POST['people'])){ ?>
 
     <select name="stage_name" id='selUser' class="form-control">
       <?php
-      $query = mysqli_query($db,"select * from people");
+      $query = db_query($db, "select * from people");
       while($options = mysqli_fetch_assoc($query)){ ?>
-        <option value="<?php echo $options['stage_name']?>"><?php echo $options['stage_name'];?></option>
+        <option value="<?php echo h($options['stage_name'])?>"><?php echo h($options['stage_name']);?></option>
 
       <?php }
       ?>
@@ -211,7 +214,7 @@ if(isset($_POST['people'])){ ?>
               $count = 0;
 
 // Use a prepared statement so search input cannot change the SQL query.
-$stmt = $db->prepare("
+$stmt = db_prepare($db, "
     SELECT *
     FROM movies
     WHERE native_name LIKE ?
@@ -233,16 +236,15 @@ $stmt->execute();
 $query = $stmt->get_result();
               if(mysqli_num_rows($query)>0){
               while($movies = mysqli_fetch_assoc($query)){
-              $count++;
-              }
+              ?>
 
 
           <tr>
 
-          <th scope="row"><?php echo $count; ?></th>
-          <td><?php echo $movies['native_name']; ?></td>
-          <td><?php echo $movies['english_name'] ?></td>
-          <td><?php echo $movies['year_made'] ?></td>
+          <th scope="row"><?php echo h($count); ?></th>
+          <td><?php echo h($movies['native_name']); ?></td>
+          <td><?php echo h($movies['english_name']) ?></td>
+          <td><?php echo h($movies['year_made']) ?></td>
           </tr>
 
           <?php
@@ -278,15 +280,15 @@ $query = $stmt->get_result();
 
             <?php
             $count1 = 0;
-            $query1 = mysqli_query($db, "select people.stage_name, people.first_name,people.middle_name, people.last_name,movie_people.role,movies.native_name, movies.english_name,
+            $query1 = db_query($db, ['sql' => 'select people.stage_name, people.first_name,people.middle_name, people.last_name,movie_people.role,movies.native_name, movies.english_name,
             movies.year_made
               from movie_people
               join movies on movies.movie_id =movie_people.movie_id
               join people on people.people_id = movie_people.people_id
-              where movies.native_name LIKE '%".$name2."%'
-              OR movies.english_name LIKE '%".$name2."%'
-              OR movies.year_made LIKE '%".$name2."%'
-              ");
+              where movies.native_name LIKE ?
+              OR movies.english_name LIKE ?
+              OR movies.year_made LIKE ?
+              ', 'params' => ['%' . $name2 . '%', '%' . $name2 . '%', '%' . $name2 . '%']]);
             if(mysqli_num_rows($query1)>0){
             while($movie1 = mysqli_fetch_assoc($query1)){
             $count1++;
@@ -295,12 +297,12 @@ $query = $stmt->get_result();
 
         <tr>
 
-        <th scope="row"><?php echo $count1; ?></th>
-        <td><?php echo $movie1['first_name']." ".$movie1['middle_name']." ".$movie1['last_name']; ?></td>
-        <td><?php echo $movie1['role'] ?></td>
-        <td><?php echo $movie1['native_name'] ?></td>
-        <td><?php echo $movie1['english_name']; ?></td>
-        <td><?php echo $movie1['year_made'] ?></td>
+        <th scope="row"><?php echo h($count1); ?></th>
+        <td><?php echo h($movie1['first_name']) . " " . h($movie1['middle_name']) . " " . h($movie1['last_name']); ?></td>
+        <td><?php echo h($movie1['role']) ?></td>
+        <td><?php echo h($movie1['native_name']) ?></td>
+        <td><?php echo h($movie1['english_name']); ?></td>
+        <td><?php echo h($movie1['year_made']) ?></td>
         </tr>
 
         <?php
@@ -335,15 +337,15 @@ $query = $stmt->get_result();
 
               <?php
               $count2 = 0;
-              $query2 = mysqli_query($db, "select songs.song_id, songs.title,songs.lyrics, songs.theme,movie_song.movie_id, movies.native_name,
+              $query2 = db_query($db, ['sql' => 'select songs.song_id, songs.title,songs.lyrics, songs.theme,movie_song.movie_id, movies.native_name,
               movies.english_name, movies.year_made
                 from movie_song
                 join songs on songs.song_id =movie_song.song_id
                 join movies on movies.movie_id = movie_song.movie_id
-                where movies.native_name LIKE '%".$name2."%'
-                OR movies.english_name LIKE '%".$name2."%'
-                OR movies.year_made LIKE '%".$name2."%'
-              ");
+                where movies.native_name LIKE ?
+                OR movies.english_name LIKE ?
+                OR movies.year_made LIKE ?
+              ', 'params' => ['%' . $name2 . '%', '%' . $name2 . '%', '%' . $name2 . '%']]);
 
               if(mysqli_num_rows($query2)>0){
               while($movie2 = mysqli_fetch_assoc($query2)){
@@ -353,13 +355,13 @@ $query = $stmt->get_result();
 
             <tr>
 
-            <th scope="row"><?php echo $count2; ?></th>
-            <td><?php echo $movie2['title']; ?></td>
-            <td><?php echo $movie2['lyrics'] ?></td>
-            <td><?php echo $movie2['theme'] ?></td>
-            <td><?php echo $movie2['native_name']; ?></td>
-            <td><?php echo $movie2['english_name']; ?></td>
-            <td><?php echo $movie2['year_made'] ?></td>
+            <th scope="row"><?php echo h($count2); ?></th>
+            <td><?php echo h($movie2['title']); ?></td>
+            <td><?php echo h($movie2['lyrics']) ?></td>
+            <td><?php echo h($movie2['theme']) ?></td>
+            <td><?php echo h($movie2['native_name']); ?></td>
+            <td><?php echo h($movie2['english_name']); ?></td>
+            <td><?php echo h($movie2['year_made']) ?></td>
             </tr>
 
             <?php
@@ -387,14 +389,14 @@ $query = $stmt->get_result();
             ?>
             <h3 style = "color: #01B0F1;">Search Result</h3>
             <?php
-            $query =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+            $query =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
             people.first_name,people.middle_name,people.last_name
             from movie_people
             JOIN people ON people.people_id = movie_people.people_id
             JOIN movies ON movies.movie_id = movie_people.movie_id
-            WHERE movie_people.role='lead_actor'
-            AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-            OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name LIKE '%".$lead_actor."%')");
+            WHERE movie_people.role=\'lead_actor\'
+            AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+            OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
             if(mysqli_num_rows($query)>0){
             $count ='0';
@@ -417,12 +419,12 @@ $query = $stmt->get_result();
                 $count++;
               ?>
               <tr>
-                <td><?php echo $count; ?></td>
-                <td><?php echo $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];?></td>
-                <td><?php echo $row['native_name']; ?></td>
-                <td><?php echo $row['english_name']; ?></td>
-                <td><?php echo $row['year_made']; ?></td>
-                <td><?php echo $row['role']; ?></td>
+                <td><?php echo h($count); ?></td>
+                <td><?php echo h($row['first_name']) . ' ' . h($row['middle_name']) . ' ' . h($row['last_name']);?></td>
+                <td><?php echo h($row['native_name']); ?></td>
+                <td><?php echo h($row['english_name']); ?></td>
+                <td><?php echo h($row['year_made']); ?></td>
+                <td><?php echo h($row['role']); ?></td>
               </tr>
             <?php } ?>
             </tbody>
@@ -444,14 +446,14 @@ $query = $stmt->get_result();
           ?>
           <h3 style = "color: #01B0F1;">Search Result</h3>
           <?php
-          $query =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+          $query =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
           people.first_name,people.middle_name,people.last_name
           from movie_people
           JOIN people ON people.people_id = movie_people.people_id
           JOIN movies ON movies.movie_id = movie_people.movie_id
-          WHERE movie_people.role='lead_actress'
-          AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-          OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name LIKE '%".$lead_actress."%')");
+          WHERE movie_people.role=\'lead_actress\'
+          AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+          OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
           if(mysqli_num_rows($query)>0){
           $count ='0';
           ?>
@@ -473,12 +475,12 @@ $query = $stmt->get_result();
               $count++;
             ?>
             <tr>
-              <td><?php echo $count; ?></td>
-              <td><?php echo $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];?></td>
-              <td><?php echo $row['native_name']; ?></td>
-              <td><?php echo $row['english_name']; ?></td>
-              <td><?php echo $row['year_made']; ?></td>
-              <td><?php echo $row['role']; ?></td>
+              <td><?php echo h($count); ?></td>
+              <td><?php echo h($row['first_name']) . ' ' . h($row['middle_name']) . ' ' . h($row['last_name']);?></td>
+              <td><?php echo h($row['native_name']); ?></td>
+              <td><?php echo h($row['english_name']); ?></td>
+              <td><?php echo h($row['year_made']); ?></td>
+              <td><?php echo h($row['role']); ?></td>
             </tr>
           <?php } ?>
           </tbody>
@@ -501,14 +503,14 @@ $query = $stmt->get_result();
             ?>
             <h3 style = "color: #01B0F1;">Search Result</h3>
             <?php
-            $query =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+            $query =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
             people.first_name,people.middle_name,people.last_name
             from movie_people
             JOIN people ON people.people_id = movie_people.people_id
             JOIN movies ON movies.movie_id = movie_people.movie_id
-            WHERE movie_people.role='producer'
-            AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-            OR people.last_name LIKE '%".$producer."%' OR people.stage_name LIKE '%".$producer."%')");
+            WHERE movie_people.role=\'producer\'
+            AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+            OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
             if(mysqli_num_rows($query)>0){
             $count ='0';
             ?>
@@ -530,12 +532,12 @@ $query = $stmt->get_result();
                 $count++;
               ?>
               <tr>
-                <td><?php echo $count; ?></td>
-                <td><?php echo $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];?></td>
-                <td><?php echo $row['native_name']; ?></td>
-                <td><?php echo $row['english_name']; ?></td>
-                <td><?php echo $row['year_made']; ?></td>
-                <td><?php echo $row['role']; ?></td>
+                <td><?php echo h($count); ?></td>
+                <td><?php echo h($row['first_name']) . ' ' . h($row['middle_name']) . ' ' . h($row['last_name']);?></td>
+                <td><?php echo h($row['native_name']); ?></td>
+                <td><?php echo h($row['english_name']); ?></td>
+                <td><?php echo h($row['year_made']); ?></td>
+                <td><?php echo h($row['role']); ?></td>
               </tr>
             <?php } ?>
             </tbody>
@@ -558,14 +560,14 @@ $query = $stmt->get_result();
               ?>
               <h3 style = "color: #01B0F1;">Search Result</h3>
               <?php
-              $query =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+              $query =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
               people.first_name,people.middle_name,people.last_name
               from movie_people
               JOIN people ON people.people_id = movie_people.people_id
               JOIN movies ON movies.movie_id = movie_people.movie_id
-              WHERE movie_people.role='director'
-              AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-              OR people.last_name LIKE '%".$director."%' OR people.stage_name LIKE '%".$director."%')");
+              WHERE movie_people.role=\'director\'
+              AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+              OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
               if(mysqli_num_rows($query)>0){
               $count ='0';
               ?>
@@ -587,12 +589,12 @@ $query = $stmt->get_result();
                   $count++;
                 ?>
                 <tr>
-                  <td><?php echo $count; ?></td>
-                  <td><?php echo $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];?></td>
-                  <td><?php echo $row['native_name']; ?></td>
-                  <td><?php echo $row['english_name']; ?></td>
-                  <td><?php echo $row['year_made']; ?></td>
-                  <td><?php echo $row['role']; ?></td>
+                  <td><?php echo h($count); ?></td>
+                  <td><?php echo h($row['first_name']) . ' ' . h($row['middle_name']) . ' ' . h($row['last_name']);?></td>
+                  <td><?php echo h($row['native_name']); ?></td>
+                  <td><?php echo h($row['english_name']); ?></td>
+                  <td><?php echo h($row['year_made']); ?></td>
+                  <td><?php echo h($row['role']); ?></td>
                 </tr>
               <?php } ?>
               </tbody>
@@ -614,14 +616,14 @@ $query = $stmt->get_result();
                 ?>
                 <h3 style = "color: #01B0F1;">Search Result</h3>
                 <?php
-                $query =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+                $query =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
                 people.first_name,people.middle_name,people.last_name
                 from movie_people
                 JOIN people ON people.people_id = movie_people.people_id
                 JOIN movies ON movies.movie_id = movie_people.movie_id
-                WHERE movie_people.role='music_director'
-                AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-                OR people.last_name LIKE '%".$music_director."%' OR people.stage_name LIKE '%".$music_director."%')");
+                WHERE movie_people.role=\'music_director\'
+                AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+                OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
                 if(mysqli_num_rows($query)>0){
                 $count ='0';
                 ?>
@@ -643,12 +645,12 @@ $query = $stmt->get_result();
                     $count++;
                   ?>
                   <tr>
-                    <td><?php echo $count; ?></td>
-                    <td><?php echo $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];?></td>
-                    <td><?php echo $row['native_name']; ?></td>
-                    <td><?php echo $row['english_name']; ?></td>
-                    <td><?php echo $row['year_made']; ?></td>
-                    <td><?php echo $row['role']; ?></td>
+                    <td><?php echo h($count); ?></td>
+                    <td><?php echo h($row['first_name']) . ' ' . h($row['middle_name']) . ' ' . h($row['last_name']);?></td>
+                    <td><?php echo h($row['native_name']); ?></td>
+                    <td><?php echo h($row['english_name']); ?></td>
+                    <td><?php echo h($row['year_made']); ?></td>
+                    <td><?php echo h($row['role']); ?></td>
                   </tr>
                 <?php } ?>
                 </tbody>
@@ -672,23 +674,23 @@ $query = $stmt->get_result();
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
 
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='lead_actress'
-      AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-      OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name LIKE '%".$lead_actress."%')");
+      WHERE movie_people.role=\'lead_actress\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
       if(mysqli_num_rows($query2)>0){
     $count ='0';
     ?>
@@ -710,12 +712,12 @@ $query = $stmt->get_result();
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -724,12 +726,12 @@ $query = $stmt->get_result();
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -752,24 +754,24 @@ $query = $stmt->get_result();
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='producer'
-      AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-      OR people.last_name LIKE '%".$producer."%' OR people.stage_name LIKE '%".$producer."%')");
+      WHERE movie_people.role=\'producer\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -792,12 +794,12 @@ $query = $stmt->get_result();
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -806,12 +808,12 @@ $query = $stmt->get_result();
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -836,24 +838,24 @@ else{
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
 
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='director'
-      AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-      OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+      WHERE movie_people.role=\'director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -876,12 +878,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -890,12 +892,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -923,24 +925,24 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name  LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='music_director'
-      AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-      OR people.last_name LIKE '%".$music_director."%' OR people.stage_name  LIKE '%".$music_director."%')");
+      WHERE movie_people.role=\'music_director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -963,12 +965,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -977,12 +979,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -1011,24 +1013,24 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actress'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actress\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='music_director'
-      AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-      OR people.last_name LIKE '%".$producer."%' OR people.stage_name LIKE '%".$producer."%')");
+      WHERE movie_people.role=\'music_director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -1051,12 +1053,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1065,12 +1067,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -1096,24 +1098,24 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actress'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name  LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actress\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='director'
-      AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-      OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+      WHERE movie_people.role=\'director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -1136,12 +1138,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1150,12 +1152,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -1179,24 +1181,24 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actress'
-    AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-    OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+    WHERE movie_people.role=\'lead_actress\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='music_director'
-      AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-      OR people.last_name LIKE '%".$music_director."%' OR people.stage_name  LIKE '%".$music_director."%')");
+      WHERE movie_people.role=\'music_director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -1219,12 +1221,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1233,12 +1235,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -1269,24 +1271,24 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='producer'
-    AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-    OR people.last_name LIKE '%".$producer."%' OR people.stage_name  LIKE '%".$producer."%')");
+    WHERE movie_people.role=\'producer\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='director'
-      AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-      OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+      WHERE movie_people.role=\'director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -1309,12 +1311,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1323,12 +1325,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -1354,24 +1356,24 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='producer'
-    AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-    OR people.last_name LIKE '%".$producer."%' OR people.stage_name  LIKE '%".$producer."%')");
+    WHERE movie_people.role=\'producer\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='music_director'
-      AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-      OR people.last_name LIKE '%".$music_director."%' OR people.stage_name  LIKE '%".$music_director."%')");
+      WHERE movie_people.role=\'music_director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -1394,12 +1396,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1408,12 +1410,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -1439,24 +1441,24 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='director'
-    AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-    OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+    WHERE movie_people.role=\'director\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='music_director'
-      AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-      OR people.last_name LIKE '%".$music_director."%' OR people.stage_name LIKE '%".$music_director."%')");
+      WHERE movie_people.role=\'music_director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
     $count ='0';
@@ -1479,12 +1481,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1493,12 +1495,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
     </tbody>
@@ -1523,34 +1525,34 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name  LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='lead_actress'
-      AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-      OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+      WHERE movie_people.role=\'lead_actress\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='producer'
-        AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-        OR people.last_name LIKE '%".$producer."%' OR people.stage_name  LIKE '%".$producer."%')");
+        WHERE movie_people.role=\'producer\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
         if(mysqli_num_rows($query3)>0){
     $count ='0';
     ?>
@@ -1572,12 +1574,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1586,12 +1588,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -1600,12 +1602,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
     </tbody>
@@ -1635,34 +1637,34 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name  LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='lead_actress'
-      AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-      OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+      WHERE movie_people.role=\'lead_actress\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='director'
-        AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-        OR people.last_name LIKE '%".$director."%' OR people.stage_name LIKE '%".$director."%')");
+        WHERE movie_people.role=\'director\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
         if(mysqli_num_rows($query3)>0){
     $count ='0';
     ?>
@@ -1684,12 +1686,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1698,12 +1700,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -1712,12 +1714,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
     </tbody>
@@ -1747,34 +1749,34 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name  LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='lead_actress'
-      AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-      OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+      WHERE movie_people.role=\'lead_actress\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='music_director'
-        AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-        OR people.last_name LIKE '%".$music_director."%' OR people.stage_name  LIKE '%".$music_director."%')");
+        WHERE movie_people.role=\'music_director\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
         if(mysqli_num_rows($query3)>0){
     $count ='0';
     ?>
@@ -1796,12 +1798,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1810,12 +1812,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -1824,12 +1826,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
     </tbody>
@@ -1859,34 +1861,34 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actress'
-    AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-    OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+    WHERE movie_people.role=\'lead_actress\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='producer'
-      AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-      OR people.last_name LIKE '%".$producer."%' OR people.stage_name  LIKE '%".$producer."%')");
+      WHERE movie_people.role=\'producer\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='director'
-        AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-        OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+        WHERE movie_people.role=\'director\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
         if(mysqli_num_rows($query3)>0){
     $count ='0';
     ?>
@@ -1908,12 +1910,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -1922,12 +1924,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -1936,12 +1938,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
     </tbody>
@@ -1969,34 +1971,34 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actress'
-    AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-    OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+    WHERE movie_people.role=\'lead_actress\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='producer'
-      AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-      OR people.last_name LIKE '%".$producer."%' OR people.stage_name  LIKE '%".$producer."%')");
+      WHERE movie_people.role=\'producer\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='music_director'
-        AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-        OR people.last_name LIKE '%".$music_director."%' OR people.stage_name  LIKE '%".$music_director."%')");
+        WHERE movie_people.role=\'music_director\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
         if(mysqli_num_rows($query3)>0){
     $count ='0';
     ?>
@@ -2018,12 +2020,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -2032,12 +2034,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -2046,12 +2048,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
     </tbody>
@@ -2081,34 +2083,34 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='producer'
-    AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-    OR people.last_name LIKE '%".$producer."%' OR people.stage_name  LIKE '%".$producer."%')");
+    WHERE movie_people.role=\'producer\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='director'
-      AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-      OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+      WHERE movie_people.role=\'director\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='music_director'
-        AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-        OR people.last_name LIKE '%".$music_director."%' OR people.stage_name  LIKE '%".$music_director."%')");
+        WHERE movie_people.role=\'music_director\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
         if(mysqli_num_rows($query3)>0){
     $count ='0';
     ?>
@@ -2130,12 +2132,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -2144,12 +2146,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -2158,12 +2160,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
     </tbody>
@@ -2195,43 +2197,43 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name  LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='lead_actress'
-      AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-      OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+      WHERE movie_people.role=\'lead_actress\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='producer'
-        AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-        OR people.last_name LIKE '%".$producer."%' OR people.stage_name  LIKE '%".$producer."%')");
+        WHERE movie_people.role=\'producer\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
         if(mysqli_num_rows($query3)>0){
-          $query4 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+          $query4 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
           people.first_name,people.middle_name,people.last_name
           from movie_people
           JOIN people ON people.people_id = movie_people.people_id
           JOIN movies ON movies.movie_id = movie_people.movie_id
-          WHERE movie_people.role='director'
-          AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-          OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+          WHERE movie_people.role=\'director\'
+          AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+          OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
           if(mysqli_num_rows($query4)>0){
     $count ='0';
     ?>
@@ -2253,12 +2255,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -2267,12 +2269,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -2281,12 +2283,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
 
@@ -2297,12 +2299,12 @@ while($row4 = mysqli_fetch_assoc($query4)){
   $count++;
 ?>
 <tr>
-  <td><?php echo $count; ?></td>
-  <td><?php echo $row4['first_name'].' '.$row4['middle_name'].' '.$row4['last_name'];?></td>
-  <td><?php echo $row4['native_name']; ?></td>
-  <td><?php echo $row4['english_name']; ?></td>
-  <td><?php echo $row4['year_made']; ?></td>
-  <td><?php echo $row4['role']; ?></td>
+  <td><?php echo h($count); ?></td>
+  <td><?php echo h($row4['first_name']) . ' ' . h($row4['middle_name']) . ' ' . h($row4['last_name']);?></td>
+  <td><?php echo h($row4['native_name']); ?></td>
+  <td><?php echo h($row4['english_name']); ?></td>
+  <td><?php echo h($row4['year_made']); ?></td>
+  <td><?php echo h($row4['role']); ?></td>
 </tr>
 <?php } ?>
     </tbody>
@@ -2339,43 +2341,43 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name  LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='producer'
-      AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-      OR people.last_name LIKE '%".$producer."%' OR people.stage_name LIKE '%".$producer."%')");
+      WHERE movie_people.role=\'producer\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='director'
-        AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-        OR people.last_name LIKE '%".$director."%' OR people.stage_name  LIKE '%".$director."%')");
+        WHERE movie_people.role=\'director\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
         if(mysqli_num_rows($query3)>0){
-          $query4 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+          $query4 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
           people.first_name,people.middle_name,people.last_name
           from movie_people
           JOIN people ON people.people_id = movie_people.people_id
           JOIN movies ON movies.movie_id = movie_people.movie_id
-          WHERE movie_people.role='music_director'
-          AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-          OR people.last_name LIKE '%".$music_director."%' OR people.stage_name LIKE '%".$music_director."%')");
+          WHERE movie_people.role=\'music_director\'
+          AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+          OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
           if(mysqli_num_rows($query4)>0){
     $count ='0';
     ?>
@@ -2397,12 +2399,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -2411,12 +2413,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -2425,12 +2427,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
 
@@ -2441,12 +2443,12 @@ while($row4 = mysqli_fetch_assoc($query4)){
   $count++;
 ?>
 <tr>
-  <td><?php echo $count; ?></td>
-  <td><?php echo $row4['first_name'].' '.$row4['middle_name'].' '.$row4['last_name'];?></td>
-  <td><?php echo $row4['native_name']; ?></td>
-  <td><?php echo $row4['english_name']; ?></td>
-  <td><?php echo $row4['year_made']; ?></td>
-  <td><?php echo $row4['role']; ?></td>
+  <td><?php echo h($count); ?></td>
+  <td><?php echo h($row4['first_name']) . ' ' . h($row4['middle_name']) . ' ' . h($row4['last_name']);?></td>
+  <td><?php echo h($row4['native_name']); ?></td>
+  <td><?php echo h($row4['english_name']); ?></td>
+  <td><?php echo h($row4['year_made']); ?></td>
+  <td><?php echo h($row4['role']); ?></td>
 </tr>
 <?php } ?>
     </tbody>
@@ -2483,43 +2485,43 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actress'
-    AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-    OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name LIKE '%".$lead_actress."%')");
+    WHERE movie_people.role=\'lead_actress\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='producer'
-      AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-      OR people.last_name LIKE '%".$producer."%' OR people.stage_name LIKE '%".$producer."%')");
+      WHERE movie_people.role=\'producer\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='director'
-        AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-        OR people.last_name LIKE '%".$director."%' OR people.stage_name LIKE '%".$director."%')");
+        WHERE movie_people.role=\'director\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
         if(mysqli_num_rows($query3)>0){
-          $query4 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+          $query4 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
           people.first_name,people.middle_name,people.last_name
           from movie_people
           JOIN people ON people.people_id = movie_people.people_id
           JOIN movies ON movies.movie_id = movie_people.movie_id
-          WHERE movie_people.role='music_director'
-          AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-          OR people.last_name LIKE '%".$music_director."%' OR people.stage_name LIKE '%".$music_director."%')");
+          WHERE movie_people.role=\'music_director\'
+          AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+          OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
           if(mysqli_num_rows($query4)>0){
     $count ='0';
     ?>
@@ -2541,12 +2543,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -2555,12 +2557,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -2569,12 +2571,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
 
@@ -2585,12 +2587,12 @@ while($row4 = mysqli_fetch_assoc($query4)){
   $count++;
 ?>
 <tr>
-  <td><?php echo $count; ?></td>
-  <td><?php echo $row4['first_name'].' '.$row4['middle_name'].' '.$row4['last_name'];?></td>
-  <td><?php echo $row4['native_name']; ?></td>
-  <td><?php echo $row4['english_name']; ?></td>
-  <td><?php echo $row4['year_made']; ?></td>
-  <td><?php echo $row4['role']; ?></td>
+  <td><?php echo h($count); ?></td>
+  <td><?php echo h($row4['first_name']) . ' ' . h($row4['middle_name']) . ' ' . h($row4['last_name']);?></td>
+  <td><?php echo h($row4['native_name']); ?></td>
+  <td><?php echo h($row4['english_name']); ?></td>
+  <td><?php echo h($row4['year_made']); ?></td>
+  <td><?php echo h($row4['role']); ?></td>
 </tr>
 <?php } ?>
     </tbody>
@@ -2626,53 +2628,53 @@ else{
     ?>
     <h3 style = "color: #01B0F1;">Search Result</h3>
     <?php
-    $query1 =mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+    $query1 =db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
     people.first_name,people.middle_name,people.last_name
     from movie_people
     JOIN people ON people.people_id = movie_people.people_id
     JOIN movies ON movies.movie_id = movie_people.movie_id
-    WHERE movie_people.role='lead_actor'
-    AND (people.first_name LIKE '%".$lead_actor."%' OR people.middle_name LIKE '%".$lead_actor."%'
-    OR people.last_name LIKE '%".$lead_actor."%' OR people.stage_name LIKE '%".$lead_actor."%')");
+    WHERE movie_people.role=\'lead_actor\'
+    AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+    OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%', '%' . $lead_actor . '%']]);
 
     if(mysqli_num_rows($query1)>0){
-      $query2 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+      $query2 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
       people.first_name,people.middle_name,people.last_name
       from movie_people
       JOIN people ON people.people_id = movie_people.people_id
       JOIN movies ON movies.movie_id = movie_people.movie_id
-      WHERE movie_people.role='lead_actress'
-      AND (people.first_name LIKE '%".$lead_actress."%' OR people.middle_name LIKE '%".$lead_actress."%'
-      OR people.last_name LIKE '%".$lead_actress."%' OR people.stage_name  LIKE '%".$lead_actress."%')");
+      WHERE movie_people.role=\'lead_actress\'
+      AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+      OR people.last_name LIKE ? OR people.stage_name  LIKE ?)', 'params' => ['%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%', '%' . $lead_actress . '%']]);
 
       if(mysqli_num_rows($query2)>0){
-        $query3 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+        $query3 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
         people.first_name,people.middle_name,people.last_name
         from movie_people
         JOIN people ON people.people_id = movie_people.people_id
         JOIN movies ON movies.movie_id = movie_people.movie_id
-        WHERE movie_people.role='producer'
-        AND (people.first_name LIKE '%".$producer."%' OR people.middle_name LIKE '%".$producer."%'
-        OR people.last_name LIKE '%".$producer."%' OR people.stage_name LIKE '%".$producer."%')");
+        WHERE movie_people.role=\'producer\'
+        AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+        OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%', '%' . $producer . '%']]);
         if(mysqli_num_rows($query3)>0){
-          $query4 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+          $query4 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
           people.first_name,people.middle_name,people.last_name
           from movie_people
           JOIN people ON people.people_id = movie_people.people_id
           JOIN movies ON movies.movie_id = movie_people.movie_id
-          WHERE movie_people.role='director'
-          AND (people.first_name LIKE '%".$director."%' OR people.middle_name LIKE '%".$director."%'
-          OR people.last_name LIKE '%".$director."%' OR people.stage_name LIKE '%".$director."%')");
+          WHERE movie_people.role=\'director\'
+          AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+          OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $director . '%', '%' . $director . '%', '%' . $director . '%', '%' . $director . '%']]);
           if(mysqli_num_rows($query4)>0){
 
-            $query5 = mysqli_query($db,"select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
+            $query5 = db_query($db, ['sql' => 'select movies.native_name,movies.english_name,movies.year_made,movie_people.role,
             people.first_name,people.middle_name,people.last_name
             from movie_people
             JOIN people ON people.people_id = movie_people.people_id
             JOIN movies ON movies.movie_id = movie_people.movie_id
-            WHERE movie_people.role='music_director'
-            AND (people.first_name LIKE '%".$music_director."%' OR people.middle_name LIKE '%".$music_director."%'
-            OR people.last_name LIKE '%".$music_director."%' OR people.stage_name LIKE '%".$music_director."%')");
+            WHERE movie_people.role=\'music_director\'
+            AND (people.first_name LIKE ? OR people.middle_name LIKE ?
+            OR people.last_name LIKE ? OR people.stage_name LIKE ?)', 'params' => ['%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%', '%' . $music_director . '%']]);
             if(mysqli_num_rows($query5)>0){
     $count ='0';
     ?>
@@ -2694,12 +2696,12 @@ else{
         $count++;
       ?>
       <tr>
-        <td><?php echo $count; ?></td>
-        <td><?php echo $row1['first_name'].' '.$row1['middle_name'].' '.$row1['last_name'];?></td>
-        <td><?php echo $row1['native_name']; ?></td>
-        <td><?php echo $row1['english_name']; ?></td>
-        <td><?php echo $row1['year_made']; ?></td>
-        <td><?php echo $row1['role']; ?></td>
+        <td><?php echo h($count); ?></td>
+        <td><?php echo h($row1['first_name']) . ' ' . h($row1['middle_name']) . ' ' . h($row1['last_name']);?></td>
+        <td><?php echo h($row1['native_name']); ?></td>
+        <td><?php echo h($row1['english_name']); ?></td>
+        <td><?php echo h($row1['year_made']); ?></td>
+        <td><?php echo h($row1['role']); ?></td>
       </tr>
     <?php } ?>
 
@@ -2708,12 +2710,12 @@ else{
       $count++;
     ?>
     <tr>
-      <td><?php echo $count; ?></td>
-      <td><?php echo $row2['first_name'].' '.$row2['middle_name'].' '.$row2['last_name'];?></td>
-      <td><?php echo $row2['native_name']; ?></td>
-      <td><?php echo $row2['english_name']; ?></td>
-      <td><?php echo $row2['year_made']; ?></td>
-      <td><?php echo $row2['role']; ?></td>
+      <td><?php echo h($count); ?></td>
+      <td><?php echo h($row2['first_name']) . ' ' . h($row2['middle_name']) . ' ' . h($row2['last_name']);?></td>
+      <td><?php echo h($row2['native_name']); ?></td>
+      <td><?php echo h($row2['english_name']); ?></td>
+      <td><?php echo h($row2['year_made']); ?></td>
+      <td><?php echo h($row2['role']); ?></td>
     </tr>
   <?php } ?>
 
@@ -2722,12 +2724,12 @@ else{
     $count++;
   ?>
   <tr>
-    <td><?php echo $count; ?></td>
-    <td><?php echo $row3['first_name'].' '.$row3['middle_name'].' '.$row3['last_name'];?></td>
-    <td><?php echo $row3['native_name']; ?></td>
-    <td><?php echo $row3['english_name']; ?></td>
-    <td><?php echo $row3['year_made']; ?></td>
-    <td><?php echo $row3['role']; ?></td>
+    <td><?php echo h($count); ?></td>
+    <td><?php echo h($row3['first_name']) . ' ' . h($row3['middle_name']) . ' ' . h($row3['last_name']);?></td>
+    <td><?php echo h($row3['native_name']); ?></td>
+    <td><?php echo h($row3['english_name']); ?></td>
+    <td><?php echo h($row3['year_made']); ?></td>
+    <td><?php echo h($row3['role']); ?></td>
   </tr>
 <?php } ?>
 
@@ -2738,12 +2740,12 @@ while($row4 = mysqli_fetch_assoc($query4)){
   $count++;
 ?>
 <tr>
-  <td><?php echo $count; ?></td>
-  <td><?php echo $row4['first_name'].' '.$row4['middle_name'].' '.$row4['last_name'];?></td>
-  <td><?php echo $row4['native_name']; ?></td>
-  <td><?php echo $row4['english_name']; ?></td>
-  <td><?php echo $row4['year_made']; ?></td>
-  <td><?php echo $row4['role']; ?></td>
+  <td><?php echo h($count); ?></td>
+  <td><?php echo h($row4['first_name']) . ' ' . h($row4['middle_name']) . ' ' . h($row4['last_name']);?></td>
+  <td><?php echo h($row4['native_name']); ?></td>
+  <td><?php echo h($row4['english_name']); ?></td>
+  <td><?php echo h($row4['year_made']); ?></td>
+  <td><?php echo h($row4['role']); ?></td>
 </tr>
 <?php } ?>
 
@@ -2753,12 +2755,12 @@ while($row5 = mysqli_fetch_assoc($query5)){
   $count++;
 ?>
 <tr>
-  <td><?php echo $count; ?></td>
-  <td><?php echo $row5['first_name'].' '.$row5['middle_name'].' '.$row5['last_name'];?></td>
-  <td><?php echo $row5['native_name']; ?></td>
-  <td><?php echo $row5['english_name']; ?></td>
-  <td><?php echo $row5['year_made']; ?></td>
-  <td><?php echo $row5['role']; ?></td>
+  <td><?php echo h($count); ?></td>
+  <td><?php echo h($row5['first_name']) . ' ' . h($row5['middle_name']) . ' ' . h($row5['last_name']);?></td>
+  <td><?php echo h($row5['native_name']); ?></td>
+  <td><?php echo h($row5['english_name']); ?></td>
+  <td><?php echo h($row5['year_made']); ?></td>
+  <td><?php echo h($row5['role']); ?></td>
 </tr>
 <?php } ?>
 

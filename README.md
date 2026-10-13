@@ -1,12 +1,9 @@
+# OMDB2 — online movie directory
 
-[1] Download the ZIP file from the repo (www.github.com/sjasthi/omdb2) and extract the contents to xampp/htdocs/omdb 
+This version hardens the existing OMDB XAMPP application. Use the current omdb database, with the existing users schema containing id, email, password, and role. Database dumps and account credentials are intentionally excluded from the source package.
 
-[2] Launch XAMPP; Start Apache Server and SQL Server;
+Place the application in C:\xampp\htdocs\omdb, keep your local ignored db_credentials.php, and visit http://localhost/omdb/. For a new local configuration, copy db_credentials.example.php to db_credentials.php and fill in your own database settings. PHP requires mysqli with mysqlnd, mbstring, and fileinfo. Apache must allow this application's .htaccess rules.
 
-[3] Go to SQL Admin panel (phpmyadmin); Create a database called "ombd_db".
+Sign in with your existing account. Normal users have read access; ADMIN and SUPER-ADMIN users manage data. Administrators create new accounts using sign_up.php. Existing legacy passwords are upgraded to secure hashes after successful authentication.
 
-[4] Import the SQL file (xampp/htdocs/omdb/sql/omdb_06_03_2022.sql) into abcd_db database.
-
-[5] Launch the abcd application
-http://localhost/omdb 
- 
+See [SECURITY.md](SECURITY.md) for the access policy, commit checks, deployment rules, and removal of previously tracked private files.

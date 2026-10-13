@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "SONGS";
   $left_buttons = "YES";
   $left_selected = "TRIVIA";
@@ -31,18 +34,18 @@
                   <?php
 
 $sql = "SELECT * FROM `song_trivia`";
-    $result = $db->query($sql);
+    $result = db_query($db, $sql);
 
                     if ($result->num_rows > 0) {
                         // output data of each row
                         while($row = $result->fetch_assoc()) {
                             echo '<tr>
-                                    <td>'.$row["song_id"].'</td>
-                                    <td>'.$row["song_trivia_id"].' </span> </td>
-                                    <td>'.$row["song_trivia_name"].'</td>
-                                    <td><a class="btn btn-info btn-sm" href="movie_info.php?movie_id='.$row["song_id"].'">Display</a>
-                                        <a class="btn btn-warning btn-sm" href="modify_movie.php?movie_id='.$row["song_id"].'">Modify</a>
-                                        <a class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='.$row["song_id"].'">Delete</a></td>
+                                    <td>' . h($row["song_id"]) . '</td>
+                                    <td>' . h($row["song_trivia_id"]) . ' </span> </td>
+                                    <td>' . h($row["song_trivia_name"]) . '</td>
+                                    <td><a class="btn btn-info btn-sm" href="movie_info.php?movie_id=' . h($row["song_id"]) . '">Display</a>
+                                        <a class="btn btn-warning btn-sm" href="modify_movie.php?movie_id=' . h($row["song_id"]) . '">Modify</a>
+                                        <a class="btn btn-danger btn-sm" href="delete_movie.php?movie_id=' . h($row["song_id"]) . '">Delete</a></td>
                                 </tr>';
                         }//end while
                     }//end if

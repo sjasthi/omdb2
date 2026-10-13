@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
   $nav_selected = "PEOPLE"; 
   $left_buttons = "YES"; 
@@ -35,19 +38,19 @@
               <?php
 
 $sql = "SELECT * from people ORDER BY first_name ASC;";
-$result = $db->query($sql);
+$result = db_query($db, $sql);
 
                 if ($result->num_rows > 0) {
                     // output data of each row
                     while($row = $result->fetch_assoc()) {
                         echo '<tr>
-                                <td>'.$row["people_id"].'</td>
-                                <td>'.$row["stage_name"].' </span> </td>
-                                <td>'.$row["first_name"].'</td>
-                                <td>'.$row["middle_name"].'</td>
-                                <td>'.$row["last_name"].'</td>
-                                <td>'.$row["gender"].'</td>
-                                <td>'.$row["image_name"].'</td>
+                                <td>' . h($row["people_id"]) . '</td>
+                                <td>' . h($row["stage_name"]) . ' </span> </td>
+                                <td>' . h($row["first_name"]) . '</td>
+                                <td>' . h($row["middle_name"]) . '</td>
+                                <td>' . h($row["last_name"]) . '</td>
+                                <td>' . h($row["gender"]) . '</td>
+                                <td>' . h($row["image_name"]) . '</td>
                             </tr>';
                     }//end while
                 }//end if

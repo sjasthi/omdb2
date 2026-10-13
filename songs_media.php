@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "SONGS";
   $left_buttons = "YES";
   $left_selected = "MEDIA";
@@ -32,16 +35,16 @@
                   <?php
 
   $sql = "SELECT * FROM `song_media`";
-    $result = $db->query($sql);
+    $result = db_query($db, $sql);
 
                     if ($result->num_rows > 0) {
                         // output data of each row
                         while($row = $result->fetch_assoc()) {
                             echo '<tr>
-                                    <td>'.$row["song_media_id"].'</td>
-                                    <td>'.$row["s_link"].' </span> </td>
-                                    <td>'.$row["s_link_type"].'</td>
-                                    <td>'.$row["song_i"].'</td>'
+                                    <td>' . h($row["song_media_id"]) . '</td>
+                                    <td>' . h($row["s_link"]) . ' </span> </td>
+                                    <td>' . h($row["s_link_type"]) . '</td>
+                                    <td>' . h($row["song_i"]) . '</td>'
                           ;
                         }//end while
                     }//end if

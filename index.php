@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
   // set the current page to one of the main buttons
   $nav_selected = "HOME";
@@ -32,13 +35,13 @@ table.center {
 
         <?php
 
-            $sql_movies = mysqli_query($db,"select * from movies");
+            $sql_movies = db_query($db, "select * from movies");
             $movies_count = mysqli_num_rows($sql_movies);
 
-            $sql_songs = mysqli_query($db,"select * from songs");
+            $sql_songs = db_query($db, "select * from songs");
             $songs_count = mysqli_num_rows($sql_songs);
 
-            $sql_people = mysqli_query($db,"select * from people");
+            $sql_people = db_query($db, "select * from people");
             $people_count = mysqli_num_rows($sql_people);
 
             ?>
@@ -52,17 +55,17 @@ table.center {
                         <thead>
                           <tr>
                         <td>Number of movies</td>
-                        <td><?php echo $movies_count;?></td>
+                        <td><?php echo h($movies_count);?></td>
                         </tr>
 
                         <tr>
                       <td>Number of Songs</td>
-                      <td><?php echo $songs_count;?></td>
+                      <td><?php echo h($songs_count);?></td>
                       </tr>
 
                       <tr>
                     <td>Number of People</td>
-                    <td><?php echo $people_count;?></td>
+                    <td><?php echo h($people_count);?></td>
                     </tr>
                         </thead>
                         <tbody>

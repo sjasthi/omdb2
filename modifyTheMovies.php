@@ -1,6 +1,11 @@
 <?php
-session_start();
-
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
@@ -77,10 +82,7 @@ $tag_line_update = trim($_POST['tag_line_update'] ?? '');
         
         //Movies Update
         if (isset($_POST['english_name_update'])) {
-    $stmt = mysqli_prepare(
-        $db,
-        "UPDATE movies SET english_name = ?, year_made = ? WHERE movie_id = ?"
-    );
+    $stmt = db_prepare($db, "UPDATE movies SET english_name = ?, year_made = ? WHERE movie_id = ?");
 
     mysqli_stmt_bind_param($stmt, "sii",
         $english_update,
@@ -96,12 +98,9 @@ $tag_line_update = trim($_POST['tag_line_update'] ?? '');
 
     $native_update = $_POST['native_name_update'];
 
-    $stmt2 = mysqli_prepare(
-        $db,
-        "UPDATE movies
+    $stmt2 = db_prepare($db, "UPDATE movies
          SET native_name = ?, english_name = ?, year_made = ?
-         WHERE movie_id = ?"
-    );
+         WHERE movie_id = ?");
 
     mysqli_stmt_bind_param(
         $stmt2,
@@ -129,10 +128,7 @@ if (
 ) {
 
     // Check whether movie_data already exists for this movie
-    $stmtCheck = mysqli_prepare(
-        $db,
-        "SELECT movie_id FROM movie_data WHERE movie_id = ?"
-    );
+    $stmtCheck = db_prepare($db, "SELECT movie_id FROM movie_data WHERE movie_id = ?");
 
     mysqli_stmt_bind_param($stmtCheck, "i", $movie_id);
     mysqli_stmt_execute($stmtCheck);
@@ -144,12 +140,9 @@ if (
 
     if ($movieDataExists) {
 
-        $stmt4 = mysqli_prepare(
-            $db,
-            "UPDATE movie_data
+        $stmt4 = db_prepare($db, "UPDATE movie_data
              SET language = ?, country = ?, genre = ?, plot = ?, tag_line = ?
-             WHERE movie_id = ?"
-        );
+             WHERE movie_id = ?");
 
         mysqli_stmt_bind_param(
             $stmt4,
@@ -164,12 +157,9 @@ if (
 
     } else {
 
-        $stmt4 = mysqli_prepare(
-            $db,
-            "INSERT INTO movie_data
+        $stmt4 = db_prepare($db, "INSERT INTO movie_data
              (movie_id, language, country, genre, plot, tag_line)
-             VALUES (?, ?, ?, ?, ?, ?)"
-        );
+             VALUES (?, ?, ?, ?, ?, ?)");
 
         mysqli_stmt_bind_param(
             $stmt4,
@@ -194,12 +184,9 @@ if (
     isset($_POST['running_time_update'])
 ) {
 
-    $stmt5 = mysqli_prepare(
-        $db,
-        "UPDATE movie_numbers
+    $stmt5 = db_prepare($db, "UPDATE movie_numbers
          SET box_office = ?, budget = ?, running_time = ?
-         WHERE movie_id = ?"
-    );
+         WHERE movie_id = ?");
 
     mysqli_stmt_bind_param(
         $stmt5,
@@ -217,12 +204,9 @@ if (
        //Movie_Anagrams Update
 if (!empty($anagram_id)) {
 
-    $stmt6 = mysqli_prepare(
-        $db,
-        "UPDATE movie_anagrams
+    $stmt6 = db_prepare($db, "UPDATE movie_anagrams
          SET anagram = ?
-         WHERE movie_id = ? AND anagram_id = ?"
-    );
+         WHERE movie_id = ? AND anagram_id = ?");
 
     for ($i = 0; $i < sizeof($anagram_id); $i++) {
 
@@ -246,12 +230,9 @@ if (!empty($anagram_id)) {
        //Movie_Keywords Update
 if (!empty($keyword_update)) {
 
-    $stmt7 = mysqli_prepare(
-        $db,
-        "UPDATE movie_keywords
+    $stmt7 = db_prepare($db, "UPDATE movie_keywords
          SET keyword = ?
-         WHERE movie_id = ?"
-    );
+         WHERE movie_id = ?");
 
     for ($i = 0; $i < sizeof($keyword_update); $i++) {
 
@@ -273,12 +254,9 @@ if (!empty($keyword_update)) {
  //Movie_Media Update
 if (!empty($movie_media_id)) {
 
-    $stmt8 = mysqli_prepare(
-        $db,
-        "UPDATE movie_media
+    $stmt8 = db_prepare($db, "UPDATE movie_media
          SET m_link = ?, m_link_type = ?
-         WHERE movie_id = ? AND movie_media_id = ?"
-    );
+         WHERE movie_id = ? AND movie_media_id = ?");
 
     for ($i = 0; $i < sizeof($movie_media_id); $i++) {
 
@@ -305,12 +283,9 @@ if (!empty($movie_media_id)) {
 //Movie_Quotes Update
 if (!empty($movie_quote_id)) {
 
-    $stmt9 = mysqli_prepare(
-        $db,
-        "UPDATE movie_quotes
+    $stmt9 = db_prepare($db, "UPDATE movie_quotes
          SET movie_quote_name = ?
-         WHERE movie_id = ? AND movie_quote_id = ?"
-    );
+         WHERE movie_id = ? AND movie_quote_id = ?");
 
     for ($i = 0; $i < sizeof($movie_quote_id); $i++) {
 
@@ -335,12 +310,9 @@ if (!empty($movie_quote_id)) {
 //Movie_Trivia Update
 if (!empty($movie_trivia_id)) {
 
-    $stmt10 = mysqli_prepare(
-        $db,
-        "UPDATE movie_trivia
+    $stmt10 = db_prepare($db, "UPDATE movie_trivia
          SET movie_trivia_name = ?
-         WHERE movie_id = ? AND movie_trivia_id = ?"
-    );
+         WHERE movie_id = ? AND movie_trivia_id = ?");
 
     for ($i = 0; $i < sizeof($movie_trivia_id); $i++) {
 

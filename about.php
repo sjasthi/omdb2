@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
   // set the current page;
   $nav_selected = "ABOUT";

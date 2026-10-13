@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
 <?php $page_title = 'The Cow Layer'; ?>
 <?php
     $nav_selected = "SONGS";
@@ -26,8 +32,8 @@ $test = '';
         }
         for($i = 0, $size = count($people_id); $i < $size; $i++){
             
-            $sql = "insert ignore into song_people (song_id, people_id, role) values (".$song_id.", ".$people_id[$i].", '".$roles[$i]."');";
-            mysqli_query($db, $sql);
+            $sql = ['sql' => 'insert ignore into song_people (song_id, people_id, role) values (?, ?, ?);', 'params' => [$song_id, $people_id[$i], $roles[$i]]];
+            db_query($db, $sql);
         }
     }
     else if(isset($_POST['delete'])){
@@ -43,14 +49,14 @@ $test = '';
             }
         }
         for($i = 0, $size = count($people_id); $i < $size; $i++){
-            $sql = "delete from song_people where song_id = ".$song_id." and people_id = ".$people_id[$i]." and role = '".$roles[$i]."';";
-            mysqli_query($db, $sql);
+            $sql = ['sql' => 'delete from song_people where song_id = ? and people_id = ? and role = ?;', 'params' => [$song_id, $people_id[$i], $roles[$i]]];
+            db_query($db, $sql);
         }
     }
 
-    $sql = mysqli_query($db,"select people.*, song_people.* from people left join song_people on people.people_id = song_people.people_id where song_people.song_id = ".$song_id.";");
+    $sql = db_query($db, ['sql' => 'select people.*, song_people.* from people left join song_people on people.people_id = song_people.people_id where song_people.song_id = ?;', 'params' => [$song_id]]);
 
-    $sql2 = mysqli_query($db,"select title from songs where song_id = ".$song_id.";");
+    $sql2 = db_query($db, ['sql' => 'select title from songs where song_id = ?;', 'params' => [$song_id]]);
     $name = mysqli_fetch_assoc($sql2);
   
   ?>
@@ -58,10 +64,10 @@ $test = '';
 <!DOCTYPE html>
 <html>
 <div class = "container">
-<h1>Attach A Person to <?php echo $name['title'];?></h1>
+<h1>Attach A Person to <?php echo h($name['title']);?></h1>
 
 <h3>People Library</h3>
-<form name="add_person" id="add_person" class="add_person" method="post" action="songs_people_list.php">
+<form name="add_person" id="add_person" class="add_person" method="post" action="songs_people_list.php"><?php echo csrf_field(); ?>
   <table id="info" cellpadding="0" cellspacing="0" border="0"
       class="datatable table table-striped table-bordered datatable-style table-hover"
       width="100%" style="width: 100px;">
@@ -78,7 +84,7 @@ $test = '';
   <?php
 
   $count = 1;
-      $query = mysqli_query($db,"SELECT * from people;");
+      $query = db_query($db, "SELECT * from people;");
 
 
     if(mysqli_num_rows($query)>0){
@@ -89,11 +95,11 @@ $test = '';
 
 
             <tr>
-            <td><input type="checkbox" class="add" id="add" name="people_id<?php echo $count; ?>" value="<?php echo $row['people_id']; ?>" onclick="addPeople(this)"></td>
-          <td><?php echo $row['people_id']; ?></td>
-          <td><?php echo $row['stage_name']; ?></td>
+            <td><input type="checkbox" class="add" id="add" name="people_id<?php echo h($count); ?>" value="<?php echo h($row['people_id']); ?>" onclick="addPeople(this)"></td>
+          <td><?php echo h($row['people_id']); ?></td>
+          <td><?php echo h($row['stage_name']); ?></td>
           <td>
-              <select class="add" name="role<?php echo $count; ?>" disabled>
+              <select class="add" name="role<?php echo h($count); ?>" disabled>
                   <option value="" disabled selected>Select Role</option>
                   <option value="Composer">Composer</option>
                   <option value="Songwriter">Songwriter</option>
@@ -114,7 +120,7 @@ $test = '';
 
             </tbody>
             </table>
-            <input type="hidden" name="song_id" value="<?php echo $song_id; ?>" />
+            <input type="hidden" name="song_id" value="<?php echo h($song_id); ?>" />
             <input type="checkbox" name="add" id='addFinal' value="add" style="display:none;" required>
             </form>
             
@@ -127,8 +133,8 @@ if(mysqli_num_rows($sql)>0){
     $count = '1';
 ?>
     <br><br><br><br>
-    <h3>People for <?php echo $name['title'];?></h3>
-    <form name="delete_person" id="delete_person" method="post" action="songs_people_list.php">
+    <h3>People for <?php echo h($name['title']);?></h3>
+    <form name="delete_person" id="delete_person" method="post" action="songs_people_list.php"><?php echo csrf_field(); ?>
       <table id="info1" cellpadding="0" cellspacing="0" border="0"
           class="datatable table table-striped table-bordered datatable-style table-hover"
           width="100%" style="width: 100px;">
@@ -145,11 +151,11 @@ if(mysqli_num_rows($sql)>0){
         while($row = mysqli_fetch_assoc($sql)){
     ?>
             <tr>
-            <td><input type="checkbox" class="delete" name="people_id<?php echo $count; ?>" value="<?php echo $row['people_id']; ?>" onclick="this.nextSibling.nextSibling.disabled = false;" autofocus>
-            <input type="hidden" name="role<?php echo $count;?>" value="<?php echo $row['role']; ?>" disabled>
-            <td><?php echo $row['people_id']; ?></td>
-            <td><?php echo $row['stage_name']; ?></td>
-            <td><?php echo $row['role']; ?></td>
+            <td><input type="checkbox" class="delete" name="people_id<?php echo h($count); ?>" value="<?php echo h($row['people_id']); ?>" onclick="this.nextSibling.nextSibling.disabled = false;" autofocus>
+            <input type="hidden" name="role<?php echo h($count);?>" value="<?php echo h($row['role']); ?>" disabled>
+            <td><?php echo h($row['people_id']); ?></td>
+            <td><?php echo h($row['stage_name']); ?></td>
+            <td><?php echo h($row['role']); ?></td>
 
             </tr>
             
@@ -160,7 +166,7 @@ if(mysqli_num_rows($sql)>0){
     ?>
             </tbody>
             </table>
-            <input type="hidden" name="song_id" value="<?php echo $song_id; ?>" />
+            <input type="hidden" name="song_id" value="<?php echo h($song_id); ?>" />
             <input type="checkbox" name="delete" id='deleteFinal' value="delete" style="display:none;" required>
             </form>
 

@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/security.php';
+?>
 <div id="menu-left">
 
 <a href="songs.php">

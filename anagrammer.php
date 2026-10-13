@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
     include('database.php');
     $db = db_connect();
     $movie_id = "";
@@ -43,9 +46,7 @@ $winner = null;
 
     if ($movie_id && $normalized_guess !== '') {
 
-        $stmt = mysqli_prepare(
-            $db,
-            "SELECT
+        $stmt = db_prepare($db, "SELECT
                 movies.*,
                 movie_numbers.length,
                 movie_numbers.base_chars
@@ -53,8 +54,7 @@ $winner = null;
              LEFT JOIN movie_numbers
                 ON movies.movie_id = movie_numbers.movie_id
              WHERE movies.movie_id = ?
-               AND REPLACE(LOWER(movies.native_name), ' ', '') = ?"
-        );
+               AND REPLACE(LOWER(movies.native_name), ' ', '') = ?");
 
         mysqli_stmt_bind_param(
             $stmt,
@@ -71,13 +71,13 @@ $winner = null;
 
     if($flag != "winner" && !isset($_POST['movie_id'])){
         $sql = "select movie_id from movies where movie_id in (select movie_id from movie_anagrams) order by rand() limit 1;";
-        $result = mysqli_query($db, $sql);
+        $result = db_query($db, $sql);
         if($result->num_rows == 1){
             $row = $result->fetch_assoc();
             $movie_id = $row["movie_id"];
         }
-        $sql2 = "select anagram from movie_anagrams where movie_id = '".$movie_id."' order by rand() limit 3";
-        $result = mysqli_query($db, $sql2);
+        $sql2 = ['sql' => 'select anagram from movie_anagrams where movie_id = ? order by rand() limit 3', 'params' => [$movie_id]];
+        $result = db_query($db, $sql2);
         if ($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
@@ -152,12 +152,12 @@ if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
                     // output data of each row
                     $row = $winner->fetch_assoc();
                         echo '<tr>
-                                <td>'.$row["movie_id"].'</td>
-                                <td>'.$row["native_name"].' </span> </td>
-                                <td>'.$row["english_name"].'</td>
-                                <td>'.$row["year_made"].'</td>
-                                <td>'.$row["length"].'</td>
-                                <td>'.$row["base_chars"].'</td>
+                                <td>' . h($row["movie_id"]) . '</td>
+                                <td>' . h($row["native_name"]) . ' </span> </td>
+                                <td>' . h($row["english_name"]) . '</td>
+                                <td>' . h($row["year_made"]) . '</td>
+                                <td>' . h($row["length"]) . '</td>
+                                <td>' . h($row["base_chars"]) . '</td>
                             </tr>';
                 }//end if
                 else {
@@ -180,7 +180,7 @@ crossorigin="anonymous"></script>
         let currentGuess = [];
         let nextLetter = 0;
         <?php if(empty($flag)) { ?>
-        const characterCount = <?php echo mb_strlen($anagrams[0], 'utf8'); ?>;
+        const characterCount = <?php echo h(mb_strlen($anagrams[0], 'utf8')); ?>;
         var passedArray = <?php echo json_encode($anagrams);?>;
         let display = document.getElementById("display-board")
             
@@ -219,7 +219,7 @@ crossorigin="anonymous"></script>
             submit.setAttribute("type","submit")
             submit.setAttribute("form", "anagrammer")
             submit.setAttribute("name", "movie_id")
-            submit.setAttribute("value", <?php echo $movie_id;?>)
+            submit.setAttribute("value", <?php echo h($movie_id);?>)
             let input = document.createElement("input")
             input.setAttribute("type", "hidden")
             input.setAttribute("name", "anagrams[]")

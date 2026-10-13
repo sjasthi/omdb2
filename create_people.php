@@ -1,6 +1,11 @@
 <?php
-  session_start();
- if (!isset($_SESSION['username']))
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
+  if (!isset($_SESSION['username']))
       { 
        header("Location: login.php");
        exit();
@@ -19,7 +24,7 @@
 <!DOCTYPE html>
 <html>
 <div class = "container">
-<form method= "post">
+<form method= "post"><?php echo csrf_field(); ?>
 <h1>Create new People</h1>
 <div class="tab">
   <p><input name= "stage_name" placeholder="Stage Name" ></p>
@@ -175,7 +180,7 @@ function fixStepIndicator(n) {
 </html>
 <?php
       if(isset($_POST['create_people'])){
-        $people_query = mysqli_query($db,"select people_id from people order by people_id desc limit 1");
+        $people_query = db_query($db, "select people_id from people order by people_id desc limit 1");
         $people_row = mysqli_fetch_row($people_query);
         $p_id = $people_row[0] + 1;
         $stage_name = $_POST['stage_name'];
@@ -185,8 +190,8 @@ function fixStepIndicator(n) {
         $gender = $_POST['gender'];
         $image = "image file name";
 
-        $query = mysqli_query($db,"INSERT INTO people (people_id, stage_name, first_name, middle_name, last_name, gender, image_name)
-         VALUES ('$p_id', '$stage_name','$first_name','$middle_name','$last_name','$gender','$image')");
+        $query = db_query($db, ['sql' => 'INSERT INTO people (people_id, stage_name, first_name, middle_name, last_name, gender, image_name)
+         VALUES (?, ?,?,?,?,?,?)', 'params' => [$p_id, $stage_name, $first_name, $middle_name, $last_name, $gender, $image]]);
         db_disconnect($db);
         header('Location: people.php?create=Success');
       }

@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
 <?php $page_title = 'The Cow Layer'; ?>
 <script type="text/javascript" language="javascript">
 
@@ -64,15 +70,15 @@ function deleteAll() {
         $roles = [];
         foreach($_POST as $k => $v) {
             if(strpos($k, 'people_id') === 0) {
-                $song_id[] = $v;
+                $people_id[] = $v;
             }
             if(strpos($k, 'role') === 0) {
                 $roles[] = $v;
             }
         }
         for($i = 0, $size = count($people_id); $i < $size; $i++){
-            $sql = "insert ignore into movie_people (movie_id, people_id, role) values (".$movie_id.", ".$people_id[$i].", '".$roles[$i]."');";
-            mysqli_query($db, $sql);
+            $sql = ['sql' => 'insert ignore into movie_people (movie_id, people_id, role) values (?, ?, ?);', 'params' => [$movie_id, $people_id[$i], $roles[$i]]];
+            db_query($db, $sql);
         }
     }
     else if(isset($_POST['delete'])){
@@ -88,14 +94,14 @@ function deleteAll() {
             }
         }
         for($i = 0, $size = count($people_id); $i < $size; $i++){
-            $sql = "delete from movie_people where movie_id = ".$movie_id." and song_id = ".$song." and role = '".$roles[$i]."';";
-            mysqli_query($db, $sql);
+            $sql = ['sql' => 'delete from movie_people where movie_id = ? and people_id = ? and role = ?;', 'params' => [$movie_id, $people_id[$i], $roles[$i]]];
+            db_query($db, $sql);
         }
     }
 
-    $sql = mysqli_query($db,"select people.*, movie_people.* from people left join movie_people on people.people_id = movie_people.people_id where movie_people.movie_id = ".$movie_id.";");
+    $sql = db_query($db, ['sql' => 'select people.*, movie_people.* from people left join movie_people on people.people_id = movie_people.people_id where movie_people.movie_id = ?;', 'params' => [$movie_id]]);
 
-    $sql2 = mysqli_query($db,"select native_name from movies where movie_id = ".$movie_id.";");
+    $sql2 = db_query($db, ['sql' => 'select native_name from movies where movie_id = ?;', 'params' => [$movie_id]]);
     $name = mysqli_fetch_assoc($sql2);
   
   ?>
@@ -103,10 +109,10 @@ function deleteAll() {
 <!DOCTYPE html>
 <html>
 <div class = "container">
-<h1>Attach A Person to <?php echo $name['native_name'];?></h1>
+<h1>Attach A Person to <?php echo h($name['native_name']);?></h1>
 
 <h3>People Library</h3>
-<form name="add_person" id="add_person" class="add_person" method="post" action="add_movie_people.php">
+<form name="add_person" id="add_person" class="add_person" method="post" action="add_movie_people.php"><?php echo csrf_field(); ?>
   <table id="info" cellpadding="0" cellspacing="0" border="0"
       class="datatable table table-striped table-bordered datatable-style table-hover"
       width="100%" style="width: 100px;">
@@ -127,7 +133,7 @@ function deleteAll() {
   <?php
 
   $count = '1';
-      $query = mysqli_query($db,"SELECT * from people;");
+      $query = db_query($db, "SELECT * from people;");
 
 
     if(mysqli_num_rows($query)>0){
@@ -138,14 +144,14 @@ function deleteAll() {
 
 
             <tr>
-            <td><input type="checkbox" class="add" id="add" name="people_id<?php echo $count; ?>" value="<?php echo $row['people_id']; ?>"></td>
-            <td><?php echo $row['people_id']; ?></td>
-            <td><?php echo $row['stage_name']; ?></td>
-            <td><?php echo $row['first_name']; ?></td>
-            <td><?php echo $row['middle_name']; ?></td>
-            <td><?php echo $row['last_name']; ?></td>
-            <td><?php echo $row['gender']; ?></td>
-            <td><?php echo $row['image_name']; ?></td>
+            <td><input type="checkbox" class="add" id="add" name="people_id<?php echo h($count); ?>" value="<?php echo h($row['people_id']); ?>"></td>
+            <td><?php echo h($row['people_id']); ?></td>
+            <td><?php echo h($row['stage_name']); ?></td>
+            <td><?php echo h($row['first_name']); ?></td>
+            <td><?php echo h($row['middle_name']); ?></td>
+            <td><?php echo h($row['last_name']); ?></td>
+            <td><?php echo h($row['gender']); ?></td>
+            <td><?php echo h($row['image_name']); ?></td>
 
             </tr>
 
@@ -157,7 +163,7 @@ function deleteAll() {
 
             </tbody>
             </table>
-            <input type="hidden" name="movie_id" value="<?php echo $movie_id; ?>" />
+            <input type="hidden" name="movie_id" value="<?php echo h($movie_id); ?>" />
             <input type="checkbox" name="add" value="add" style="display:none;" checked>
             </form>
             
@@ -170,8 +176,8 @@ if(mysqli_num_rows($sql)>0){
     $count = '1';
 ?>
     <br><br><br><br>
-    <h3>People for <?php echo $name['native_name'];?></h3>
-    <form name="delete_person" id="delete_person" method="post" action="add_movie_people.php">
+    <h3>People for <?php echo h($name['native_name']);?></h3>
+    <form name="delete_person" id="delete_person" method="post" action="add_movie_people.php"><?php echo csrf_field(); ?>
       <table id="info1" cellpadding="0" cellspacing="0" border="0"
           class="datatable table table-striped table-bordered datatable-style table-hover"
           width="100%" style="width: 100px;">
@@ -189,11 +195,11 @@ if(mysqli_num_rows($sql)>0){
         while($row = mysqli_fetch_assoc($sql)){
     ?>
             <tr>
-            <td><input type="checkbox" class="delete" name="people_id<?php echo $count; ?>" value="<?php echo $row['people_id']; ?>"></td>
-            <td><?php echo $row['people_id']; ?></td>
-            <td><?php echo $row['stage_name']; ?></td>
-            <td><?php echo $row['screen_name']; ?></td>
-            <td><?php echo $row['role']; ?></td>
+            <td><input type="checkbox" class="delete" name="people_id<?php echo h($count); ?>" value="<?php echo h($row['people_id']); ?>"></td>
+            <td><?php echo h($row['people_id']); ?></td>
+            <td><?php echo h($row['stage_name']); ?></td>
+            <td><?php echo h($row['screen_name']); ?></td>
+            <td><?php echo h($row['role']); ?></td>
 
             </tr>
             
@@ -204,7 +210,7 @@ if(mysqli_num_rows($sql)>0){
     ?>
             </tbody>
             </table>
-            <input type="hidden" name="movie_id" value="<?php echo $movie_id; ?>" />
+            <input type="hidden" name="movie_id" value="<?php echo h($movie_id); ?>" />
             <input type="checkbox" name="delete" value="delete" style="display:none;" checked>
             </form>
 

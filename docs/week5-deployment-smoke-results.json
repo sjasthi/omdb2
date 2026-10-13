@@ -1,0 +1,61 @@
+[
+  {
+    "test": "Apache home page",
+    "passed": true,
+    "status": 200
+  },
+  {
+    "test": "Regular user cannot create movies",
+    "passed": true,
+    "status": 403
+  },
+  {
+    "test": "Regular user cannot enter setup",
+    "passed": true,
+    "status": 403
+  },
+  {
+    "test": "Admin movie form",
+    "passed": true,
+    "status": 200
+  },
+  {
+    "test": "Admin poster form",
+    "passed": true,
+    "status": 200
+  },
+  {
+    "test": "Private credentials blocked",
+    "passed": true,
+    "status": 403
+  },
+  {
+    "test": "Git metadata blocked",
+    "passed": true,
+    "status": 403
+  },
+  {
+    "test": "Tools blocked",
+    "passed": true,
+    "status": 404
+  },
+  {
+    "test": "Removed debugger unavailable",
+    "passed": true,
+    "status": 404
+  },
+  {
+    "test": "Removed dump unavailable",
+    "passed": true,
+    "status": 403
+  },
+  {
+    "test": "Package excludes private configuration, dumps, Git internals, and supplied logins",
+    "passed": true
+  },
+  {
+    "test": "All deployed PHP files pass syntax checks",
+    "passed": true,
+    "file_count": 117
+  }
+]

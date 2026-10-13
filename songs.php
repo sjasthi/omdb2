@@ -1,5 +1,7 @@
 <?php
-  session_start();
+require_once __DIR__ . '/security.php';
+?>
+<?php
   $nav_selected = "SONGS";
   $left_buttons = "YES";
   $left_selected = "SONGS";
@@ -15,7 +17,7 @@
 
 
       <?php
-        if (isset($_SESSION['username']))
+        if (is_admin())
         { ?>
          <button title='Create Song'><a class='btn btn-sm' href='create_song.php'><i class = 'fa fa-plus'></i></a></button>
       <?php } ?>
@@ -53,12 +55,13 @@
                 ],
 
        columnDefs: [
+      { targets: [0, 1, 2, 3], render: $.fn.dataTable.render.text() },
     {
         targets: 4,
         render: function (data, type, row) {
-           return '<a title="View" class="btn btn-info btn-sm" href="song_info.php?song_id=' + row.song_id + '"><i class="fa fa-eye"></i></a> '
-    + '<a title="Modify" class="btn btn-warning btn-sm" href="modify_song.php?song_id=' + row.song_id + '"><i class="fa fa-pencil"></i></a> '
-    + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_song.php?song_id=' + row.song_id + '"><i class="fa fa-close"></i></a>';
+           return '<a title="View" class="btn btn-info btn-sm" href="song_info.php?song_id=' + encodeURIComponent(row.song_id) + '"><i class="fa fa-eye"></i></a> '
+    + (<?php echo is_admin() ? 'true' : 'false'; ?> ? '<a title="Modify" class="btn btn-warning btn-sm" href="modify_song.php?song_id=' + encodeURIComponent(row.song_id) + '"><i class="fa fa-pencil"></i></a> '
+    + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_song.php?song_id=' + encodeURIComponent(row.song_id) + '"><i class="fa fa-close"></i></a>' : '');
         }
     }
 ],

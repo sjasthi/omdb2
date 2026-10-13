@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
 
   // is_blank('abcd')
   // * validate data presence
@@ -100,11 +103,7 @@
   function has_unique_page_user_name($username, $current_id="0") {
     global $db;
 
-    $sql = "SELECT * FROM users ";
-    $sql .= "WHERE username='" . db_escape($db, $username) . "' ";
-    $sql .= "AND user_id != '" . db_escape($db, $current_id) . "'";
-
-    $user_set = mysqli_query($db, $sql);
+    $user_set = db_query($db, 'SELECT id FROM users WHERE email = ? AND id != ?', [$username, $current_id]);
     $user_count = mysqli_num_rows($user_set);
     mysqli_free_result($user_set);
 

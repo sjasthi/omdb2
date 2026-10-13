@@ -1,6 +1,12 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -26,16 +32,13 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    $stmt = mysqli_prepare(
-        $db,
-        "UPDATE people
+    $stmt = db_prepare($db, "UPDATE people
          SET stage_name = ?,
              first_name = ?,
              middle_name = ?,
              last_name = ?,
              gender = ?
-         WHERE people_id = ?"
-    );
+         WHERE people_id = ?");
 
     mysqli_stmt_bind_param(
         $stmt,

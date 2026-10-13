@@ -1,6 +1,11 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
+<?php
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
 }
 
 if (!isset($_SESSION['username'])) {
@@ -64,12 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      */
     $media_files = array();
 
-    $stmt = mysqli_prepare(
-        $db,
-        "SELECT m_link, m_link_type
+    $stmt = db_prepare($db, "SELECT m_link, m_link_type
          FROM movie_media
-         WHERE movie_id = ?"
-    );
+         WHERE movie_id = ?");
 
     mysqli_stmt_bind_param($stmt, "i", $movie_id);
     mysqli_stmt_execute($stmt);
@@ -82,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             !empty($row['m_link_type'])
         ) {
             $media_files[] =
-                'posters/' .
+                __DIR__ . '/posters/' .
                 basename($row['m_link']) .
                 '.' .
                 basename($row['m_link_type']);
@@ -116,11 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($tables as $table) {
 
-            $stmt = mysqli_prepare(
-                $db,
-                "DELETE FROM `$table`
-                 WHERE movie_id = ?"
-            );
+            $stmt = db_prepare($db, "DELETE FROM `$table`
+                 WHERE movie_id = ?");
 
             if (!$stmt) {
                 throw new Exception(
@@ -148,11 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /*
          * Delete the movie itself.
          */
-        $stmt = mysqli_prepare(
-            $db,
-            "DELETE FROM movies
-             WHERE movie_id = ?"
-        );
+        $stmt = db_prepare($db, "DELETE FROM movies
+             WHERE movie_id = ?");
 
         mysqli_stmt_bind_param(
             $stmt,
@@ -179,8 +175,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          * Delete poster files only after the database deletion succeeds.
          */
         foreach ($media_files as $file_name) {
-            if (is_file($file_name)) {
-                unlink($file_name);
+            $resolved = realpath($file_name);
+            $poster_directory = realpath(__DIR__ . '/posters');
+            if ($resolved !== false && dirname($resolved) === $poster_directory && !is_link($file_name)) {
+                unlink($resolved);
             }
         }
 
@@ -231,13 +229,10 @@ if (!$movie_id || $movie_id < 1) {
 /*
  * Make sure the movie exists and get its name.
  */
-$stmt = mysqli_prepare(
-    $db,
-    "SELECT native_name, english_name, year_made
+$stmt = db_prepare($db, "SELECT native_name, english_name, year_made
      FROM movies
      WHERE movie_id = ?
-     LIMIT 1"
-);
+     LIMIT 1");
 
 mysqli_stmt_bind_param(
     $stmt,
@@ -327,7 +322,7 @@ function escape_html($value)
             <input
                 type="hidden"
                 name="movie_id"
-                value="<?php echo (int)$movie_id; ?>"
+                value="<?php echo h((int)$movie_id); ?>"
             >
 
             <input

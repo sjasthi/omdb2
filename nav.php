@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/security.php';
+?>
+<?php
   require_once('initialize.php');
 ?>
 
@@ -80,11 +83,13 @@
             </a>
 
 
+        <?php if (is_admin()) { ?>
         <a href="setup.php">
           <li <?php if($nav_selected == "SETUP"){ echo 'class="current-page"'; } ?>>
             <img src="./images/setup.png">
             <br/>Setup</li>
         </a>
+        <?php } ?>
 
         <a href="about.php">
           <li <?php if($nav_selected == "ABOUT"){ echo 'class="current-page"'; } ?>>
@@ -104,13 +109,14 @@
             <br/>Help</li>
         </a>
 
-         <?php if(isset($_SESSION['username'])){
+         <?php if(is_logged_in()){
 
-                    ?><a href="log_out.php">
-                        <li <?php if($nav_selected == "LOG_OUT"){ echo 'class="current-page"'; } ?>>
-                        <img src="./images/help.png"> <!-- make a picture for login or just remove this -->
-                        <br/>LogOut</li>
-                    </a>
+                    ?><li class="horozontal-li">
+                        <form action="log_out.php" method="post">
+                            <?php echo csrf_field(); ?>
+                            <button type="submit" style="border:0;background:transparent;color:inherit;">LogOut</button>
+                        </form>
+                    </li>
                     <?php
                 }else{ 
                     ?><a href="login.php">
@@ -133,7 +139,7 @@
       </ul>
       <br />
     </div>
-    <form method="post" action="search.php">
+    <form method="post" action="search.php"><?php echo csrf_field(); ?>
     <input type="search" id="form1" style="width:12%; margin-right:5px; position:relative; right:90px; top:10px; display:inline-block;"name="text_search" class="form-control" />
 
     <button type="submit" style=" display:inline-block; position:relative; right:90px; top:10px;" name="search" class="btn btn-primary">

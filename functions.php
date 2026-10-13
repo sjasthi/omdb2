@@ -1,201 +1,65 @@
 <?php
-
-function url_for($script_path) {
-  // add the leading '/' if not present
-  if($script_path[0] != '/') {
-    $script_path = "/" . $script_path;
-  }
-  return WWW_ROOT . $script_path;
+require_once __DIR__ . '/security.php';
+function url_for($path) { return WWW_ROOT . '/' . ltrim($path, '/'); }
+function u($value = '') { return urlencode((string)$value); }
+function raw_u($value = '') { return rawurlencode((string)$value); }
+function h($value = '') {
+    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
-
-function u($string="") {
-  return urlencode($string);
+function js_value($value): string {
+    return json_encode($value, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_THROW_ON_ERROR);
 }
-
-function raw_u($string="") {
-  return rawurlencode($string);
+function safe_url($value): string {
+    $url = trim((string)$value);
+    $parts = parse_url($url);
+    if (!$parts || !in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true)
+        || empty($parts['host']) || isset($parts['user']) || isset($parts['pass'])
+        || preg_match('/[\x00-\x20\x7f]/', $url)) {
+        return '';
+    }
+    return $url;
 }
-
-function h($string="") {
-  return htmlspecialchars($string);
-}
-
-function error_404() {
-  header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
-  exit();
-}
-
-function error_500() {
-  header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
-  exit();
-}
-
-function redirect_to($location) {
-  header("Location: " . $location);
-  exit;
-}
-
-function is_post_request() {
-  return $_SERVER['REQUEST_METHOD'] == 'POST';
-}
-
-function is_get_request() {
-  return $_SERVER['REQUEST_METHOD'] == 'GET';
-}
-
-function display_errors($errors=array()) {
+function error_404() { security_fail(404, 'Page not found.'); }
+function error_500() { security_fail(500, 'Unable to complete this request. Please try again later.'); }
+function redirect_to($location) { header('Location: ' . $location); exit; }
+function is_post_request() { return ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST'; }
+function is_get_request() { return ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET'; }
+function display_errors($errors = []) {
     $output = '';
-    if(!empty($errors)) {
-        $output .= "<div class=\"errors\">";
-        $output .= "Please fix the following errors:";
-        $output .= "<ul>";
-        foreach($errors as $error) {
-            $output .= "<li>" . h($error) . "</li>";
-        }
-        $output .= "</ul>";
-        $output .= "</div>";
+    if ($errors) {
+        $output = '<div class="errors">Please fix the following errors:<ul>';
+        foreach ($errors as $error) { $output .= '<li>' . h($error) . '</li>'; }
+        $output .= '</ul></div>';
     }
     return $output;
 }
-
-//------------------------------------------------------------------------
-//	Used to convert a user-created URL into an embeddable URL.  
-//	Example: The typical URL pasted in from users will look like this: https://www.youtube.com/watch?v=CgSs3OvTnUQ
-// 			 But this will not work in an embedded iFrame and so must be converted to: https://www.youtube.com/embed/CgSs3OvTnUQ
-//
-function mangleurl($url, $urltype = "") {
-	if (strcasecmp($urltype, 'url') == 0 and strcasecmp(substr($url, 0, 3), 'http') != 0) {
-		$url = 'http://' . $url;
-	}
-	$urlchunks = parse_url(trim($url));
-
-	if (DEBUG_MODE == 'ONxx') {
-		echo 'DEBUG MODE: ' . dirname(__FILE__).'.mangleurl()<br/>'; 
-		echo var_dump($url) . '<br/>';
-		echo var_dump($urlchunks) . '<br/>';
-		echo '<br/>';
-		}
-	
-	$baseurl = $url;		// in case we don't need to do anything, send back what we were given
-	
-	if (strpos(strtolower($urlchunks['host']), 'youtube') > 0) {
-	    $baseurl = $urlchunks['scheme']."://".$urlchunks['host']."/embed/";
-		if (strtolower(substr($urlchunks['query'], 0, 2)) == "v=") {
-			$youtubeid = substr($urlchunks['query'], 2);
-		}
-		else {
-			$youtubeid = $urlchunks['query'];
-		}
-		
-		return $baseurl.$youtubeid;
-	}
-
-	if (strcasecmp(strtolower($urlchunks['host']), 'drive.google.com') == 0) {
-		if (strcasecmp($urltype, 'image') == 0) {
-			$baseurl  = $urlchunks['scheme']."://".$urlchunks['host']."/thumbnail?";
-			$baseurl .= $urlchunks['query'].'&sz=w400-h400';
-		}
-		else {		
-			$baseurl = 'https://docs.google.com/document/d/' . substr($urlchunks['query'], 3) . '/edit';
-		}
-	}
-
-	return $baseurl;
+function mangleurl($value, $type = '') {
+    $url = safe_url($value);
+    if ($url === '') { return ''; }
+    $parts = parse_url($url);
+    $host = strtolower($parts['host']);
+    if (in_array($host, ['youtube.com', 'www.youtube.com', 'm.youtube.com'], true)) {
+        parse_str($parts['query'] ?? '', $query);
+        $id = $query['v'] ?? '';
+        if (is_string($id) && preg_match('/^[A-Za-z0-9_-]{11}$/D', $id)) {
+            return 'https://www.youtube.com/embed/' . $id;
+        }
+    }
+    if ($host === 'drive.google.com' && strcasecmp($type, 'image') === 0) {
+        parse_str($parts['query'] ?? '', $query);
+        $id = $query['id'] ?? '';
+        if (is_string($id) && preg_match('/^[A-Za-z0-9_-]+$/D', $id)) {
+            return 'https://drive.google.com/thumbnail?id=' . rawurlencode($id) . '&sz=w400-h400';
+        }
+    }
+    return $url;
 }
-
-
-//------------------------------------------------------------------------
-//	An item entry from the DB might have multiple URLs sepearated by ';' characters
-//	This function takes that string and returns an array of those items
-//	it will always return an array that is at least one item in size
-//	Example https://www.youtube.com/watch?v=Md0CGAtOPEw;https://www.youtube.com/watch?v=0uPQjgfjl2Q;https://www.youtube.com/watch?v=yA83mhXV3iU;https://www.youtube.com/watch?v=pwFy7eP-IGA
-
-function handlemultipleitems($item) {
-	$urlarray = explode(';',$item);
-
-	// if (DEBUG_MODE == 'ON') {
-		// echo 'DEBUG MODE: ' . dirname(__FILE__).'.handlemultipleitems()<br/>'; 
-		// echo var_dump($urlarray);
-		// echo '<br/>';
-		// }
-			
-	return $urlarray;
-}
-
-//------------------------------------------------------------------------
-//	An item entry from the DB might have multiple URLs sepearated by ';' characters
-//	This function counts how many items are in that long string
-//	it can return 0 if the string is empty
-//	Example https://www.youtube.com/watch?v=Md0CGAtOPEw;https://www.youtube.com/watch?v=0uPQjgfjl2Q;https://www.youtube.com/watch?v=yA83mhXV3iU;https://www.youtube.com/watch?v=pwFy7eP-IGA
-
+function handlemultipleitems($item) { return explode(';', (string)$item); }
 function countitems($item) {
-	$urlarray = explode(';',$item);
-	$ctr = 0;
-
-	 // if (DEBUG_MODE == 'ON') {
-		// echo 'DEBUG MODE: ' . dirname(__FILE__).'.countitems()<br/>'; 
-		// echo var_dump($urlarray);
-		// echo count($urlarray);
-		// echo '<br/>';
-		// }
-			
-	foreach ($urlarray as $subitem) {
-		if (trim($subitem) != '') {
-			$ctr += 1;
-		}
-	}
-		
-	return $ctr;
+    return count(array_filter(handlemultipleitems($item), function ($part) { return trim($part) !== ''; }));
 }
-
-  function is_logged_in() {
-    return isset($_SESSION['username']) &&
-           trim($_SESSION['username']) !== '';
-}
-
-
-function is_super_admin() {
-    if (!is_logged_in()) {
-        return false;
-    }
-
-    return ($_SESSION['role'] ?? 'USER') === 'SUPER-ADMIN';
-}
-
-
-function is_admin() {
-    if (!is_logged_in()) {
-        return false;
-    }
-
-    $role = $_SESSION['role'] ?? 'USER';
-
-    return $role === 'ADMIN' || $role === 'SUPER-ADMIN';
-}
-
-
-function is_user() {
-    if (!is_logged_in()) {
-        return false;
-    }
-
-    $role = $_SESSION['role'] ?? 'USER';
-
-    return in_array(
-        $role,
-        array('USER', 'ADMIN', 'SUPER-ADMIN'),
-        true
-    );
-}
-
-
 function show_flash_message() {
-  if (isset($_SESSION['action_message'])) {
-    $message = $_SESSION['action_message'];
+    $message = $_SESSION['action_message'] ?? null;
     unset($_SESSION['action_message']);
     return $message;
-  }
-  return NULL;
 }
-
-?>

@@ -1,4 +1,11 @@
 <?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+require_post();
+csrf_validate();
+?>
+<?php
     include("./nav.php");
     
     $movie_id = $_POST['movie_id'];
@@ -44,16 +51,15 @@
     for($i=1 ; $i<$total_elements ; $i++){
       if(!empty($_POST['people_id'.$i.''])){
       $people_id[$i] = $_POST['people_id'.$i.''];
-      $query = "INSERT INTO `movie_people`(`movie_id`, `people_id`, `role`) VALUES ('$movie_id','$people_id[$i]','$role')";
-       $result = mysqli_query($db,$query);
-       // print_r($result);
+      $query = ['sql' => 'INSERT INTO `movie_people`(`movie_id`, `people_id`, `role`) VALUES (?,?,?)', 'params' => [$movie_id, $people_id[$i], $role]];
+       $result = db_query($db, $query);
        // exit();
     }
     else{
       // break;
     }
-    db_disconnect($db);
     }
+    db_disconnect($db);
      header("location:add_movie_people.php?movie_id=$movie_id");
 
 ?>

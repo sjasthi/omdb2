@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . '/security.php';
+$omdb_admin_page = true;
+require_admin();
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+?>
 <?php $page_title = 'The Cow Layer'; ?>
 <?php
     $nav_selected = "LIST";
@@ -9,7 +15,7 @@
   
 <!DOCTYPE html>
 <html>
-<form id="movieData" action="createTheData.php" method= "post">
+<form id="movieData" action="createTheData.php" method= "post"><?php echo csrf_field(); ?>
 
 <?php
 $native_name = "";
@@ -35,7 +41,7 @@ $movie_quote_name = [];
 $movie_trivia_id = [];
 $movie_trivia_name = [];
 
-  $sql = mysqli_query($db,"SELECT * FROM movies WHERE movie_id = '$movie_id'");
+  $sql = db_query($db, ['sql' => 'SELECT * FROM movies WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql)>0){
     while($row = mysqli_fetch_assoc($sql)){
       $native_name = $row['native_name'];
@@ -44,7 +50,7 @@ $movie_trivia_name = [];
       $id = $row['movie_id'];
     }
   }
-  $sql2 = mysqli_query($db,"SELECT * FROM movie_numbers WHERE movie_id = '$movie_id'");
+  $sql2 = db_query($db, ['sql' => 'SELECT * FROM movie_numbers WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql2)>0){
     while($row = mysqli_fetch_assoc($sql2)){
       $running_time = $row['running_time'];
@@ -52,7 +58,7 @@ $movie_trivia_name = [];
       $box_office = $row['box_office'];
     }
   }
-  $sql3 = mysqli_query($db,"SELECT * FROM movie_data WHERE movie_id = '$movie_id'");
+  $sql3 = db_query($db, ['sql' => 'SELECT * FROM movie_data WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql3)>0){
     while($row = mysqli_fetch_assoc($sql3)){
       $language = $row['language'];
@@ -62,20 +68,20 @@ $movie_trivia_name = [];
       $tag_line = $row['tag_line'];
     }
   }
-  $sql4 = mysqli_query($db,"SELECT * FROM movie_keywords WHERE movie_id = '$movie_id'");
+  $sql4 = db_query($db, ['sql' => 'SELECT * FROM movie_keywords WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql4)>0){
     while($row = mysqli_fetch_assoc($sql4)){
       $keyword[] = $row['keyword'];
     }
   }
-  $sql5 = mysqli_query($db,"SELECT * FROM movie_anagrams WHERE movie_id = '$movie_id'");
+  $sql5 = db_query($db, ['sql' => 'SELECT * FROM movie_anagrams WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql5)>0){
     while($row = mysqli_fetch_assoc($sql5)){
       $anagram[] = $row['anagram'];
       $anagram_id[] = $row['anagram_id'];
     }
   }
-  $sql6 = mysqli_query($db,"SELECT * FROM movie_media WHERE movie_id = '$movie_id'");
+  $sql6 = db_query($db, ['sql' => 'SELECT * FROM movie_media WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql6)>0){
     while($row = mysqli_fetch_assoc($sql6)){
       $movie_media_id[] = $row['movie_media_id'];
@@ -83,14 +89,14 @@ $movie_trivia_name = [];
       $m_link_type[] = $row['m_link_type'];
     }
   }
-  $sql7 = mysqli_query($db,"SELECT * FROM movie_quotes WHERE movie_id = '$movie_id'");
+  $sql7 = db_query($db, ['sql' => 'SELECT * FROM movie_quotes WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql7)>0){
     while($row = mysqli_fetch_assoc($sql7)){
       $movie_quote_id[] = $row['movie_quote_id'];
       $movie_quote_name[] = $row['movie_quote_name'];
     }
   }
-  $sql8 = mysqli_query($db,"SELECT * FROM movie_trivia WHERE movie_id = '$movie_id'");
+  $sql8 = db_query($db, ['sql' => 'SELECT * FROM movie_trivia WHERE movie_id = ?', 'params' => [$movie_id]]);
   if(mysqli_num_rows($sql8)>0){
     while($row = mysqli_fetch_assoc($sql8)){
       $movie_trivia_id[] = $row['movie_trivia_id'];
@@ -98,19 +104,19 @@ $movie_trivia_name = [];
     }
   }
   ?>
-  <h1>Create Movie Data For <?php echo $native_name; ?></h1>
+  <h1>Create Movie Data For <?php echo h($native_name); ?></h1>
   <?php
   if(empty($language) && empty($country) && empty($genre) && empty($plot) && empty($tag_line)){ ?>
       <label for="language"> Language </label>
-      <p><input name= "language" id="language" value="<?php echo $language; ?>" placeholder="Add Language" class="form-control" oninput="this.className = ''"></p>
+      <p><input name= "language" id="language" value="<?php echo h($language); ?>" placeholder="Add Language" class="form-control" oninput="this.className = ''"></p>
       <label for="country"> Country </label>
-      <p><input name= "country" id="country" value="<?php echo $country; ?>" class="form-control" placeholder="Add Country" oninput="this.className = ''"></p>
+      <p><input name= "country" id="country" value="<?php echo h($country); ?>" class="form-control" placeholder="Add Country" oninput="this.className = ''"></p>
       <label for="genre"> Genre </label>
-      <p><input name= "genre" id="genre" value="<?php echo $genre; ?>" placeholder="Add Genre" class="form-control" oninput="this.className =''"></p>
+      <p><input name= "genre" id="genre" value="<?php echo h($genre); ?>" placeholder="Add Genre" class="form-control" oninput="this.className =''"></p>
       <label for="plot"> Plot </label>
-      <p><input name= "plot" id="plot" value="<?php echo $plot; ?>" placeholder="Add Plot" class="form-control" oninput="this.className = ''"></p>
+      <p><input name= "plot" id="plot" value="<?php echo h($plot); ?>" placeholder="Add Plot" class="form-control" oninput="this.className = ''"></p>
       <label for="tag_line"> Tag Line </label>
-      <p><input name= "tag_line" id="tag_line" value="<?php echo $tag_line; ?>" class="form-control" placeholder="Add Tag Line" oninput="this.className = ''"></p><br>
+      <p><input name= "tag_line" id="tag_line" value="<?php echo h($tag_line); ?>" class="form-control" placeholder="Add Tag Line" oninput="this.className = ''"></p><br>
   <?php } ?>
  
 <?php
@@ -143,7 +149,7 @@ $movie_trivia_name = [];
   }
 ?>
   
-  <input type="hidden" name="movie_id" value="<?php echo $movie_id; ?>">
+  <input type="hidden" name="movie_id" value="<?php echo h($movie_id); ?>">
 
   <div style="overflow:auto;">
       <div  class="text-left">

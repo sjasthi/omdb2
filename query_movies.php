@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/security.php';
+?>
 <?php $page_title = 'The Cow Layer'; ?>
 <?php
     $nav_selected = "LIST";
@@ -18,7 +21,7 @@
 <!DOCTYPE html>
 <html>
 <h1>Search Movies of People</h1>
-<form method="post">
+<form method="post"><?php echo csrf_field(); ?>
       <div class="form-group">
             <label for="exampleFormControlSelect1">Select Role</label>
             <select class="form-control" name="role" id="exampleFormControlSelect1">
@@ -37,14 +40,14 @@
             <select class="form-control" name="people" id="exampleFormControlSelect1">
 
              <?php
-             $query = mysqli_query($db, "select * from people");
+             $query = db_query($db, "select * from people");
              if(mysqli_num_rows($query)>0){
                while($row = mysqli_fetch_assoc($query)){
                  $people_id = $row['people_id'];
                  $name = $row['first_name'].' '.$row['middle_name'].' '.$row['last_name'];
                  ?>
 
-                  <option value="<?php echo $people_id; ?>"><?php echo $name; ?></option>
+                  <option value="<?php echo h($people_id); ?>"><?php echo h($name); ?></option>
                 <?php }
              }
 
@@ -80,16 +83,16 @@
               if(!empty($role)){
               $id11 = $people_id11;
               $count = '1';
-              $que = "select movies.native_name, movies.english_name, movies.year_made, people.first_name, people.middle_name, people.last_name,people.gender,movie_people.role
+              $que = ['sql' => 'select movies.native_name, movies.english_name, movies.year_made, people.first_name, people.middle_name, people.last_name,people.gender,movie_people.role
               from movie_people
               LEFT JOIN movies
               ON movie_people.movie_id = movies.movie_id
               LEFT JOIN people
               ON movie_people.people_id = people.people_id
-              where movie_people.people_id = '$id11'
-              AND movie_people.role = '$role'";
+              where movie_people.people_id = ?
+              AND movie_people.role = ?', 'params' => [$id11, $role]];
 
-               $query = mysqli_query($db,$que);
+               $query = db_query($db, $que);
               $num = mysqli_num_rows($query);
               if($num>0){
                 while($row = mysqli_fetch_assoc($query))
@@ -105,12 +108,12 @@
 
                         <tr>
 
-                        <th scope="row"><?php echo $count; ?></th>
-                        <td><?php echo $name; ?></td>
-                        <td><?php echo $song_title; ?></td>
-                        <td><?php echo $song_lyrics; ?></td>
-                        <td><?php echo $song_theme; ?></td>
-                        <td><?php echo $role; ?></td>
+                        <th scope="row"><?php echo h($count); ?></th>
+                        <td><?php echo h($name); ?></td>
+                        <td><?php echo h($song_title); ?></td>
+                        <td><?php echo h($song_lyrics); ?></td>
+                        <td><?php echo h($song_theme); ?></td>
+                        <td><?php echo h($role); ?></td>
 
 
                       </tr>
