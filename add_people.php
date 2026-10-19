@@ -33,54 +33,13 @@ $left_selected = "MOVIE";
 
 include("./nav.php");
 
-$test = '';
-    if(isset($_POST['add'])){
-        $movie_id = $_POST['movie_id'];
-        $people_id = [];
-        $roles = [];
-        $screen_name = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'people_id') === 0) {
-                $people_id[] = $v;
-            }
-            if(strpos($k, 'screen_name') === 0) {
-                if(!empty($v)){
-                    $screen_name[] = $v;
-                }
-            }
-            if(strpos($k, 'role') === 0) {
-                if(!empty($v)){
-                    $roles[] = $v;
-                }
-            }
-        }
-        for($i = 0, $size = count($roles); $i < $size; $i++){
-            $sc = $screen_name[$i];
-            $sql = ['sql' => 'insert ignore into movie_people (movie_id, people_id, role, screen_name) values (?, ?, ?, ?);', 'params' => [$movie_id, $people_id[$i], $roles[$i], $sc]];
-            db_query($db, $sql);
-        }
+require_once __DIR__ . '/catalog.php';
+try {
+    $movie_id = catalog_id($_POST['movie_id'] ?? $_GET['movie_id'] ?? null);
+    if (isset($_POST['add']) || isset($_POST['delete'])) {
+        catalog_relationships($db, 'movie_people', $movie_id, $_POST);
     }
-    else if(isset($_POST['delete'])){
-        $movie_id = $_POST['movie_id'];
-        $people_id = [];
-        $roles = [];
-        $screen_name = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'people_id') === 0) {
-                $people_id[] = $v;
-            }
-            if(strpos($k, 'role') === 0) {
-                $roles[] = $v;
-            }
-            if(strpos($k, 'screen_name') === 0) {
-                $screen_name[] = $v;
-            }
-        }
-        for($i = 0, $size = count($people_id); $i < $size; $i++){
-            $sql = ['sql' => 'delete from movie_people where movie_id = ? and people_id = ? and role = ? and screen_name = ?;', 'params' => [$movie_id, $people_id[$i], $roles[$i], $screen_name[$i]]];
-            db_query($db, $sql);
-        }
-    }
+} catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
 
     $sql = db_query($db, ['sql' => 'select people.*, movie_people.* from people left join movie_people on people.people_id = movie_people.people_id where movie_people.movie_id = ?;', 'params' => [$movie_id]]);
 

@@ -33,32 +33,13 @@ if (
 
 $movie_id = (int)$movie_id;
 
-    if(isset($_POST['add'])){
-        $movie_id = $_POST['movie_id'];
-        $song_id = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'song_id') === 0) {
-                $song_id[] = $v;
-            }
-        }
-        foreach($song_id as $song){
-            $sql = ['sql' => 'insert ignore into movie_song (movie_id, song_id) values (?, ?);', 'params' => [$movie_id, $song]];
-            db_query($db, $sql);
-        }
+require_once __DIR__ . '/catalog.php';
+try {
+    $movie_id = catalog_id($_POST['movie_id'] ?? $_GET['movie_id'] ?? null);
+    if (isset($_POST['add']) || isset($_POST['delete'])) {
+        catalog_relationships($db, 'movie_song', $movie_id, $_POST);
     }
-    else if(isset($_POST['delete'])){
-        $movie_id = $_POST['movie_id'];
-        $song_id = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'song_id') === 0) {
-                $song_id[] = $v;
-            }
-        }
-        foreach($song_id as $song){
-            $sql = ['sql' => 'delete from movie_song where movie_id = ? and song_id = ?;', 'params' => [$movie_id, $song]];
-            db_query($db, $sql);
-        }
-    }
+} catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
 
     $sql = db_query($db, ['sql' => 'select songs.* from songs left join movie_song on songs.song_id = movie_song.song_id where movie_song.movie_id = ?;', 'params' => [$movie_id]]);
 

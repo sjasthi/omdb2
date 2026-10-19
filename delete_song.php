@@ -6,16 +6,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
 ?>
 <?php
 
-if (session_status() == PHP_SESSION_NONE) {
-}
 
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-require_once("./database.php");
-$db = db_connect();
+require_once("./initialize.php");
+
 
 if (!$db) {
     die("Database connection failed.");
@@ -31,88 +29,14 @@ if (empty($_SESSION['csrf_token'])) {
  * ---------------------------------------------------------
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $song_id = filter_input(
-        INPUT_POST,
-        'song_id',
-        FILTER_VALIDATE_INT
-    );
-
-    $csrf_token = $_POST['csrf_token'] ?? '';
-
-    if (!$song_id || $song_id < 1) {
-        db_disconnect($db);
-        header("Location: songs.php");
-        exit();
-    }
-
-    if (
-        empty($csrf_token) ||
-        !hash_equals($_SESSION['csrf_token'], $csrf_token)
-    ) {
-        db_disconnect($db);
-        http_response_code(403);
-        exit("Invalid security token.");
-    }
-
-    mysqli_begin_transaction($db);
-
-    try {
-
-        // Remove movie/song relationships.
-        $stmt = db_prepare($db, "DELETE FROM movie_song WHERE song_id = ?");
-
-        mysqli_stmt_bind_param($stmt, "i", $song_id);
-
-        if (!mysqli_stmt_execute($stmt)) {
-            throw new Exception("Could not remove movie relationship.");
-        }
-
-        mysqli_stmt_close($stmt);
-
-        // Remove people/song relationships.
-        $stmt = db_prepare($db, "DELETE FROM song_people WHERE song_id = ?");
-
-        mysqli_stmt_bind_param($stmt, "i", $song_id);
-
-        if (!mysqli_stmt_execute($stmt)) {
-            throw new Exception("Could not remove people relationship.");
-        }
-
-        mysqli_stmt_close($stmt);
-
-        // Delete the song.
-        $stmt = db_prepare($db, "DELETE FROM songs WHERE song_id = ?");
-
-        mysqli_stmt_bind_param($stmt, "i", $song_id);
-
-        if (!mysqli_stmt_execute($stmt)) {
-            throw new Exception("Could not delete song.");
-        }
-
-        mysqli_stmt_close($stmt);
-
-        mysqli_commit($db);
-
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-
-        db_disconnect($db);
-
-        header("Location: songs.php?deleted=Success");
-        exit();
-
-    } catch (Throwable $e) {
-
-        mysqli_rollback($db);
-        db_disconnect($db);
-
-        http_response_code(500);
-
-        echo "<h2>Unable to Delete Song</h2>";
-        echo "<p>The song could not be deleted.</p>";
-
-        exit();
-    }
+    $id = filter_input(INPUT_POST, 'song_id', FILTER_VALIDATE_INT);
+    if (!$id || $id < 1) { security_fail(400, 'Select a valid record.'); }
+    $media = db_transaction($db, function () use ($db, $id) {
+        db_query($db, 'DELETE FROM songs WHERE song_id = ?', [$id]);
+    });
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    header('Location: songs.php?delete=Success');
+    exit;
 }
 
 /*
@@ -164,14 +88,6 @@ $left_selected = "";
 
 include("./nav.php");
 
-function escape_html($value)
-{
-    return htmlspecialchars(
-        (string)$value,
-        ENT_QUOTES,
-        'UTF-8'
-    );
-}
 ?>
 
 <div class="container">
@@ -194,7 +110,7 @@ function escape_html($value)
 
         <p>
             <strong>Title:</strong>
-            <?php echo escape_html($song['title']); ?>
+            <?php echo h($song['title']); ?>
         </p>
 
         <p>
@@ -222,7 +138,7 @@ function escape_html($value)
             <input
                 type="hidden"
                 name="csrf_token"
-                value="<?php echo escape_html($_SESSION['csrf_token']); ?>"
+                value="<?php echo h($_SESSION['csrf_token']); ?>"
             >
 
             <button

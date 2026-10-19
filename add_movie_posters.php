@@ -33,8 +33,7 @@ if (is_post_request()) {
             throw new RuntimeException('Poster upload failed.');
         }
         try {
-            $mediaId = (int)db_query($db, 'SELECT COALESCE(MAX(movie_media_id), 0) + 1 AS next_id FROM movie_media')->fetch_assoc()['next_id'];
-            db_query($db, 'INSERT INTO movie_media (movie_id, m_link, m_link_type, movie_media_id) VALUES (?, ?, ?, ?)', [$id, $name, $extension, $mediaId]);
+            db_query($db, 'INSERT INTO movie_media (movie_id, m_link, m_link_type) VALUES (?, ?, ?)', [$id, $name, $extension]);
         } catch (Throwable $error) {
             @unlink($target);
             throw $error;

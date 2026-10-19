@@ -128,48 +128,11 @@ mysqli_stmt_close($stmt);
 
 <?php
 
-// Process modification
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $posted_song_id = filter_input(
-        INPUT_POST,
-        'song_id',
-        FILTER_VALIDATE_INT
-    );
-
-    $new_title = trim($_POST['title'] ?? '');
-    $new_lyrics = trim($_POST['lyrics'] ?? '');
-    $new_theme = trim($_POST['theme'] ?? '');
-
-    if (!$posted_song_id || $new_title === '') {
-        exit("Invalid song information.");
-    }
-
-    $update_stmt = db_prepare($db, "UPDATE songs
-         SET title = ?, lyrics = ?, theme = ?
-         WHERE song_id = ?");
-
-    mysqli_stmt_bind_param(
-        $update_stmt,
-        "sssi",
-        $new_title,
-        $new_lyrics,
-        $new_theme,
-        $posted_song_id
-    );
-
-    if (mysqli_stmt_execute($update_stmt)) {
-
-        mysqli_stmt_close($update_stmt);
-        db_disconnect($db);
-
-        header("Location: songs.php?updated=Success");
-        exit();
-    }
-
-    mysqli_stmt_close($update_stmt);
-
-    echo "<p>Unable to update song.</p>";
+    require_once __DIR__ . '/catalog.php';
+    try { db_transaction($db, function () use ($db): void { catalog_update_song($db, $_POST); }); }
+    catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+    redirect_to('songs.php?updated=Success');
 }
 
 db_disconnect($db);

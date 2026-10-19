@@ -3,6 +3,14 @@ require_once __DIR__ . '/security.php';
 $omdb_admin_page = true;
 require_admin();
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+require_once __DIR__ . '/initialize.php';
+require_once __DIR__ . '/catalog.php';
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    try {
+        catalog_insert_person($db, $_POST);
+        redirect_to('people.php?create=Success');
+    } catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+}
 ?>
 <?php
   if (!isset($_SESSION['username']))
@@ -178,22 +186,3 @@ function fixStepIndicator(n) {
 }
 </script>
 </html>
-<?php
-      if(isset($_POST['create_people'])){
-        $people_query = db_query($db, "select people_id from people order by people_id desc limit 1");
-        $people_row = mysqli_fetch_row($people_query);
-        $p_id = $people_row[0] + 1;
-        $stage_name = $_POST['stage_name'];
-        $first_name = $_POST['first_name'];
-        $middle_name = $_POST['middle_name'];
-        $last_name  = $_POST['last_name'];
-        $gender = $_POST['gender'];
-        $image = "image file name";
-
-        $query = db_query($db, ['sql' => 'INSERT INTO people (people_id, stage_name, first_name, middle_name, last_name, gender, image_name)
-         VALUES (?, ?,?,?,?,?,?)', 'params' => [$p_id, $stage_name, $first_name, $middle_name, $last_name, $gender, $image]]);
-        db_disconnect($db);
-        header('Location: people.php?create=Success');
-      }
-
-?>

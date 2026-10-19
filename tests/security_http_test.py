@@ -179,7 +179,7 @@ old_token=admin.token('index.php')
 status,_,_=admin.request('log_out.php',{'csrf_token':old_token})
 check('Logout requires token and ends the session',status==302 and admin.request('create_people.php')[0]==302)
 
-path=Path(__file__).parent/'security-test-results.json'
+path=Path(os.environ.get('OMDB_TEST_RESULTS', str(Path(__file__).parent/'security-test-results.json')))
 path.write_text(json.dumps(RESULTS,indent=2),encoding='utf-8')
 failures=sum(not result['passed'] for result in RESULTS)
 print(f'{len(RESULTS)-failures}/{len(RESULTS)} security checks passed. Results: {path.name}')

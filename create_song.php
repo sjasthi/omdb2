@@ -3,6 +3,14 @@ require_once __DIR__ . '/security.php';
 $omdb_admin_page = true;
 require_admin();
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+require_once __DIR__ . '/initialize.php';
+require_once __DIR__ . '/catalog.php';
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    try {
+        catalog_insert_song($db, $_POST);
+        redirect_to('songs.php?create=Success');
+    } catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+}
 ?>
 <?php
   if (!isset($_SESSION['username']))
@@ -89,20 +97,3 @@ input.invalid {
   background-color: #4CAF50;
 }
 </style>
-<?php
-if(isset($_POST['create_song'])){
-  $title = $_POST['title'];
-  $lyrics = $_POST['lyrics'];
-  $theme = $_POST['theme'];
-
-  $query = db_query($db, "select song_id from songs order by song_id desc limit 1;");
-  $row = $query->fetch_assoc();
-  $song_id = $row['song_id'] + 1;
-
-  $result = db_query($db, ['sql' => 'INSERT INTO `songs`(`song_id`, `title`, `lyrics`, `theme`) VALUES (?, ?, ?, ?)', 'params' => [$song_id, $title, $lyrics, $theme]]);
-
-  db_disconnect($db);
-  header('Location: songs.php?create=Success');
-}
-?>
-</html>

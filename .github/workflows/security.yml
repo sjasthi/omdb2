@@ -11,3 +11,29 @@ jobs:
         run: find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n 1 php -l
       - name: Reject committed configuration and credentials
         run: php tools/check-secrets.php --all
+  backend-database:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        database: ['mariadb:10.4', 'mysql:8.0']
+    services:
+      database:
+        image: ${{ matrix.database }}
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Fresh schema and legacy migration regression tests
+        env:
+          OMDB_DB_SERVER: '127.0.0.1'
+          OMDB_DB_USER: root
+          OMDB_DB_PASS: ''
+          OMDB_DB_NAME: unused_configuration
+        run: php tests/backend.php
