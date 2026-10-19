@@ -1,195 +1,74 @@
 <?php
-require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/initialize.php';
+$nav_selected = $nav_selected ?? '';
+$left_selected = $left_selected ?? '';
+$left_buttons = $left_buttons ?? 'NO';
+$document_title = ($page_title ?? '') !== '' && $page_title !== 'The Cow Layer'
+    ? $page_title : 'Online Movie Database (OMDB)';
+$navigation = [
+    ['HOME','index.php','home.png','Home'], ['MOVIES','movies.php','movies.png','Movies'],
+    ['PEOPLE','people.php','people.png','People'], ['SONGS','songs.php','songs.png','Songs'],
+    ['REPORTS','reports.php','reports.png','Reports'], ['search','search_data.php','search.png','Search'],
+    ['SETUP','setup.php','setup.png','Setup'], ['ABOUT','about.php','about.png','About'],
+    ['GAMES','games.php','puzzles.png','Games'], ['HELP','help.php','help.png','Help']
+];
+$sidebars = ['MOVIES'=>'left_menu_movies.php','LIST'=>'left_menu_movies.php','PEOPLE'=>'left_menu_people.php',
+    'SONGS'=>'left_menu_songs.php','REPORTS'=>'left_menu_reports.php','PUZZLES'=>'left_menu_puzzles.php',
+    'GAMES'=>'left_menu_games.php','search_data'=>'left_search_data.php'];
+$sidebar = $left_buttons === 'YES' ? ($sidebars[$nav_selected] ?? null) : null;
 ?>
-<?php
-  require_once('initialize.php');
-?>
-
-<!DOCTYPE html>
-
-<html>
-    <head>
-
-
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <!-- jQuery library -->
-        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        
-        <title>Online Movie Database (OMDB)</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="styles/mainStyleSheet.css">
-        <link rel="stylesheet" href="fonts/css/fontawesome.min.css">
-        <link rel="stylesheet" href="fonts/css/all.css">
-
-        <script src='ajax/jquery-3.2.1.min.js' type='text/javascript'></script>
-        <script src='ajax/select2/dist/js/select2.min.js' type='text/javascript'></script>
-        <link href='ajax/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
-
-    </head>
-
-<body class="body_background">
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php echo h($document_title); ?></title>
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/datatables/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="fonts/css/all.css">
+    <link rel="stylesheet" href="fonts/css/v4-shims.min.css">
+    <link rel="stylesheet" href="ajax/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="styles/mainStyleSheet.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    <script src="ajax/jquery-3.2.1.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="ajax/select2/dist/js/select2.min.js"></script>
+    <script src="scripts/layout.js" defer></script>
+</head>
+<body class="omdb-app">
+<a class="skip-link" href="#main-content">Skip to content</a>
 <div id="wrap">
-    <div id="nav">
-        <ul>
-            <a href="index.php">
-              <li class="horozontal-li-logo">
-              <img src ="./images/omdb_logo.png">
-              <br/>Online Movie Database</li>
-            </a>
-
-            <a href="index.php">
-              <li <?php if($nav_selected == "HOME"){ echo 'class="current-page"'; } ?>>
-              <img src="./images/home.png">
-              <br/>Home</li>
-            </a>
-
-            <a href="movies.php">
-              <li <?php if($nav_selected == "MOVIES"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/movies.png">
-                <br/>Movies</li>
-            </a>
-
-            <a href="people.php">
-              <li <?php if($nav_selected == "PEOPLE"){ echo 'class="current-page"'; } ?>>
-              <img src="./images/people.png">
-              <br/>People</li>
-            </a>
-
-            <a href="songs.php">
-              <li <?php if($nav_selected == "SONGS"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/songs.png">
-                <br/>Songs</li>
-            </a>
-
-            <a href="reports.php">
-              <li <?php if($nav_selected == "REPORTS"){ echo 'class="current-page"'; } ?>>
-              <img src="./images/reports.png">
-              <br/>Reports</li>
-            </a>
-
-           <a href="search_data.php">
-              <li <?php if($nav_selected == "search"){ echo 'class="current-page"'; } ?>>
-                <img src="./images/search.png">
-                <!-- <i class="fa fa-search" aria-hidden="true"></i> -->
-                <br/>Search</li>
-            </a>
-
-
-        <?php if (is_admin()) { ?>
-        <a href="setup.php">
-          <li <?php if($nav_selected == "SETUP"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/setup.png">
-            <br/>Setup</li>
+    <header class="site-header">
+        <a class="site-brand" href="index.php">
+            <img src="images/omdb_logo.png" alt="OMDB" width="160" height="44">
+            <span>Online Movie Database</span>
         </a>
-        <?php } ?>
-
-        <a href="about.php">
-          <li <?php if($nav_selected == "ABOUT"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/about.png">
-            <br/>About</li>
-        </a>
-
-        <a href="games.php">
-          <li <?php if($nav_selected == "GAMES"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/puzzles.png">
-            <br/>Games</li>
-        </a>
-
-        <a href="help.php">
-          <li <?php if($nav_selected == "HELP"){ echo 'class="current-page"'; } ?>>
-            <img src="./images/help.png">
-            <br/>Help</li>
-        </a>
-
-         <?php if(is_logged_in()){
-
-                    ?><li class="horozontal-li">
-                        <form action="log_out.php" method="post">
-                            <?php echo csrf_field(); ?>
-                            <button type="submit" style="border:0;background:transparent;color:inherit;">LogOut</button>
-                        </form>
-                    </li>
-                    <?php
-                }else{ 
-                    ?><a href="login.php">
-                        <li <?php if($nav_selected == "LOGIN"){ echo 'class="current-page"'; } ?>>
-                        <img src="./images/help.png"> <!-- make a picture for login or just remove this -->
-                        <br/>Login</li>
-                    </a>
-                    <?php
-                } ?>
-
-
-       
-
-       
-
-        <li>
-        
-    </li>
-
-      </ul>
-      <br />
-    </div>
-    <form method="post" action="search.php"><?php echo csrf_field(); ?>
-    <input type="search" id="form1" style="width:12%; margin-right:5px; position:relative; right:90px; top:10px; display:inline-block;"name="text_search" class="form-control" />
-
-    <button type="submit" style=" display:inline-block; position:relative; right:90px; top:10px;" name="search" class="btn btn-primary">
-    <i class="fa fa-search" aria-hidden="true"></i>
-    </button>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
+        <nav id="primary-nav" aria-label="Main navigation">
+            <ul>
+            <?php foreach ($navigation as [$key,$href,$icon,$label]) {
+                if ($key === 'SETUP' && !is_admin()) { continue; }
+                $active = $nav_selected === $key || ($key === 'search' && $nav_selected === 'search_data'); ?>
+                <li><a href="<?php echo h($href); ?>"<?php echo $active ? ' aria-current="page"' : ''; ?>>
+                    <img src="images/<?php echo h($icon); ?>" alt="" width="28" height="28"><span><?php echo h($label); ?></span>
+                </a></li>
+            <?php } ?>
+            <?php if (is_logged_in()) { ?>
+                <li><form action="log_out.php" method="post"><?php echo csrf_field(); ?><button class="nav-logout" type="submit">Log out</button></form></li>
+            <?php } else { ?>
+                <li><a href="login.php"<?php echo basename($_SERVER['SCRIPT_NAME']) === 'login.php' ? ' aria-current="page"' : ''; ?>>Sign in</a></li>
+            <?php } ?>
+            </ul>
+        </nav>
+    </header>
+    <form class="site-search" method="post" action="search.php" role="search">
+        <?php echo csrf_field(); ?>
+        <label class="sr-only" for="global-search">Search OMDB</label>
+        <input type="search" id="global-search" name="text_search" class="form-control" placeholder="Search OMDB">
+        <button type="submit" name="search" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
     </form>
-
-    <table style="width:1250px">
-      <tr>
-        <?php
-            if ($left_buttons == "YES") {
-        ?>
-
-        <td style="width: 120px;" valign="top">
-        <?php
-            if ($nav_selected == "HOME") {
-                include("./index.php");
-            } elseif ($nav_selected == "MOVIES") {
-                include("./left_menu_movies.php");
-            } elseif ($nav_selected == "PEOPLE") {
-                include("./left_menu_people.php");
-            } elseif ($nav_selected == "SONGS") {
-                include("./left_menu_songs.php");
-            } elseif ($nav_selected == "REPORTS") {
-                include("./left_menu_reports.php");
-            } elseif ($nav_selected == "PUZZLES") {
-                include("./left_menu_puzzles.php");
-            }  elseif ($nav_selected == "SETUP") {
-                include("./left_menu_setup.php");
-            } elseif ($nav_selected == "ABOUT") {
-                include("./left_menu_about.php");
-            } elseif ($nav_selected == "GAMES"){
-                include("./left_menu_games.php");
-            } elseif ($nav_selected == "HELP") {
-                include("./left_menu_help.php");
-            } elseif ($nav_selected == "search_data") {
-                include("./left_search_data.php");
-            } else {
-                include("./left_menu_movies.php");
-            }
-
-        ?>
-        </td>
-        <td style="width: 1100px;" valign="top">
-        <?php
-          } else {
-        ?>
-        <td style="width: 100%;" valign="top">
-        <?php
-          }
-        ?>
-
-
+    <div class="app-layout<?php echo $sidebar ? ' with-sidebar' : ''; ?>">
+        <?php if ($sidebar) { ?><aside class="section-sidebar" aria-label="Section navigation"><?php include __DIR__ . '/' . $sidebar; ?></aside><?php } ?>
+        <main id="main-content" class="omdb-content" tabindex="-1">

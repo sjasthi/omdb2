@@ -2,8 +2,7 @@
 require_once __DIR__ . '/security.php';
 ?>
 <?php
-    include('database.php');
-    $db = db_connect();
+    require_once __DIR__ . '/initialize.php';
     $movie_id = "";
     $anagrams = [];
     $stringding = "";
@@ -88,31 +87,16 @@ $winner = null;
 
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anagrammer</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>A Basic Composer</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="http://fonts.cdnfonts.com/css/games" rel="stylesheet">
-                
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="styles/mainStyleSheet.css">
-    <link rel="stylesheet" href="fonts/css/all.css">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
-	<link
-	rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-	  />
-	<link rel="stylesheet" href="basechars.css"/>
-</head>
-<body>
-    <h1> ANAGRAMMER </h1>
+<?php
+$nav_selected='GAMES'; $left_buttons='YES'; $left_selected='ANAGRAMUSER';
+$page_title='Anagrammer · OMDB';
+include __DIR__ . '/nav.php';
+?>
+<link rel="stylesheet" href="vendor/toastr/toastr.min.css">
+<link rel="stylesheet" href="vendor/animate/animate.min.css">
+<link rel="stylesheet" href="basechars.css">
+<section class="anagram-game">
+<h1> ANAGRAMMER </h1>
     <div id="clues">
     <?php
 if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
@@ -168,11 +152,8 @@ if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
         </table>
     </div>
     <?php } ?>
-<script
-src="https://code.jquery.com/jquery-3.6.0.min.js"
-integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script src="vendor/toastr/toastr.min.js"></script>
 <script>
 	function initBoard() {
         const NUMBER_OF_GUESSES = 1;
@@ -304,5 +285,5 @@ var table = $('#info').DataTable( {
     db_disconnect($db);
 ?>
 
-</body>
-</html>
+</section>
+<?php include __DIR__ . '/footer.php'; ?>

@@ -19,14 +19,14 @@ $left_selected = "MOVIES";
 include("./nav.php");
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Create Movie</title>
-</head>
 
-<body>
+
+
+
+
+
+
+
 
 <form id="movieCreate" action="createTheMovie.php" method="post"><?php echo csrf_field(); ?>
 
@@ -82,22 +82,6 @@ include("./nav.php");
 </form>
 
 <style>
-#movieCreate {
-    background-color: #ffffff;
-    margin: 50px auto;
-    padding: 40px;
-    width: 70%;
-    min-width: 300px;
-}
-
-#movieCreate input {
-    padding: 10px;
-    width: 100%;
-    font-size: 17px;
-    border: 1px solid #aaaaaa;
-    box-sizing: border-box;
-}
-
 #movieCreate label {
     font-weight: bold;
 }
@@ -107,5 +91,6 @@ include("./nav.php");
 }
 </style>
 
-</body>
-</html>
+
+
+<?php include __DIR__ . '/footer.php'; ?>

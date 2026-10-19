@@ -22,7 +22,7 @@ if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
 
   ?>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="right-content">
     <div class="container">
 
@@ -30,8 +30,8 @@ if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
       <?php
       if (is_admin())
       { ?>
-       <button title='Create Movie'><a class='btn btn-sm' href='create_movie.php'><i class = 'fa fa-plus'></i></a></button>
-       <button title="Poster Upload"><a class="btn btn-sm" href="add_movie_posters.php"><i class = "fa fa-file-image-o"></i></a></button>
+       <a class="btn btn-primary" href="create_movie.php"><i class="fa fa-plus" aria-hidden="true"></i> Create movie</a>
+       <a class="btn btn-default" href="add_movie_posters.php"><i class="fa fa-file-image-o" aria-hidden="true"></i> Upload posters</a>
       <?php } ?>
 
 
@@ -40,7 +40,7 @@ if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
 
         <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
-            width="100%" style="width:100px;">
+            width="100%" >
               <thead>
                 <tr id="table-first-row">
                         <th>id</th>

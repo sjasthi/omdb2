@@ -6,16 +6,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
 ?>
 <?php
 
-if (session_status() == PHP_SESSION_NONE) {
-}
 
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-require_once("./database.php");
-$db = db_connect();
+require_once("./initialize.php");
+
 
 if (!$db) {
     die("Database connection failed.");
@@ -34,56 +32,14 @@ if (empty($_SESSION['csrf_token'])) {
  * ---------------------------------------------------------
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $people_id = filter_input(
-        INPUT_POST,
-        'people_id',
-        FILTER_VALIDATE_INT
-    );
-
-    $csrf_token = $_POST['csrf_token'] ?? '';
-
-    if (!$people_id || $people_id < 1) {
-        db_disconnect($db);
-        header("Location: people.php");
-        exit();
-    }
-
-    if (
-        empty($csrf_token) ||
-        !hash_equals($_SESSION['csrf_token'], $csrf_token)
-    ) {
-        db_disconnect($db);
-        http_response_code(403);
-        exit("Invalid security token.");
-    }
-
-    $stmt = db_prepare($db, "DELETE FROM people WHERE people_id = ?");
-
-    mysqli_stmt_bind_param(
-        $stmt,
-        "i",
-        $people_id
-    );
-
-    if (mysqli_stmt_execute($stmt)) {
-
-        mysqli_stmt_close($stmt);
-
-        // Rotate token after successful deletion.
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-
-        db_disconnect($db);
-
-        header("Location: people.php?delete=Success");
-        exit();
-    }
-
-    mysqli_stmt_close($stmt);
-    db_disconnect($db);
-
-    header("Location: people.php?delete=Failed");
-    exit();
+    $id = filter_input(INPUT_POST, 'people_id', FILTER_VALIDATE_INT);
+    if (!$id || $id < 1) { security_fail(400, 'Select a valid record.'); }
+    $media = db_transaction($db, function () use ($db, $id) {
+        db_query($db, 'DELETE FROM people WHERE people_id = ?', [$id]);
+    });
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    header('Location: people.php?delete=Success');
+    exit;
 }
 
 /*
@@ -143,14 +99,6 @@ $left_selected = "";
 
 include("./nav.php");
 
-function escape_html($value)
-{
-    return htmlspecialchars(
-        (string)$value,
-        ENT_QUOTES,
-        'UTF-8'
-    );
-}
 
 $display_name = trim(
     $person['stage_name'] !== ''
@@ -181,7 +129,7 @@ $display_name = trim(
 
         <p>
             <strong>Name:</strong>
-            <?php echo escape_html($display_name); ?>
+            <?php echo h($display_name); ?>
         </p>
 
         <p>
@@ -208,7 +156,7 @@ $display_name = trim(
             <input
                 type="hidden"
                 name="csrf_token"
-                value="<?php echo escape_html($_SESSION['csrf_token']); ?>"
+                value="<?php echo h($_SESSION['csrf_token']); ?>"
             >
 
             <button

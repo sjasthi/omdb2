@@ -4,75 +4,9 @@ $omdb_admin_page = true;
 require_admin();
 require_post();
 csrf_validate();
-?>
-<?php
-include("./nav.php");
-  if(isset($_POST['song_id'])){
-    $song_id = $_POST['song_id'];
-    $title = $_POST['title'];
-    $lyrics = $_POST['lyrics'];
-    $theme = $_POST['theme'];
-    $song_trivia_id = [];
-    $song_trivia_name_update = [];
-    $song_keyword_update = [];
-    $song_media_id = [];
-    $s_link_update = [];
-    $s_link_type_update = [];
-      
-
-    foreach($_POST as $k => $v) {
-      if(strpos($k, 'song_trivia_name_update') === 0) {
-          $song_trivia_name_update[] = $v;
-      }
-      if(strpos($k, 'song_trivia_id') === 0) {
-          $song_trivia_id[] = $v;
-      }
-      if(strpos($k, 'song_keyword_update') === 0) {
-          $song_keyword_update[] = $v;
-      }
-      if(strpos($k, 's_link_update') === 0) {
-          $s_link_update[] = $v;
-      }
-      if(strpos($k, 's_link_type_update') === 0) {
-          $s_link_type_update[] = $v;
-      }
-      if(strpos($k, 'song_media_id') === 0) {
-          $song_media_id[] = $v;
-      }
-    }
-
-      //Songs Update
-      if(isset($_POST['title'])){
-          $sql = ['sql' => 'UPDATE songs SET
-          title=?, lyrics=?, theme=? WHERE song_id=?', 'params' => [$title, $lyrics, $theme, $song_id]];
-          db_query($db, $sql);
-      }
-      
-      if(!empty($song_trivia_id)){
-          for ($i = 0; $i < sizeof($song_trivia_id); $i++){
-              $sql2 = ['sql' => 'UPDATE song_trivia SET song_trivia_name = ? WHERE song_id = ? and song_trivia_id = ?', 'params' => [$song_trivia_name_update[$i], $song_id, $song_trivia_id[$i]]];
-              db_query($db, $sql2);
-          }
-      }
-      
-      //Song_Keywords Update
-      if(!empty($song_keyword_update)){
-          for ($i = 0; $i < sizeof($song_keyword_update); $i++){
-              $sql3= ['sql' => 'UPDATE song_keywords SET keyword = ? WHERE song_id = ?', 'params' => [$song_keyword_update[$i], $song_id]];
-              db_query($db, $sql3);
-          }
-      }
-      
-      //Song_Media Update
-      if(!empty($song_media_id)){
-          for ($i = 0; $i < sizeof($song_media_id); $i++){
-              $sql4 = ['sql' => 'UPDATE song_media SET s_link = ?, s_link_type = ? WHERE song_id = ? and song_media_id = ?', 'params' => [$s_link_update[$i], $s_link_type_update[$i], $song_id, $song_media_id[$i]]];
-               db_query($db, $sql4);
-          }
-      }
-      
-      db_disconnect($db);
-      header('location: songs.php?updated=Success');
-  }
-
-?>
+require_once __DIR__ . '/initialize.php';
+require_once __DIR__ . '/catalog.php';
+try {
+    db_transaction($db, function () use ($db): void { catalog_update_song($db, $_POST); });
+} catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+redirect_to('songs.php?updated=Success');

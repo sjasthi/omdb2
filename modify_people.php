@@ -23,8 +23,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
 
   ?>
 
-<!DOCTYPE html>
-<html>
+
+
 
 
 <h1>Modify a People</h1>
@@ -83,22 +83,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
 
 
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 100px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -181,4 +169,6 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 </script>
-</html>
+
+
+<?php include __DIR__ . '/footer.php'; ?>

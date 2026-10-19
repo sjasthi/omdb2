@@ -23,6 +23,8 @@ The source repository contained a database dump with user records. Removing it f
 
 The older FP3 Word report also contained the supplied test-account logins and is removed from this version. Change those accounts' passwords because the old report remains in historical commits.
 
-Manual ID allocation and the older schema remain; migrating to unique AUTO_INCREMENT keys is a separate database change. External puzzle services and the production hosting configuration were not assessed. Security tests reduce the obvious issues checked here; they do not establish that every possible vulnerability has been eliminated.
+Week 7 adds AUTO_INCREMENT primary keys, ownership foreign keys with cascades, transaction coverage, and reproducible schema/migration files. Only schema-only SQL files are tracked; no user data or account passwords are seeded. Migration tooling is CLI-only and denied by Apache. See README.md and docs/database.md before upgrading an existing installation. The migration archive stays private in the database.
+
+Production hosting configuration and historical credential rotation still need owner verification. Read-only puzzle helpers now use HTTPS, timeouts, response checks, and local fallbacks; the external service's security was not audited. Regression tests reduce the obvious issues checked here; they do not establish that every possible vulnerability has been eliminated.
 
 Implementation references: [PHP HTML escaping](https://www.php.net/manual/en/function.htmlspecialchars.php), [PHP prepared statements](https://www.php.net/manual/en/mysqli.quickstart.prepared-statements.php), and [OWASP CSRF guidance](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html).

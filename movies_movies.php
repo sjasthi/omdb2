@@ -12,7 +12,7 @@ require_once __DIR__ . '/security.php';
 
   ?>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="right-content">
     <div class="container">
 
@@ -26,7 +26,7 @@ require_once __DIR__ . '/security.php';
 
         <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
-            width="100%" style="width: 100px;">
+            width="100%" >
               <thead>
                 <tr id="table-first-row">
                         <th>id</th>

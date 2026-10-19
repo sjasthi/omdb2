@@ -13,10 +13,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     header('Location: login.php');
     exit;
 }
-require_once __DIR__ . '/functions.php';
+$nav_selected = '';
+$left_buttons = 'NO';
+$left_selected = '';
+include __DIR__ . '/nav.php';
 ?>
-<!doctype html><html><head><meta charset="utf-8"><title>Sign Out</title></head><body>
+<h2>Sign out</h2>
 <form action="log_out.php" method="post"><?php echo csrf_field(); ?>
-    <button type="submit">Sign out</button>
+    <button type="submit" class="btn btn-primary">Sign out</button>
 </form>
-</body></html>
+<?php db_disconnect($db); include __DIR__ . '/footer.php'; ?>

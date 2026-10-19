@@ -97,6 +97,9 @@ styles/._style.css
 *credentials*.json
 *secrets*.json
 *.sql
+!/sql/schema.sql
+!/sql/migrations/007_database_cleanup.sql
+!/tests/fixtures/week6-schema.sql
 *.log
 *.bak
 *.old

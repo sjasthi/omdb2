@@ -33,54 +33,13 @@ $left_selected = "MOVIE";
 
 include("./nav.php");
 
-$test = '';
-    if(isset($_POST['add'])){
-        $movie_id = $_POST['movie_id'];
-        $people_id = [];
-        $roles = [];
-        $screen_name = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'people_id') === 0) {
-                $people_id[] = $v;
-            }
-            if(strpos($k, 'screen_name') === 0) {
-                if(!empty($v)){
-                    $screen_name[] = $v;
-                }
-            }
-            if(strpos($k, 'role') === 0) {
-                if(!empty($v)){
-                    $roles[] = $v;
-                }
-            }
-        }
-        for($i = 0, $size = count($roles); $i < $size; $i++){
-            $sc = $screen_name[$i];
-            $sql = ['sql' => 'insert ignore into movie_people (movie_id, people_id, role, screen_name) values (?, ?, ?, ?);', 'params' => [$movie_id, $people_id[$i], $roles[$i], $sc]];
-            db_query($db, $sql);
-        }
+require_once __DIR__ . '/catalog.php';
+try {
+    $movie_id = catalog_id($_POST['movie_id'] ?? $_GET['movie_id'] ?? null);
+    if (isset($_POST['add']) || isset($_POST['delete'])) {
+        catalog_relationships($db, 'movie_people', $movie_id, $_POST);
     }
-    else if(isset($_POST['delete'])){
-        $movie_id = $_POST['movie_id'];
-        $people_id = [];
-        $roles = [];
-        $screen_name = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'people_id') === 0) {
-                $people_id[] = $v;
-            }
-            if(strpos($k, 'role') === 0) {
-                $roles[] = $v;
-            }
-            if(strpos($k, 'screen_name') === 0) {
-                $screen_name[] = $v;
-            }
-        }
-        for($i = 0, $size = count($people_id); $i < $size; $i++){
-            $sql = ['sql' => 'delete from movie_people where movie_id = ? and people_id = ? and role = ? and screen_name = ?;', 'params' => [$movie_id, $people_id[$i], $roles[$i], $screen_name[$i]]];
-            db_query($db, $sql);
-        }
-    }
+} catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
 
     $sql = db_query($db, ['sql' => 'select people.*, movie_people.* from people left join movie_people on people.people_id = movie_people.people_id where movie_people.movie_id = ?;', 'params' => [$movie_id]]);
 
@@ -89,15 +48,15 @@ $test = '';
   
   ?>
 
-<!DOCTYPE html>
-<html>
+
+
 <div class = "container">
 <h1>Attach A Person to <?php echo h($name['native_name']);?></h1>
 <h3>People Library</h3>
 <form name="add_person" id="add_person" class="add_person" method="post" action="add_people.php"><?php echo csrf_field(); ?>
   <table id="info" cellpadding="0" cellspacing="0" border="0"
       class="datatable table table-striped table-bordered datatable-style table-hover"
-      width="100%" style="width: 100px;">
+      width="100%" >
               <thead>
               <tr id="table-first-row">
                 <th>Select</th>
@@ -168,7 +127,7 @@ if(mysqli_num_rows($sql)>0){
     <form name="delete_person" id="delete_person" method="post" action="add_people.php"><?php echo csrf_field(); ?>
       <table id="info1" cellpadding="0" cellspacing="0" border="0"
           class="datatable table table-striped table-bordered datatable-style table-hover"
-          width="100%" style="width: 100px;">
+          width="100%" >
                   <thead>
                   <tr id="table-first-row">
                     <th>Select</th>
@@ -215,21 +174,10 @@ if(mysqli_num_rows($sql)>0){
 
 <div>
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 100px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size = 3px;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {

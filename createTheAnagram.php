@@ -15,8 +15,7 @@ if (!isset($_SESSION['username'])) {
 
 
 
-include('database.php');
-$db = db_connect();
+require_once __DIR__ . '/initialize.php';
 
 if (!$db) {
     die("Database connection failed.");
@@ -202,19 +201,19 @@ $nativeChars = graphemes($nativeTitle);
 
 db_disconnect($db);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Anagram</title>
+<?php $nav_selected='GAMES'; $left_buttons='YES'; $left_selected='ANAGRAMADMIN'; $page_title='Create anagram · OMDB'; include __DIR__ . '/nav.php'; ?>
+
+
+
+
+
 
     <style>
         * {
             box-sizing: border-box;
         }
 
-        body {
+        .anagram-creator {
             margin: 0;
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
@@ -238,7 +237,7 @@ db_disconnect($db);
             box-shadow: 0 18px 50px rgba(0,0,0,.18);
         }
 
-        h1 {
+        .anagram-creator h1 {
             margin: 0 0 12px;
             text-align: center;
             letter-spacing: 1px;
@@ -391,10 +390,10 @@ db_disconnect($db);
             }
         }
     </style>
-</head>
 
-<body>
-<div class="page">
+
+
+<section class="anagram-creator"><div class="page">
     <div class="top-links">
         <a href="movies_anagram.php">← Anagram List</a>
         <a href="index.php">Home</a>
@@ -523,5 +522,8 @@ if (shuffleButton) {
 }
 </script>
 
-</body>
-</html>
+
+
+
+</section>
+<?php include __DIR__ . '/footer.php'; ?>

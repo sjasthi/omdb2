@@ -22,8 +22,8 @@ require_once __DIR__ . '/security.php';
   
  ?>
 
-<!DOCTYPE html>
-<html>
+
+
 <form id="basecharAdmin" action="games.php" method= "POST"><?php echo csrf_field(); ?>
 
 <h2>Welcome to the Base Characters Game!</h1>
@@ -64,7 +64,7 @@ if (isset($_POST['basecharinput']) && !empty($_POST['basecharinput'])){
 <br>
 <table id="info" cellpadding="0" cellspacing="0" border="0"
     class="datatable table table-striped table-bordered datatable-style table-hover"
-    width="100%" style="width: 100px;">
+    width="100%" >
       <thead>
         <tr id="table-first-row">
                 <th>id</th>
@@ -125,22 +125,10 @@ if (isset($_POST['basecharinput']) && !empty($_POST['basecharinput'])){
 
 </form>
 <style type="text/css">
-#basecharAdmin {
-  background-color: #ffffff;
-  margin: auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
+
 
 #length{
         width: auto;
@@ -150,9 +138,7 @@ input {
 
 }
 
-#label{
-    text-indent: 530px;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -264,7 +250,7 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 </script>
-</html>
+
 
 
 <?php

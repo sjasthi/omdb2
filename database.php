@@ -16,6 +16,7 @@ function db_connect(): mysqli {
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     $connection = new mysqli(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
     $connection->set_charset('utf8mb4');
+    $connection->query("SET SESSION sql_mode = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
     // Refresh the role so account deletion and demotion take effect immediately.
     if (is_logged_in()) {
         $stmt = $connection->prepare('SELECT email, role FROM users WHERE id = ? LIMIT 1');
@@ -77,4 +78,24 @@ function db_query(mysqli $connection, $query, array $params = []) {
     $result = $stmt->get_result();
     $stmt->close();
     return $result === false ? true : $result;
+}
+
+// Capture the server-generated ID before another query can change insert_id.
+function db_insert(mysqli $connection, string $sql, array $params): int {
+    db_query($connection, $sql, $params);
+    $id = (int)$connection->insert_id;
+    if ($id < 1) { throw new RuntimeException('Insert did not generate an ID.'); }
+    return $id;
+}
+
+function db_transaction(mysqli $connection, callable $operation) {
+    $connection->begin_transaction();
+    try {
+        $result = $operation();
+        $connection->commit();
+        return $result;
+    } catch (Throwable $error) {
+        $connection->rollback();
+        throw $error;
+    }
 }

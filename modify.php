@@ -41,9 +41,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
     }
   ?>
 
-<!DOCTYPE html>
-<html>
-<body >
+
+
+
 <?php
 if(isset($_GET['movie_id'])){
     echo '<form id="movieModify" class="movieModify" action="modifyTheMovies.php" method= "POST">' . csrf_field();
@@ -171,6 +171,7 @@ if(isset($_GET['movie_id'])){
     if(sizeof($keyword) > 0){
         for($i = 0; $i < sizeof($keyword); $i++){
             echo '<label for="keyword' . h($i) . '"> Keyword #' . h($i+1) . ' </label>';
+            echo '<input type="hidden" name="original_keyword' . h($i) . '" value="' . h($keyword[$i]) . '">';
             echo '<p><input id="keyword' . h($i) . '" name= "keyword_update' . h($i) . '" value="' . h($keyword[$i]) . '" class="form-control" placeholder="Modify Keyword" oninput="this.className = """></p><br>';
         }
     }
@@ -284,6 +285,7 @@ if(isset($_GET['song_id'])){
     if(sizeof($keyword) > 0){
         for($i = 0; $i < sizeof($keyword); $i++){
             echo '<label for="keyword' . h($i) . '"> Keyword #' . h($i+1) . ' </label>';
+            echo '<input type="hidden" name="original_keyword' . h($i) . '" value="' . h($keyword[$i]) . '">';
             echo '<p><input id="keyword' . h($i) . '" name= "song_keyword_update' . h($i) . '" value="' . h($keyword[$i]) . '" class="form-control" placeholder="Modify Keyword" oninput="this.className = """></p>';
         }
     }
@@ -391,6 +393,8 @@ if(isset($_GET['people_id'])){
             echo '<label for="screen_name' . h($i) . '"> Movie #' . h($i+1) . ': Screen Name </label>';
             echo '<p><input id="screen_name' . h($i) . '" name= "screen_name_update' . h($i) . '" value="' . h($screen_name[$i]) . '" class="form-control" placeholder="Modify Screen Name for ' . h($movie_id[$i]) . '" oninput="this.className = """></p>';
             echo '<label for="role' . h($i) . '"> Movie #' . h($i+1) . ': Role </label>';
+            echo '<input type="hidden" name="original_role' . h($i) . '" value="' . h($role[$i]) . '">';
+            echo '<input type="hidden" name="original_screen_name' . h($i) . '" value="' . h($screen_name[$i]) . '">';
             echo '<p><input id="role' . h($i) . '" name= "role_update' . h($i) . '" value="' . h($role[$i]) . '" class="form-control" placeholder="Modify Role for ' . h($movie_id[$i]) . '" oninput="this.className = """></p>';
             echo '<input type="hidden" name="movie_id' . h($i) . '" value="' . h($movie_id[$i]) . '"><br>';
         }
@@ -406,6 +410,7 @@ if(isset($_GET['people_id'])){
     if(sizeof($song_id) > 0){
         for($i = 0; $i < sizeof($song_id); $i++){
             echo '<label for="song_role' . h($i) . '"> Song #' . h($i+1) . ' </label>';
+            echo '<input type="hidden" name="original_song_role' . h($i) . '" value="' . h($song_role[$i]) . '">';
             echo '<p><input id="song_role' . h($i) . '" name= "song_role_update' . h($i) . '" value="' . h($song_role[$i]) . '" class="form-control" placeholder="Modify Song Role for ' . h($song_id[$i]) . '" oninput="this.className = """></p>';
             echo '<input type="hidden" name="song_id' . h($i) . '" value="' . h($song_id[$i]) . '"><br>';
         }
@@ -431,22 +436,10 @@ if(isset($_GET['people_id'])){
 ?>
 
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 10px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -529,6 +522,8 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 </script>
-</body>
-</html>
 
+
+
+
+<?php include __DIR__ . '/footer.php'; ?>

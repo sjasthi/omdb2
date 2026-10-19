@@ -9,7 +9,7 @@ require_once __DIR__ . '/security.php';
   include("./nav.php");
 
  ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
  <div class="right-content">
     <div class="container">
 
@@ -19,13 +19,13 @@ require_once __DIR__ . '/security.php';
       <?php
         if (is_admin())
         { ?>
-         <button title='Create Song'><a class='btn btn-sm' href='create_song.php'><i class = 'fa fa-plus'></i></a></button>
+         <a class="btn btn-primary" href="create_song.php"><i class="fa fa-plus" aria-hidden="true"></i> Create song</a>
       <?php } ?>
     <br>
 
             <table id="info" cellpadding="0" cellspacing="0" border="0"
                 class="datatable table table-striped table-bordered datatable-style table-hover"
-                width="100%" style="width: 100px;">
+                width="100%" >
                   <thead>
                     <tr id="table-first-row">
                             <th>id</th>

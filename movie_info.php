@@ -217,17 +217,17 @@ var flag = true;
 </script>
 
 <div class="background" id="background"></div>
-<div class="container" id="container">
+<div class="container movie-details" id="container">
   <div class="cellphone-container">
       <div class="movie">
         <h1><?php echo h($native_name);?></h1>
-        <div class="movie-img">
+        <div class="movie-img"><button type="button" class="poster-trigger" aria-label="Enlarge movie poster">
         <?php if (isset($m_link[0]) && !empty(trim($m_link[0]))) { ?>
-        <img src="posters/<?php echo h($m_link[0]) . '.' . h($m_link_type[0]);?>" alt="<?php echo h($m_link[0]);?>" class="movie-image" id="movie-image" onclick="if(flag == true){ enlargeImg();} else { resetImg();}" style="width:300px;height:300px;"></img>
+        <img src="posters/<?php echo h($m_link[0]) . '.' . h($m_link_type[0]);?>" alt="<?php echo h($m_link[0]);?>" class="movie-image" id="movie-image" style="width:300px;height:300px;"></img>
         <?php } else { ?>
             <img class="movie-image" id="movie-image" src="images/no-image.png" alt="No Image" style="width:300px;height:300px;"></img>
         <?php } ?>
-        </div>
+        </button></div>
         <div class="text-movie-cont">
           <div class="mr-grid summary-row">
             <div class="col">
@@ -426,21 +426,22 @@ for (var i = 0; i < section.length; i++) {
     });
 }
                               
-img = document.getElementById("movie-image");
-body = document.getElementById("container");
-button = document.getElementsByClass('collapsible');
-function enlargeImg() {
-  img.style.transform = "scale(2.2)";
-  img.style.position = "relative";
-  img.style.top = '50px';
-  flag = false;
-}
-                              
-function resetImg() {
-  img.style.transform = "scale(1)";
-  img.style.removeProperty('position');
-  flag = true;
-}
+(() => {
+  const trigger = document.querySelector('.poster-trigger');
+  const image = document.getElementById('movie-image');
+  if (!trigger || !image) return;
+  const dialog = document.createElement('dialog');
+  dialog.className = 'poster-dialog';
+  dialog.setAttribute('aria-label', 'Movie poster');
+  const close = document.createElement('button');
+  close.type = 'button'; close.textContent = 'Close poster';
+  const enlarged = document.createElement('img');
+  enlarged.src = image.src; enlarged.alt = image.alt;
+  dialog.append(close, enlarged); document.body.append(dialog);
+  trigger.addEventListener('click', () => dialog.showModal());
+  close.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+})();
 </script>
                               
 <?php

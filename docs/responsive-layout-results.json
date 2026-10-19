@@ -1,0 +1,1298 @@
+[
+  {
+    "page": "index.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 390,
+    "viewport": 390
+  },
+  {
+    "page": "movies.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "people.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "songs.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "movies_data.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "movies_numbers.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "reports.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "search_data.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 390,
+    "viewport": 390
+  },
+  {
+    "page": "about.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 390,
+    "viewport": 390
+  },
+  {
+    "page": "help.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "games.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "anagrammer.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "games_base_chars_user.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "create_movie.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "create_people.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 390,
+    "viewport": 390
+  },
+  {
+    "page": "create_song.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 390,
+    "viewport": 390
+  },
+  {
+    "page": "setup.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 390,
+    "viewport": 390
+  },
+  {
+    "page": "sign_up.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "createTheAnagram.php",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "movie_info.php?movie_id=4",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "modify.php?movie_id=4",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "create_Data.php?movie_id=4",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "add_people.php?movie_id=4",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "add_song.php?movie_id=4",
+    "width": 390,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 375,
+    "viewport": 390
+  },
+  {
+    "page": "index.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "movies.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "people.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "songs.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "movies_data.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "movies_numbers.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "reports.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "search_data.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "about.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "help.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "games.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "anagrammer.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "games_base_chars_user.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "create_movie.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "create_people.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "create_song.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "setup.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "sign_up.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 768,
+    "viewport": 768
+  },
+  {
+    "page": "createTheAnagram.php",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "movie_info.php?movie_id=4",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "modify.php?movie_id=4",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "create_Data.php?movie_id=4",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "add_people.php?movie_id=4",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "add_song.php?movie_id=4",
+    "width": 768,
+    "footerOutsideMain": true,
+    "main": true,
+    "overflow": [],
+    "pageWidth": 753,
+    "viewport": 768
+  },
+  {
+    "page": "index.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/index.php",
+    "viewport": 1024
+  },
+  {
+    "page": "movies.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/movies.php",
+    "viewport": 1024
+  },
+  {
+    "page": "people.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/people.php",
+    "viewport": 1024
+  },
+  {
+    "page": "songs.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/songs.php",
+    "viewport": 1024
+  },
+  {
+    "page": "movies_data.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/movies_data.php",
+    "viewport": 1024
+  },
+  {
+    "page": "movies_numbers.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/movies_numbers.php",
+    "viewport": 1024
+  },
+  {
+    "page": "reports.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/reports.php",
+    "viewport": 1024
+  },
+  {
+    "page": "search_data.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/search_data.php",
+    "viewport": 1024
+  },
+  {
+    "page": "about.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/about.php",
+    "viewport": 1024
+  },
+  {
+    "page": "help.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/help.php",
+    "viewport": 1024
+  },
+  {
+    "page": "games.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/games.php",
+    "viewport": 1024
+  },
+  {
+    "page": "anagrammer.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/anagrammer.php",
+    "viewport": 1024
+  },
+  {
+    "page": "games_base_chars_user.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/games_base_chars_user.php",
+    "viewport": 1024
+  },
+  {
+    "page": "create_movie.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/create_movie.php",
+    "viewport": 1024
+  },
+  {
+    "page": "create_people.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/create_people.php",
+    "viewport": 1024
+  },
+  {
+    "page": "create_song.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/create_song.php",
+    "viewport": 1024
+  },
+  {
+    "page": "setup.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1024,
+    "path": "/omdb/setup.php",
+    "viewport": 1024
+  },
+  {
+    "page": "sign_up.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/sign_up.php",
+    "viewport": 1024
+  },
+  {
+    "page": "createTheAnagram.php",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/createTheAnagram.php",
+    "viewport": 1024
+  },
+  {
+    "page": "movie_info.php?movie_id=4",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/movie_info.php?movie_id=4",
+    "viewport": 1024
+  },
+  {
+    "page": "modify.php?movie_id=4",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/modify.php?movie_id=4",
+    "viewport": 1024
+  },
+  {
+    "page": "create_Data.php?movie_id=4",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/create_Data.php?movie_id=4",
+    "viewport": 1024
+  },
+  {
+    "page": "add_people.php?movie_id=4",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/add_people.php?movie_id=4",
+    "viewport": 1024
+  },
+  {
+    "page": "add_song.php?movie_id=4",
+    "width": 1024,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1009,
+    "path": "/omdb/add_song.php?movie_id=4",
+    "viewport": 1024
+  },
+  {
+    "page": "index.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/index.php",
+    "viewport": 1366
+  },
+  {
+    "page": "movies.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/movies.php",
+    "viewport": 1366
+  },
+  {
+    "page": "people.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/people.php",
+    "viewport": 1366
+  },
+  {
+    "page": "songs.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/songs.php",
+    "viewport": 1366
+  },
+  {
+    "page": "movies_data.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/movies_data.php",
+    "viewport": 1366
+  },
+  {
+    "page": "movies_numbers.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/movies_numbers.php",
+    "viewport": 1366
+  },
+  {
+    "page": "reports.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/reports.php",
+    "viewport": 1366
+  },
+  {
+    "page": "search_data.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/search_data.php",
+    "viewport": 1366
+  },
+  {
+    "page": "about.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/about.php",
+    "viewport": 1366
+  },
+  {
+    "page": "help.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/help.php",
+    "viewport": 1366
+  },
+  {
+    "page": "games.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/games.php",
+    "viewport": 1366
+  },
+  {
+    "page": "anagrammer.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/anagrammer.php",
+    "viewport": 1366
+  },
+  {
+    "page": "games_base_chars_user.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/games_base_chars_user.php",
+    "viewport": 1366
+  },
+  {
+    "page": "create_movie.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/create_movie.php",
+    "viewport": 1366
+  },
+  {
+    "page": "create_people.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/create_people.php",
+    "viewport": 1366
+  },
+  {
+    "page": "create_song.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/create_song.php",
+    "viewport": 1366
+  },
+  {
+    "page": "setup.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1366,
+    "path": "/omdb/setup.php",
+    "viewport": 1366
+  },
+  {
+    "page": "sign_up.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/sign_up.php",
+    "viewport": 1366
+  },
+  {
+    "page": "createTheAnagram.php",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/createTheAnagram.php",
+    "viewport": 1366
+  },
+  {
+    "page": "movie_info.php?movie_id=4",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/movie_info.php?movie_id=4",
+    "viewport": 1366
+  },
+  {
+    "page": "modify.php?movie_id=4",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/modify.php?movie_id=4",
+    "viewport": 1366
+  },
+  {
+    "page": "create_Data.php?movie_id=4",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/create_Data.php?movie_id=4",
+    "viewport": 1366
+  },
+  {
+    "page": "add_people.php?movie_id=4",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/add_people.php?movie_id=4",
+    "viewport": 1366
+  },
+  {
+    "page": "add_song.php?movie_id=4",
+    "width": 1366,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1351,
+    "path": "/omdb/add_song.php?movie_id=4",
+    "viewport": 1366
+  },
+  {
+    "page": "index.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/index.php",
+    "viewport": 1920
+  },
+  {
+    "page": "movies.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/movies.php",
+    "viewport": 1920
+  },
+  {
+    "page": "people.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/people.php",
+    "viewport": 1920
+  },
+  {
+    "page": "songs.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/songs.php",
+    "viewport": 1920
+  },
+  {
+    "page": "movies_data.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/movies_data.php",
+    "viewport": 1920
+  },
+  {
+    "page": "movies_numbers.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/movies_numbers.php",
+    "viewport": 1920
+  },
+  {
+    "page": "reports.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/reports.php",
+    "viewport": 1920
+  },
+  {
+    "page": "search_data.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/search_data.php",
+    "viewport": 1920
+  },
+  {
+    "page": "about.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/about.php",
+    "viewport": 1920
+  },
+  {
+    "page": "help.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/help.php",
+    "viewport": 1920
+  },
+  {
+    "page": "games.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/games.php",
+    "viewport": 1920
+  },
+  {
+    "page": "anagrammer.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/anagrammer.php",
+    "viewport": 1920
+  },
+  {
+    "page": "games_base_chars_user.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/games_base_chars_user.php",
+    "viewport": 1920
+  },
+  {
+    "page": "create_movie.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/create_movie.php",
+    "viewport": 1920
+  },
+  {
+    "page": "create_people.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/create_people.php",
+    "viewport": 1920
+  },
+  {
+    "page": "create_song.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/create_song.php",
+    "viewport": 1920
+  },
+  {
+    "page": "setup.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/setup.php",
+    "viewport": 1920
+  },
+  {
+    "page": "sign_up.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1920,
+    "path": "/omdb/sign_up.php",
+    "viewport": 1920
+  },
+  {
+    "page": "createTheAnagram.php",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/createTheAnagram.php",
+    "viewport": 1920
+  },
+  {
+    "page": "movie_info.php?movie_id=4",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/movie_info.php?movie_id=4",
+    "viewport": 1920
+  },
+  {
+    "page": "modify.php?movie_id=4",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/modify.php?movie_id=4",
+    "viewport": 1920
+  },
+  {
+    "page": "create_Data.php?movie_id=4",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/create_Data.php?movie_id=4",
+    "viewport": 1920
+  },
+  {
+    "page": "add_people.php?movie_id=4",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/add_people.php?movie_id=4",
+    "viewport": 1920
+  },
+  {
+    "page": "add_song.php?movie_id=4",
+    "width": 1920,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 1905,
+    "path": "/omdb/add_song.php?movie_id=4",
+    "viewport": 1920
+  },
+  {
+    "page": "index.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 320,
+    "path": "/omdb/index.php",
+    "viewport": 320
+  },
+  {
+    "page": "movies.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/movies.php",
+    "viewport": 320
+  },
+  {
+    "page": "people.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/people.php",
+    "viewport": 320
+  },
+  {
+    "page": "songs.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/songs.php",
+    "viewport": 320
+  },
+  {
+    "page": "movies_data.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/movies_data.php",
+    "viewport": 320
+  },
+  {
+    "page": "movies_numbers.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/movies_numbers.php",
+    "viewport": 320
+  },
+  {
+    "page": "reports.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/reports.php",
+    "viewport": 320
+  },
+  {
+    "page": "search_data.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 320,
+    "path": "/omdb/search_data.php",
+    "viewport": 320
+  },
+  {
+    "page": "about.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 320,
+    "path": "/omdb/about.php",
+    "viewport": 320
+  },
+  {
+    "page": "help.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/help.php",
+    "viewport": 320
+  },
+  {
+    "page": "games.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/games.php",
+    "viewport": 320
+  },
+  {
+    "page": "anagrammer.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/anagrammer.php",
+    "viewport": 320
+  },
+  {
+    "page": "games_base_chars_user.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/games_base_chars_user.php",
+    "viewport": 320
+  },
+  {
+    "page": "create_movie.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 312,
+    "path": "/omdb/create_movie.php",
+    "viewport": 320
+  },
+  {
+    "page": "create_people.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 320,
+    "path": "/omdb/create_people.php",
+    "viewport": 320
+  },
+  {
+    "page": "create_song.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 320,
+    "path": "/omdb/create_song.php",
+    "viewport": 320
+  },
+  {
+    "page": "setup.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 320,
+    "path": "/omdb/setup.php",
+    "viewport": 320
+  },
+  {
+    "page": "sign_up.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/sign_up.php",
+    "viewport": 320
+  },
+  {
+    "page": "createTheAnagram.php",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/createTheAnagram.php",
+    "viewport": 320
+  },
+  {
+    "page": "movie_info.php?movie_id=4",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/movie_info.php?movie_id=4",
+    "viewport": 320
+  },
+  {
+    "page": "modify.php?movie_id=4",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/modify.php?movie_id=4",
+    "viewport": 320
+  },
+  {
+    "page": "create_Data.php?movie_id=4",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/create_Data.php?movie_id=4",
+    "viewport": 320
+  },
+  {
+    "page": "add_people.php?movie_id=4",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/add_people.php?movie_id=4",
+    "viewport": 320
+  },
+  {
+    "page": "add_song.php?movie_id=4",
+    "width": 320,
+    "footerOutsideMain": true,
+    "main": true,
+    "pageWidth": 305,
+    "path": "/omdb/add_song.php?movie_id=4",
+    "viewport": 320
+  }
+]

@@ -31,7 +31,7 @@ if (!isset($_SESSION['username'])) {
 
         <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
-            width="100%" style="width: 100px;">
+            width="100%" >
               <thead>
                 <tr id="table-first-row">
                         <th>Native Name</th>

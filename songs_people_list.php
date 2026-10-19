@@ -15,44 +15,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
     if(isset($_GET['song_id'])){
         $song_id = $_GET['song_id'];
     }
-$test = '';
-    if(isset($_POST['add'])){
-        $song_id = $_POST['song_id'];
-        $people_id = [];
-        $roles = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'people_id') === 0) {
-                $people_id[] = $v;
-            }
-            if(strpos($k, 'role') === 0) {
-                if(!empty($v)){
-                    $roles[] = $v;
-                }
-            }
-        }
-        for($i = 0, $size = count($people_id); $i < $size; $i++){
-            
-            $sql = ['sql' => 'insert ignore into song_people (song_id, people_id, role) values (?, ?, ?);', 'params' => [$song_id, $people_id[$i], $roles[$i]]];
-            db_query($db, $sql);
-        }
+require_once __DIR__ . '/catalog.php';
+try {
+    $song_id = catalog_id($_POST['song_id'] ?? $_GET['song_id'] ?? null);
+    if (isset($_POST['add']) || isset($_POST['delete'])) {
+        catalog_relationships($db, 'song_people', $song_id, $_POST);
     }
-    else if(isset($_POST['delete'])){
-        $song_id = $_POST['song_id'];
-        $people_id = [];
-        $roles = [];
-        foreach($_POST as $k => $v) {
-            if(strpos($k, 'people_id') === 0) {
-                $people_id[] = $v;
-            }
-            if(strpos($k, 'role') === 0) {
-                $roles[] = $v;
-            }
-        }
-        for($i = 0, $size = count($people_id); $i < $size; $i++){
-            $sql = ['sql' => 'delete from song_people where song_id = ? and people_id = ? and role = ?;', 'params' => [$song_id, $people_id[$i], $roles[$i]]];
-            db_query($db, $sql);
-        }
-    }
+} catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
 
     $sql = db_query($db, ['sql' => 'select people.*, song_people.* from people left join song_people on people.people_id = song_people.people_id where song_people.song_id = ?;', 'params' => [$song_id]]);
 
@@ -61,8 +30,8 @@ $test = '';
   
   ?>
 
-<!DOCTYPE html>
-<html>
+
+
 <div class = "container">
 <h1>Attach A Person to <?php echo h($name['title']);?></h1>
 
@@ -70,7 +39,7 @@ $test = '';
 <form name="add_person" id="add_person" class="add_person" method="post" action="songs_people_list.php"><?php echo csrf_field(); ?>
   <table id="info" cellpadding="0" cellspacing="0" border="0"
       class="datatable table table-striped table-bordered datatable-style table-hover"
-      width="100%" style="width: 100px;">
+      width="100%" >
               <thead>
               <tr id="table-first-row">
                 <th>Select</th>
@@ -137,7 +106,7 @@ if(mysqli_num_rows($sql)>0){
     <form name="delete_person" id="delete_person" method="post" action="songs_people_list.php"><?php echo csrf_field(); ?>
       <table id="info1" cellpadding="0" cellspacing="0" border="0"
           class="datatable table table-striped table-bordered datatable-style table-hover"
-          width="100%" style="width: 100px;">
+          width="100%" >
                   <thead>
                   <tr id="table-first-row">
                     <th>Select</th>
@@ -180,21 +149,10 @@ if(mysqli_num_rows($sql)>0){
 
 <div>
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 100px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size = 3px;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {

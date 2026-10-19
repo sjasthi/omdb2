@@ -90,39 +90,6 @@ $plot              = trim($_POST['plot'] ?? '');
 $tag_line          = trim($_POST['tag_line'] ?? '');
 
 
-/*
- * Helper for tables that still use manually assigned IDs.
- */
-function get_next_id(
-    mysqli $db,
-    string $table,
-    string $column
-): int {
-
-    $allowed = array(
-        'movie_trivia' => 'movie_trivia_id',
-        'movie_quotes' => 'movie_quote_id',
-        'movie_media'  => 'movie_media_id'
-    );
-
-    if (
-        !isset($allowed[$table]) ||
-        $allowed[$table] !== $column
-    ) {
-        throw new Exception("Invalid ID request.");
-    }
-
-    $sql =
-        "SELECT COALESCE(MAX(`$column`), 0) + 1 AS next_id
-         FROM `$table`";
-
-    $result = db_query($db, $sql);
-    $row = $result->fetch_assoc();
-
-    return (int)$row['next_id'];
-}
-
-
 try {
 
     $db->begin_transaction();
@@ -147,7 +114,7 @@ try {
                 plot,
                 tag_line
             )
-            VALUES (?, ?, ?, ?, ?, ?)");
+            VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE language=VALUES(language), country=VALUES(country), genre=VALUES(genre), plot=VALUES(plot), tag_line=VALUES(tag_line)");
 
         $stmt->bind_param(
             "isssss",
@@ -169,29 +136,7 @@ try {
      */
     if ($movie_trivia_name !== '') {
 
-        $movie_trivia_id = get_next_id(
-            $db,
-            'movie_trivia',
-            'movie_trivia_id'
-        );
-
-        $stmt = db_prepare($db, "INSERT INTO movie_trivia
-            (
-                movie_id,
-                movie_trivia_id,
-                movie_trivia_name
-            )
-            VALUES (?, ?, ?)");
-
-        $stmt->bind_param(
-            "iis",
-            $movie_id,
-            $movie_trivia_id,
-            $movie_trivia_name
-        );
-
-        $stmt->execute();
-        $stmt->close();
+        db_query($db, 'INSERT INTO movie_trivia (movie_id, movie_trivia_name) VALUES (?, ?)', [$movie_id, $movie_trivia_name]);
     }
 
 
@@ -203,31 +148,7 @@ try {
      */
     if ($m_link !== '' && $m_link_type !== '') {
 
-        $movie_media_id = get_next_id(
-            $db,
-            'movie_media',
-            'movie_media_id'
-        );
-
-        $stmt = db_prepare($db, "INSERT INTO movie_media
-            (
-                movie_id,
-                m_link,
-                m_link_type,
-                movie_media_id
-            )
-            VALUES (?, ?, ?, ?)");
-
-        $stmt->bind_param(
-            "issi",
-            $movie_id,
-            $m_link,
-            $m_link_type,
-            $movie_media_id
-        );
-
-        $stmt->execute();
-        $stmt->close();
+        db_query($db, 'INSERT INTO movie_media (movie_id, m_link, m_link_type) VALUES (?, ?, ?)', [$movie_id, $m_link, $m_link_type]);
     }
 
 
@@ -259,29 +180,7 @@ try {
      */
     if ($movie_quote_name !== '') {
 
-        $movie_quote_id = get_next_id(
-            $db,
-            'movie_quotes',
-            'movie_quote_id'
-        );
-
-        $stmt = db_prepare($db, "INSERT INTO movie_quotes
-            (
-                movie_id,
-                movie_quote_name,
-                movie_quote_id
-            )
-            VALUES (?, ?, ?)");
-
-        $stmt->bind_param(
-            "isi",
-            $movie_id,
-            $movie_quote_name,
-            $movie_quote_id
-        );
-
-        $stmt->execute();
-        $stmt->close();
+        db_query($db, 'INSERT INTO movie_quotes (movie_id, movie_quote_name) VALUES (?, ?)', [$movie_id, $movie_quote_name]);
     }
 
 
