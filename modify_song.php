@@ -51,14 +51,14 @@ $theme = $row['theme'];
 mysqli_stmt_close($stmt);
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Modify Song</title>
-</head>
 
-<body>
+
+
+
+
+
+
+
 
 <div class="container">
 
@@ -139,6 +139,3 @@ db_disconnect($db);
 
 include("./footer.php");
 ?>
-
-</body>
-</html>

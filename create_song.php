@@ -29,8 +29,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
   ?>
 
-<!DOCTYPE html>
-<html>
+
+
 <h1>Add a song</h1>
 
 <form method="post" action="create_song.php"><?php echo csrf_field(); ?>
@@ -47,22 +47,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
 
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 100px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -97,3 +85,5 @@ input.invalid {
   background-color: #4CAF50;
 }
 </style>
+
+<?php include __DIR__ . '/footer.php'; ?>

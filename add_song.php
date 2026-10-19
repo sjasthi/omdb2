@@ -48,8 +48,8 @@ try {
   
   ?>
 
-<!DOCTYPE html>
-<html>
+
+
 <div class = "container">
 <h1>Attach A Song to <?php echo h($name['native_name']);?></h1>
 <?php
@@ -61,7 +61,7 @@ if(mysqli_num_rows($sql)>0){
     <form name="delete_song" id="delete_song" method="post" action="add_song.php"><?php echo csrf_field(); ?>
       <table id="info1" cellpadding="0" cellspacing="0" border="0"
           class="datatable table table-striped table-bordered datatable-style table-hover"
-          width="100%" style="width: 100px;">
+          width="100%" >
                   <thead>
                   <tr id="table-first-row">
                     <th>Select</th>
@@ -111,7 +111,7 @@ if(mysqli_num_rows($sql)>0){
 <form name="add_song" id="add_song" class="add_song" method="post" action="add_song.php"><?php echo csrf_field(); ?>
   <table id="info" cellpadding="0" cellspacing="0" border="0"
       class="datatable table table-striped table-bordered datatable-style table-hover"
-      width="100%" style="width: 100px;">
+      width="100%" >
               <thead>
               <tr id="table-first-row">
                 <th>Select</th>
@@ -161,20 +161,10 @@ if(mysqli_num_rows($sql)>0){
 
 <div>
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 100px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {

@@ -21,7 +21,7 @@ require_once __DIR__ . '/security.php';
 
         <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
-            width="100%" style="width: 100px;">
+            width="100%" >
               <thead>
                 <tr id="table-first-row">
                         <th>Movie Media id</th>

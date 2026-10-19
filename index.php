@@ -14,20 +14,20 @@ require_once __DIR__ . '/security.php';
   include("./nav.php");
 ?>
 
-<html>
 
-<head>
+
+
 <style>
 table.center {
     margin-left:auto;
     margin-right:auto;
   }
 </style>
-</head>
 
-<body>
+
+
 <div class = "container">
-<h2 style = "color: #01B0F1;">Welcome to OMDB </h3>
+<h2 style = "color: #01B0F1;">Welcome to OMDB </h2>
 
 
 

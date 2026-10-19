@@ -17,26 +17,26 @@ if (!isset($_SESSION['username'])) {
   include("./nav.php");
 ?>
 
-<html>
 
-<head>
+
+
 <style>
 table.center {
     margin-left:auto;
     margin-right:auto;
   }
 </style>
-</head>
 
-<body>
+
+
 <div class="container">
-<h2 style = "color: #01B0F1;">Year Made Count </h3>
+<h2 style = "color: #01B0F1;">Year Made Count </h2>
 
 
 
   <table id="info" cellpadding="0" cellspacing="0" border="0"
       class="datatable table table-striped table-bordered datatable-style table-hover"
-      width="100%" style="width: 100px;">
+      width="100%" >
 
   <thead>
       <tr id="table-first-row">
@@ -68,6 +68,9 @@ table.center {
             ?>
 
 
+    </tbody>
+  </table>
+</div>
                     <script type="text/javascript" language="javascript">
                 $(document).ready( function () {
 

@@ -10,8 +10,8 @@ require_once __DIR__ . '/security.php';
      include("./nav.php");
   ?>
 
-<!DOCTYPE html>
-<html>
+
+
 <h1>Search Lists</h1>
 
 
@@ -230,22 +230,10 @@ $query2 = mysqli_stmt_get_result($stmt_songs);
 
 
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 100px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -285,4 +273,3 @@ input.invalid {
     db_disconnect($db);
     include("./footer.php");
 ?>
-</html>

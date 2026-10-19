@@ -1,118 +1,90 @@
-html, body {
-    height: 100%;
-	 background: url(images/gameboard.jpg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
-html {
-    display: table;
-    margin: auto;
-}
-
-body {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-h1 {
+.anagram-game h1 {
  text-align: center;
  font-family: "Games", sans-serif;
 }
-
-h3, h4, h5{
+.anagram-game h3, .anagram-game h4, .anagram-game h5 {
 	text-align: center;
 }
-
-#game-board {
+.anagram-game #game-board {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-#display-board {
+.anagram-game #display-board {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-
-.input{
+.anagram-game .input {
   border: 2px solid gray;
   border-radius: 3px;
   margin: 2px;
   font-size: 2.5rem;
   font-weight: 700;
   height: 6rem;
-  width: 50rem;
+  width: min(100%, 50rem);
   display: flex;
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
   text-align: center;
 }
-
-.letter-box {
+.anagram-game .letter-box {
   border: 2px solid grey;
   border-radius: 3px;
   margin: 2px;
   font-size: 2.5rem;
   font-weight: 700;
-  width: 6rem;
+  width: clamp(36px, 10vw, 60px);
   height: 6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
 }
-
-.display-box {
+.anagram-game .display-box {
   border: 2px solid grey;
   background-color: lightsteelblue;
   border-radius: 3px;
   margin: 2px ;
   font-size: 2.5rem;
   font-weight: 700;
-  width: 6rem;
+  width: clamp(36px, 10vw, 60px);
   height: 6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
 }
-
-.filled-box {
+.anagram-game .filled-box {
   border: 2px solid black;
 }
-
-input, input[type="text"]{
+.anagram-game input, .anagram-game input[type="text"] {
 background-color:#000;
 color: plum;
 }
-
-.letter-row {
+.anagram-game .letter-row {
   display: flex;
 }
-
-.display-row {
+.anagram-game .display-row {
   display: flex;
 }
-
-.submit-button{
+.anagram-game .submit-button {
 	margin: 10px;
 	display: flex;
   justify-content: center;
   align-items: center;
 }
-
-.tab{
+.anagram-game .tab {
 	text-align: center;
 }
-
-#info{
+.anagram-game #info {
 	text-align: center;
 }
-
-table {
+.anagram-game table {
     margin: 0 auto; /* or margin: 0 auto 0 auto */
   }
+
+.anagram-game { padding: 20px 12px; border-radius: 12px; background: #e8f2fb url(images/gameboard.jpg) center/cover; }
+.anagram-game .letter-row, .anagram-game .display-row { flex-wrap: wrap; justify-content: center; max-width: 100%; }
+.anagram-game .input { max-width: 100%; }

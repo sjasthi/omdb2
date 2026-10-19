@@ -22,9 +22,9 @@ include("./nav.php");
 
 ?>
 
-<html>
 
-<head>
+
+
 <style>
 
 table.center {
@@ -32,22 +32,14 @@ table.center {
     margin-right: auto;
 }
 
-.container {
-    width: 300px;
-    height: 200px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -150px;
-}
+
 
 </style>
-</head>
 
-<body>
 
-<div class="container">
+
+
+<div class="container omdb-form">
 
     <h1 style="color: #01B0F1;">Create User Account</h1>
 
@@ -273,9 +265,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </div>
 
-</body>
 
-</html>
+
+
 
 <?php
 

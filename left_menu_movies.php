@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__ . '/security.php';
 ?>
-<head>
-<link rel="stylesheet" href="styles/mainStyleSheet.css">
-</head>
+
 <div id="menu-left">
 
 <a href="movies.php">

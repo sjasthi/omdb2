@@ -39,6 +39,8 @@ CSV imports are UTF-8, contain no header, and have at most 10,000 records / 5 MB
 
 ## Validation
 
+The shared UI adapts to phones, tablets, laptops and desktops, with a collapsible menu below 992px, flexible forms, and local horizontal scrolling for wide tables. See [docs/responsive-ui.md](docs/responsive-ui.md) for the six-size verification matrix and refactoring details. Shared UI assets load locally from `vendor/`; preserve that directory when deploying.
+
 `php tests/backend.php` creates randomly named isolated databases ending in `_test`, tests fresh setup and a schema-only legacy fixture, and drops only its own databases. Its database user must be able to create/drop test databases; set `OMDB_TEST_DB_SERVER`, `OMDB_TEST_DB_USER`, and `OMDB_TEST_DB_PASSWORD` if needed. Application configuration must also be present, as above. Never point HTTP tests at a live database: `tests/security_http_test.py` requires a separate configured app/database ending in `_test` and test login values through environment variables.
 
 GitHub Actions runs PHP syntax checks, the secret scanner, and backend regression tests against MariaDB 10.4 and MySQL 8.0. Enable local hooks with `git config core.hooksPath .githooks`, ensure PHP is on PATH, and run `php tools/check-secrets.php --all` before uploading. Only the reviewed schema, migration, and schema-only test fixture are exempt from the SQL dump ignore rule. See [SECURITY.md](SECURITY.md) for access controls and historical credential follow-up.

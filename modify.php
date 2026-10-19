@@ -41,9 +41,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
     }
   ?>
 
-<!DOCTYPE html>
-<html>
-<body >
+
+
+
 <?php
 if(isset($_GET['movie_id'])){
     echo '<form id="movieModify" class="movieModify" action="modifyTheMovies.php" method= "POST">' . csrf_field();
@@ -436,22 +436,10 @@ if(isset($_GET['people_id'])){
 ?>
 
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 10px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -534,6 +522,8 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 </script>
-</body>
-</html>
 
+
+
+
+<?php include __DIR__ . '/footer.php'; ?>

@@ -18,8 +18,8 @@ require_once __DIR__ . '/security.php';
 
   ?>
 
-<!DOCTYPE html>
-<html>
+
+
 <h1>Search Song of People</h1>
 <form method="post"><?php echo csrf_field(); ?>
       <div class="form-group">
@@ -128,22 +128,10 @@ require_once __DIR__ . '/security.php';
 
 
 <style type="text/css">
-#movieModify {
-  background-color: #ffffff;
-  margin: 100px auto;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
-}
+
 
 /* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
+
 
 /* Mark input boxes that gets an error on validation: */
 input.invalid {
@@ -182,4 +170,3 @@ input.invalid {
     db_disconnect($db);
     include("./footer.php");
 ?>
-</html>

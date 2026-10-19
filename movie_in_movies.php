@@ -1,12 +1,12 @@
 <?php
 require_once __DIR__ . '/security.php';
 ?>
-<!DOCTYPE html>
-<html>
+
+
 <style>
 
 </style>
-    <body>
+
 
     <?php
 
@@ -309,5 +309,6 @@ require_once __DIR__ . '/security.php';
 
     </script>
 
-    </body>
-</html>
+
+
+<?php include __DIR__ . '/footer.php'; ?>
