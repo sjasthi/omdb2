@@ -1,29 +1,6 @@
-<?php
-require_once __DIR__ . '/security.php';
-?>
-<div id="menu-left">
-
-    <form method="post"><?php echo csrf_field(); ?>
-  	<div <?php if($left_selected == "SONGS")
-  	{ echo 'class="menu-left-current-page"'; } ?>>
-    <button type="submit" name="songs"><img src="./images/songs.png">
-  	<br/>Songs<br/> </button></div>
-
-</br>
-    	<div <?php if($left_selected == "MOVIES")
-    	{ echo 'class="menu-left-current-page"'; } ?>>
-    	<button type="submit" name="movies"><img src="./images/movies.png">
-    	<br/>Movies<br/></button>
-    </div>
-
-</br>
-      	<div <?php if($left_selected == "PEOPLE")
-      	{ echo 'class="menu-left-current-page"'; } ?>>
-      	<button type="submit" name="people"><img src="./images/people.png">
-      	<br/>People<br/></button>
-      </div>
-    </form>
-
-
-
-</div>
+<?php require_once __DIR__ . '/security.php'; ?>
+<nav id="menu-left" aria-label="Search categories">
+<?php foreach (['MOVIES' => ['advance_movie_search.php', 'Movies'], 'SONGS' => ['search_data.php?type=songs', 'Songs'], 'PEOPLE' => ['search_data.php?type=people', 'People']] as $key => [$href, $label]) { ?>
+    <a href="<?php echo h($href); ?>"<?php echo $left_selected === $key ? ' aria-current="page" class="menu-left-current-page"' : ''; ?>><?php echo h($label); ?></a>
+<?php } ?>
+</nav>

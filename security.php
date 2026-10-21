@@ -102,7 +102,7 @@ function require_admin_write(): void {
 // Includes are not HTTP endpoints. Apache also denies these paths.
 $internal_files = ['security.php', 'initialize.php', 'database.php', 'db_credentials.php',
     'db_credentials.example.php', 'functions.php', 'user_functions.php', 'query_functions.php',
-    'validation_functions.php', 'api_methods.php', 'catalog.php', 'nav.php', 'footer.php',
+    'validation_functions.php', 'api_methods.php', 'catalog.php', 'movie_search.php', 'nav.php', 'footer.php',
     'left_menu_games.php', 'left_menu_movies.php', 'left_menu_people.php',
     'left_menu_puzzles.php', 'left_menu_reports.php', 'left_menu_songs.php', 'left_search_data.php'];
 if (in_array(basename($_SERVER['SCRIPT_FILENAME'] ?? ''), $internal_files, true)

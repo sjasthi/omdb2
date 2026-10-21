@@ -8,7 +8,7 @@ $document_title = ($page_title ?? '') !== '' && $page_title !== 'The Cow Layer'
 $navigation = [
     ['HOME','index.php','home.png','Home'], ['MOVIES','movies.php','movies.png','Movies'],
     ['PEOPLE','people.php','people.png','People'], ['SONGS','songs.php','songs.png','Songs'],
-    ['REPORTS','reports.php','reports.png','Reports'], ['search','search_data.php','search.png','Search'],
+    ['REPORTS','reports.php','reports.png','Reports'], ['search','advance_movie_search.php','search.png','Search'],
     ['SETUP','setup.php','setup.png','Setup'], ['ABOUT','about.php','about.png','About'],
     ['GAMES','games.php','puzzles.png','Games'], ['HELP','help.php','help.png','Help']
 ];
@@ -63,10 +63,9 @@ $sidebar = $left_buttons === 'YES' ? ($sidebars[$nav_selected] ?? null) : null;
             </ul>
         </nav>
     </header>
-    <form class="site-search" method="post" action="search.php" role="search">
-        <?php echo csrf_field(); ?>
+    <form class="site-search" method="get" action="search.php" role="search">
         <label class="sr-only" for="global-search">Search OMDB</label>
-        <input type="search" id="global-search" name="text_search" class="form-control" placeholder="Search OMDB">
+        <input type="search" id="global-search" name="text_search" class="form-control" maxlength="500" placeholder="Search titles, people, or cast + director">
         <button type="submit" name="search" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
     </form>
     <div class="app-layout<?php echo $sidebar ? ' with-sidebar' : ''; ?>">
