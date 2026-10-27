@@ -6,6 +6,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
 require_once __DIR__ . '/initialize.php';
 if (is_post_request()) {
     $uploads = $_FILES;
+    $uploaded = 0;
     if (!$uploads) { security_fail(400, 'Select an image to upload.'); }
     foreach ($uploads as $index => $file) {
         if (($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) { continue; }
@@ -34,11 +35,13 @@ if (is_post_request()) {
         }
         try {
             db_query($db, 'INSERT INTO movie_media (movie_id, m_link, m_link_type) VALUES (?, ?, ?)', [$id, $name, $extension]);
+            $uploaded++;
         } catch (Throwable $error) {
             @unlink($target);
             throw $error;
         }
     }
+    ui_set_notice($uploaded ? 'Uploaded '.$uploaded.' poster(s).' : 'No files were selected.', $uploaded ? 'success' : 'info');
     redirect_to('add_movie_posters.php?uploaded=1');
 }
 $nav_selected = 'MOVIES';
@@ -50,14 +53,14 @@ $offset = ($page - 1) * 20;
 $result = db_query($db, 'SELECT movie_id, native_name, year_made FROM movies WHERE movie_id NOT IN (SELECT movie_id FROM movie_media) ORDER BY movie_id DESC LIMIT ?, 20', [$offset]);
 ?>
 <div class="container">
-<h2>Upload Movie Posters</h2>
-<p>Choose JPEG, PNG, or WebP images of at most 5 MB.</p>
-<form action="add_movie_posters.php" method="post" enctype="multipart/form-data">
+
+<p>Choose JPEG, PNG, or WebP images of at most 5 MB and 20 million pixels. Movies that already have media are excluded from this upload list.</p>
+<form class="form-panel" action="add_movie_posters.php" method="post" enctype="multipart/form-data">
 <?php echo csrf_field(); $index = 0; while ($movie = $result->fetch_assoc()) { ?>
     <div class="form-group">
-        <label><?php echo h($movie['native_name']); ?> (<?php echo h($movie['year_made']); ?>)</label>
+        <label for="poster-<?php echo h($index); ?>"><?php echo h($movie['native_name']); ?> (<?php echo h($movie['year_made']); ?>)</label>
         <input type="hidden" name="movie<?php echo h($index); ?>" value="<?php echo h($movie['movie_id']); ?>">
-        <input type="file" name="<?php echo h($index++); ?>" accept="image/jpeg,image/png,image/webp">
+        <input class="form-control" id="poster-<?php echo h($index); ?>" type="file" name="<?php echo h($index++); ?>" accept="image/jpeg,image/png,image/webp">
     </div>
 <?php } ?>
 <button type="submit" class="btn btn-primary">Upload posters</button>

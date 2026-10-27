@@ -4,7 +4,7 @@ require_once __DIR__ . '/security.php';
 <?php
 $nav_selected = "MOVIES";
 $left_buttons = "YES";
-$left_selected = "YES";
+$left_selected = "MOVIES";
 
 include("./nav.php");
 require 'bin/functions.php';
@@ -12,11 +12,11 @@ require 'bin/functions.php';
 ?>
 
 <?php
-if (isset($_GET['movie_id'])) {
-  $movie_id = $_GET['movie_id'];
-}
+$movie_id=filter_var($_GET['movie_id'] ?? null,FILTER_VALIDATE_INT);
+if (!$movie_id || $movie_id<1) { security_fail(400,'Choose a movie from the catalog first.'); }
+if (!db_query($db,'SELECT 1 FROM movies WHERE movie_id=?',[$movie_id])->num_rows) { security_fail(404,'This movie is no longer in the catalog.'); }
 ?>
-        
+
 <?php
     $native_name = '';//
     $english_name = '';//
@@ -61,7 +61,7 @@ if (isset($_GET['movie_id'])) {
               FROM movies
               WHERE movie_id =?;', 'params' => [$movie_id]];
     $result = db_query($db, $sql_A1);
-          
+
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $native_name = $row["native_name"];
@@ -105,7 +105,7 @@ if (isset($_GET['movie_id'])) {
         }
     }
     $result->close();
-    
+
 
     $sql_A3 = ['sql' => 'SELECT movie_media_id, m_link, m_link_type
               FROM movie_media
@@ -121,10 +121,10 @@ if (isset($_GET['movie_id'])) {
         }
     }
     $result->close();
-  
+
 
     $sql_A4 = ['sql' => 'SELECT * FROM movie_keywords WHERE movie_id = ?;', 'params' => [$movie_id]];
-    
+
     $result = db_query($db, $sql_A4);
 
     if ($result->num_rows > 0) {
@@ -133,7 +133,7 @@ if (isset($_GET['movie_id'])) {
         }
     }
     $result->close();
-   
+
 
     $sql_B1 = ['sql' => 'SELECT * from people natural join movie_people WHERE movie_people.movie_id =?;', 'params' => [$movie_id]];
 
@@ -156,7 +156,7 @@ if (isset($_GET['movie_id'])) {
 
 
     $sql_C1 = ['sql' => 'SELECT * from songs natural join movie_song WHERE movie_song.movie_id =?;', 'params' => [$movie_id]];
-  
+
     $result = db_query($db, $sql_C1);
 
     if ($result->num_rows > 0) {
@@ -220,7 +220,7 @@ var flag = true;
 <div class="container movie-details" id="container">
   <div class="cellphone-container">
       <div class="movie">
-        <h1><?php echo h($native_name);?></h1>
+        <h2><?php echo h($native_name);?></h2>
         <div class="movie-img"><button type="button" class="poster-trigger" aria-label="Enlarge movie poster">
         <?php if (isset($m_link[0]) && !empty(trim($m_link[0]))) { ?>
         <img src="posters/<?php echo h($m_link[0]) . '.' . h($m_link_type[0]);?>" alt="<?php echo h($m_link[0]);?>" class="movie-image" id="movie-image" style="width:300px;height:300px;"></img>
@@ -384,7 +384,7 @@ h1 {
     min-height: 20vh;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-                                
+
 .container {
   display: flex;
   justify-content: center;
@@ -396,7 +396,7 @@ h1 {
   background: linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
   font-family: arial;
 }
-                              
+
 li {
    max-width: 90%;
 }
@@ -406,12 +406,12 @@ li {
     border-style: outset;
     border-width: 5px;
 }
-                              
-                              
+
+
 </style>
-                              
+
 <script>
-                            
+
 var section = document.getElementsByClassName("collapsible");
 
 for (var i = 0; i < section.length; i++) {
@@ -425,7 +425,7 @@ for (var i = 0; i < section.length; i++) {
         }
     });
 }
-                              
+
 (() => {
   const trigger = document.querySelector('.poster-trigger');
   const image = document.getElementById('movie-image');
@@ -443,7 +443,7 @@ for (var i = 0; i < section.length; i++) {
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
 })();
 </script>
-                              
+
 <?php
     db_disconnect($db);
     include("./footer.php");

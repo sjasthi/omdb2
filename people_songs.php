@@ -15,9 +15,9 @@ require_once __DIR__ . '/security.php';
 <div class="right-content">
     <div class="container">
 
-      <h3 style = "color: #01B0F1;">Songs -> Songs List with People</h3>
 
-        <h3><img src="images/movies.png" style="max-height: 35px;" />Songs List with People</h3>
+
+
 
         <table id="info" cellpadding="0" cellspacing="0" border="0"
             class="datatable table table-striped table-bordered datatable-style table-hover"
@@ -28,9 +28,9 @@ require_once __DIR__ . '/security.php';
                         <th>Artitst</th>
                         <th>Title</th>
                         <th>role</th>
-                        
-                       
-                       
+
+
+
 
 
                 </tr>
@@ -57,8 +57,8 @@ $result = db_query($db, $sql);
                                 <td>' . h($row["screen_name"]) . '</td>
                                 <td>' . h($row["title"]) . '</td>
                                 <td>' . h($row["role"]) . '</td>
-                                
-                                
+
+
                             </tr>';
                     }//end while
                 }//end if
@@ -75,7 +75,7 @@ $result = db_query($db, $sql);
 
         <script type="text/javascript" language="javascript">
     $(document).ready( function () {
-        
+
         $('#info').DataTable( {
             dom: 'lfrtBip',
             buttons: [
@@ -87,7 +87,7 @@ $result = db_query($db, $sql);
         $('#info thead tr:eq(1) th').each( function (i) {
             var title = $(this).text();
             $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-    
+
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table
@@ -97,18 +97,18 @@ $result = db_query($db, $sql);
                 }
             } );
         } );
-    
+
         var table = $('#info').DataTable( {
             orderCellsTop: true,
             fixedHeader: true,
             retrieve: true
         } );
-        
+
     } );
 
 </script>
 
-        
+
 
  <style>
    tfoot {

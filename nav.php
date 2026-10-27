@@ -3,19 +3,19 @@ require_once __DIR__ . '/initialize.php';
 $nav_selected = $nav_selected ?? '';
 $left_selected = $left_selected ?? '';
 $left_buttons = $left_buttons ?? 'NO';
-$document_title = ($page_title ?? '') !== '' && $page_title !== 'The Cow Layer'
-    ? $page_title : 'Online Movie Database (OMDB)';
+$document_title = ui_page_info()[0] . ' | OMDB';
 $navigation = [
     ['HOME','index.php','home.png','Home'], ['MOVIES','movies.php','movies.png','Movies'],
     ['PEOPLE','people.php','people.png','People'], ['SONGS','songs.php','songs.png','Songs'],
-    ['REPORTS','reports.php','reports.png','Reports'], ['search','search_data.php','search.png','Search'],
-    ['SETUP','setup.php','setup.png','Setup'], ['ABOUT','about.php','about.png','About'],
+    ['REPORTS','reports.php','reports.png','Reports'], ['search','advance_movie_search.php','search.png','Search'],
+    ['SETUP','setup.php','setup.png','Admin'], ['ABOUT','about.php','about.png','About'],
     ['GAMES','games.php','puzzles.png','Games'], ['HELP','help.php','help.png','Help']
 ];
 $sidebars = ['MOVIES'=>'left_menu_movies.php','LIST'=>'left_menu_movies.php','PEOPLE'=>'left_menu_people.php',
     'SONGS'=>'left_menu_songs.php','REPORTS'=>'left_menu_reports.php','PUZZLES'=>'left_menu_puzzles.php',
     'GAMES'=>'left_menu_games.php','search_data'=>'left_search_data.php'];
-$sidebar = $left_buttons === 'YES' ? ($sidebars[$nav_selected] ?? null) : null;
+$admin_navigation = $nav_selected === 'SETUP' && is_admin();
+$sidebar = $admin_navigation ? 'admin' : ($left_buttons === 'YES' ? ($sidebars[$nav_selected] ?? null) : null);
 ?>
 <!doctype html>
 <html lang="en">
@@ -30,12 +30,14 @@ $sidebar = $left_buttons === 'YES' ? ($sidebars[$nav_selected] ?? null) : null;
     <link rel="stylesheet" href="ajax/select2/dist/css/select2.min.css">
     <link rel="stylesheet" href="styles/mainStyleSheet.css">
     <link rel="stylesheet" href="styles/responsive.css">
+    <link rel="stylesheet" href="styles/ui.css">
     <script src="ajax/jquery-3.2.1.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap.min.js"></script>
     <script src="ajax/select2/dist/js/select2.min.js"></script>
     <script src="scripts/layout.js" defer></script>
+    <script src="scripts/catalog-ui.js" defer></script>
 </head>
 <body class="omdb-app">
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -52,7 +54,7 @@ $sidebar = $left_buttons === 'YES' ? ($sidebars[$nav_selected] ?? null) : null;
                 if ($key === 'SETUP' && !is_admin()) { continue; }
                 $active = $nav_selected === $key || ($key === 'search' && $nav_selected === 'search_data'); ?>
                 <li><a href="<?php echo h($href); ?>"<?php echo $active ? ' aria-current="page"' : ''; ?>>
-                    <img src="images/<?php echo h($icon); ?>" alt="" width="28" height="28"><span><?php echo h($label); ?></span>
+                    <span><?php echo h($label); ?></span>
                 </a></li>
             <?php } ?>
             <?php if (is_logged_in()) { ?>
@@ -63,12 +65,13 @@ $sidebar = $left_buttons === 'YES' ? ($sidebars[$nav_selected] ?? null) : null;
             </ul>
         </nav>
     </header>
-    <form class="site-search" method="post" action="search.php" role="search">
-        <?php echo csrf_field(); ?>
+    <div class="utility-bar"><span class="account-badge"><?php echo is_admin() ? 'Administrator' : (is_logged_in() ? 'Member' : 'Guest'); ?></span>
+    <form class="site-search" method="get" action="search.php" role="search">
         <label class="sr-only" for="global-search">Search OMDB</label>
-        <input type="search" id="global-search" name="text_search" class="form-control" placeholder="Search OMDB">
+        <input type="search" id="global-search" name="text_search" class="form-control" maxlength="500" placeholder="Search titles, people, or cast + director">
         <button type="submit" name="search" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
-    </form>
+    </form></div>
     <div class="app-layout<?php echo $sidebar ? ' with-sidebar' : ''; ?>">
-        <?php if ($sidebar) { ?><aside class="section-sidebar" aria-label="Section navigation"><?php include __DIR__ . '/' . $sidebar; ?></aside><?php } ?>
+        <?php if ($sidebar) { ?><aside class="section-sidebar" aria-label="Section navigation"><?php if ($sidebar === 'admin') { ui_section_nav('ADMIN', basename($_SERVER['SCRIPT_NAME']) === 'sign_up.php' ? 'ACCOUNTS' : 'IMPORT'); } else { include __DIR__ . '/' . $sidebar; } ?></aside><?php } ?>
         <main id="main-content" class="omdb-content" tabindex="-1">
+            <?php ui_page_header(); ui_feedback(); ?>

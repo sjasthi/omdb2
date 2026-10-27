@@ -19,34 +19,34 @@ require_once __DIR__ . '/security.php';
         }
         return $unique;
     }
-  
+
  ?>
 
 
 
 <form id="basecharAdmin" action="games.php" method= "POST"><?php echo csrf_field(); ?>
 
-<h2>Welcome to the Base Characters Game!</h1>
+
 <h4>Enter a word to find its base characters and all the movies that contain them.</h3>
 
 <?php
 if (isset($_POST['basecharinput']) && !empty($_POST['basecharinput'])){
     $basecharinput = $_POST['basecharinput'];
     $basecharJSON = strtolower(str_replace(" ", "", $basecharinput));
-      
+
     //Make API call to find base_chars
     $jsonLog = "http://indic-wp.thisisjava.com/api/getBaseCharacters.php?string=".$basecharJSON."&language=Telugu";
     $jsonfile = file_get_contents($jsonLog);
     $decodedData = json_decode(strstr($jsonfile, '{'));
     $base_charRaw = implode("", $decodedData->data);
     $base_chars = implode(", ", $decodedData->data);
-    
+
     //Make API call to find length of string for length
     $jsonLength = "http://indic-wp.thisisjava.com/api/getLength.php?string=".$basecharJSON."&language=Telugu";
     $jsonfile= file_get_contents($jsonLength);
     $decoder = json_decode(strstr($jsonfile, '{'));
     $length = intval($decoder->data);
-    
+
     echo "<p>The base characters of " . h($basecharinput) . " are: ";
     echo "<b style='color:red'>" . h($base_chars) . "</b>";
     echo "</p>";
@@ -202,54 +202,7 @@ tfoot {
 display: table-header-group;
 }
 </style>
-<script>
-var currentTab = 0; // Current tab is set to be the first tab (0)
-showTab(currentTab); // Display the current tab
 
-function showTab(n) {
-  // This function will display the specified tab of the form ...
-  var x = document.getElementsByClassName("tab");
-  x[n].style.display = "block";
-  // ... and fix the Previous/Next buttons:
-  if (n == 0) {
-    document.getElementById("prevBtn").style.display = "none";
-  } else {
-    document.getElementById("prevBtn").style.display = "inline";
-  }
-  if (n == (x.length - 1)) {
-    document.getElementById("nextBtn").innerHTML = "Submit";
-  } else {
-    document.getElementById("nextBtn").innerHTML = "Next";
-  }
-  // ... and run a function that displays the correct step indicator:
-  fixStepIndicator(n)
-}
-function nextPrev(n) {
-  // This function will figure out which tab to display
-  var x = document.getElementsByClassName("tab");
-  // Hide the current tab:
-  x[currentTab].style.display = "none";
-  // Increase or decrease the current tab by 1:
-  currentTab = currentTab + n;
-  // if you have reached the end of the form... :
-  if (currentTab >= x.length) {
-    //...the form gets submitted:
-    document.getElementById("basecharAdmin").submit();
-    return false;
-  }
-  // Otherwise, display the correct tab:
-  showTab(currentTab);
-}
-function fixStepIndicator(n) {
-  // This function removes the "active" class of all steps...
-  var i, x = document.getElementsByClassName("step");
-  for (i = 0; i < x.length; i++) {
-    x[i].className = x[i].className.replace(" active", "");
-  }
-  //... and adds the "active" class to the current step:
-  x[n].className += " active";
-}
-</script>
 
 
 

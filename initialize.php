@@ -9,6 +9,7 @@ define('SERVER_ROOT_PATH', DEPLOYMENT_URL);
 define('WWW_ROOT', rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/'));
 define('DEBUG_MODE', 'OFF');
 require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/ui.php';
 require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/query_functions.php';
 require_once __DIR__ . '/validation_functions.php';

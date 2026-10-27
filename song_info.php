@@ -4,7 +4,7 @@ require_once __DIR__ . '/security.php';
 <?php
 $nav_selected = "SONGS";
 $left_buttons = "YES";
-$left_selected = "NO";
+$left_selected = "SONGS";
 
 include("./nav.php");
 require 'bin/functions.php';
@@ -93,9 +93,9 @@ media (from songs_media - show the IDs as comma separated list, media_link will 
 // We will fetch it and save it as $movie_id to be used in our queries
 ======================================================================== -->
 <?php
-if (isset($_GET['song_id'])) {
-  $song_id = $_GET['song_id'];
-}
+$song_id=filter_var($_GET['song_id'] ?? null,FILTER_VALIDATE_INT);
+if (!$song_id || $song_id<1) { security_fail(400,'Choose a song from the catalog first.'); }
+if (!db_query($db,'SELECT 1 FROM songs WHERE song_id=?',[$song_id])->num_rows) { security_fail(404,'This song is no longer in the catalog.'); }
 ?>
 
 
@@ -110,7 +110,7 @@ year_made
 
 <div class="right-content">
   <div class="container">
-    <h3 style="color: #01B0F1;">[A.1] Song -> Basic Data</h3>
+
 
 
     <table id="info" cellpadding="0" cellspacing="0" border="0"

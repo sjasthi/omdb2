@@ -37,7 +37,19 @@ See [docs/database.md](docs/database.md) for keys, ownership, deletion behavior,
 
 CSV imports are UTF-8, contain no header, and have at most 10,000 records / 5 MB. Quoted commas and line breaks are supported. An invalid record rolls back the entire upload. Columns: movies = native name, English name, year; people = stage name, first, middle, last, gender; songs = title, lyrics, theme. Existing movie native-title/year pairs are skipped; people and songs are imported as new records.
 
-## Validation
+## Combined movie search
+
+Choose **Search** to filter movies by a cast member and director together. Every filled field is required on the same movie; supporting/cameo cast, partial names, stage names, full names, and legacy role labels are supported. Optional title, lead actor/actress, producer, and music director fields narrow the results further. Results have shareable URLs and 50 movies per page.
+
+The main search box also recognizes phrases such as `movies with Brad Pitt directed by Steven Spielberg` or `movies directed by Steven Spielberg with Brad Pitt`. Other text keeps the ordinary movie/people/song search. This is a local catalog search: the people and their actual credits must already be stored in OMDB. It does not import missing people or guess film credits.
+
+`movie_search.php` contains the shared filter validation, phrase parser, parameterized AND/EXISTS query, and form. Search performs SELECT queries only. Run `php tests/movie-search.php` with the same database environment as the backend tests to check combinations, legacy roles, pagination, input handling, and read-only execution against an automatically removed test database.
+
+## UI and usability
+
+Shared headings, role-aware navigation, notices, forms, and catalog tables are documented in [docs/week8-ui-polish.md](docs/week8-ui-polish.md). Members receive only view actions; administrators receive the management actions for the relevant entity. Direct endpoint authorization remains enforced. Help describes the current workflows and shows admin tools only to administrators. `tests/ui_http_test.py` checks rendered controls and validation using the same isolated HTTP-test environment as the security suite.
+
+## Validation checks
 
 The shared UI adapts to phones, tablets, laptops and desktops, with a collapsible menu below 992px, flexible forms, and local horizontal scrolling for wide tables. See [docs/responsive-ui.md](docs/responsive-ui.md) for the six-size verification matrix and refactoring details. Shared UI assets load locally from `vendor/`; preserve that directory when deploying.
 

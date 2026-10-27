@@ -400,7 +400,7 @@ db_disconnect($db);
     </div>
 
     <div class="card">
-        <h1>ADD AN ANAGRAM</h1>
+
         <div class="subtitle">Admin anagram creator</div>
 
         <?php if ($success !== ''): ?>

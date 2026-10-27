@@ -27,7 +27,7 @@ function is_get_request() { return ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET';
 function display_errors($errors = []) {
     $output = '';
     if ($errors) {
-        $output = '<div class="errors">Please fix the following errors:<ul>';
+        $output = '<div class="notice notice--error errors" role="alert" tabindex="-1"><strong>Please check these details:</strong><ul>';
         foreach ($errors as $error) { $output .= '<li>' . h($error) . '</li>'; }
         $output .= '</ul></div>';
     }

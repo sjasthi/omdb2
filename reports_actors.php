@@ -21,9 +21,9 @@ if (!isset($_SESSION['username'])) {
 <div class="right-content">
     <div class="container">
 
-      <h3 style = "color: #01B0F1;">Prince's Actors Page</h3>
 
-        <h3><img src="images/trivia.png" style="max-height: 35px;" />Which Actors Films are to be viewed?</h3>
+
+
 
         <form action="reports_actors.php" method="get">
         Actor Name: <input type="text" name="name"><br>

@@ -13,8 +13,16 @@ function security_fail(int $status, string $message): void {
         ob_end_clean();
     }
     http_response_code($status);
-    header('Content-Type: text/plain; charset=utf-8');
-    echo $message;
+    if (PHP_SAPI === 'cli') { echo $message; exit; }
+    header('Content-Type: text/html; charset=utf-8');
+    $escape = static function ($value) { return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); };
+    $root = rtrim(str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+    $title = [400=>'Check your details',403=>'Access unavailable',404=>'Page not found',405=>'Open the form first',500=>'Something went wrong'][$status] ?? 'Unable to complete this request';
+    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'.$escape($title).' | OMDB</title>'
+        .'<link rel="stylesheet" href="'.$escape($root.'/styles/ui.css').'"></head><body class="error-screen"><main class="error-card"><a href="'.$escape($root.'/index.php').'">OMDB · Home</a>'
+        .'<h1>'.$escape($title).'</h1><div class="notice notice--error" role="alert">'.$escape($message).'</div>'
+        .'<p>Your request could not be completed. Use your browser’s Back button to return to the form, or choose a page below.</p>'
+        .'<div class="form-actions"><a class="btn btn-primary" href="'.$escape($root.'/index.php').'">Home</a><a class="btn btn-default" href="'.$escape($root.'/help.php').'">Help</a></div></main></body></html>';
     exit;
 }
 set_exception_handler(function (Throwable $error): void {
@@ -102,7 +110,7 @@ function require_admin_write(): void {
 // Includes are not HTTP endpoints. Apache also denies these paths.
 $internal_files = ['security.php', 'initialize.php', 'database.php', 'db_credentials.php',
     'db_credentials.example.php', 'functions.php', 'user_functions.php', 'query_functions.php',
-    'validation_functions.php', 'api_methods.php', 'catalog.php', 'nav.php', 'footer.php',
+    'validation_functions.php', 'api_methods.php', 'catalog.php', 'movie_search.php', 'ui.php', 'nav.php', 'footer.php',
     'left_menu_games.php', 'left_menu_movies.php', 'left_menu_people.php',
     'left_menu_puzzles.php', 'left_menu_reports.php', 'left_menu_songs.php', 'left_search_data.php'];
 if (in_array(basename($_SERVER['SCRIPT_FILENAME'] ?? ''), $internal_files, true)

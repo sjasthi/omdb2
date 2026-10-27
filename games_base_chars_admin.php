@@ -175,7 +175,7 @@ include("./nav.php");
 
 <div class="right-content">
     <div class="container">
-        <h2 style="color:#01B0F1;">Base Characters Admin</h2>
+
         <p>Enter a Telugu word to find its base characters and matching movies.</p>
 
         <?php if ($error !== '') { ?>

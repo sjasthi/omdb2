@@ -1,120 +1,26 @@
 <?php
-require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/initialize.php';
+$nav_selected = 'SONGS'; $left_buttons = 'YES'; $left_selected = 'SONGS';
+$year_filter = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT, ['options'=>['min_range'=>1888,'max_range'=>2155]]);
+include __DIR__ . '/nav.php';
 ?>
-<?php
-  $nav_selected = "SONGS";
-  $left_buttons = "YES";
-  $left_selected = "SONGS";
+<div class="page-actions">
+<?php if (is_admin()) { ?>
+    <a class="btn btn-primary" href="create_song.php">Create song</a>
 
-  include("./nav.php");
-
- ?>
-
- <div class="right-content">
-    <div class="container">
-
-      <h3 style = "color: #01B0F1;">Songs --> Songs List</h3>
-
-
-      <?php
-        if (is_admin())
-        { ?>
-         <a class="btn btn-primary" href="create_song.php"><i class="fa fa-plus" aria-hidden="true"></i> Create song</a>
-      <?php } ?>
-    <br>
-
-            <table id="info" cellpadding="0" cellspacing="0" border="0"
-                class="datatable table table-striped table-bordered datatable-style table-hover"
-                width="100%" >
-                  <thead>
-                    <tr id="table-first-row">
-                            <th>id</th>
-                            <th>Song Name</th>
-                            <th>Lyrics</th>
-                            <th>Theme</th>
-                            <th> Actions </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-
-            </table>
-            <script type="text/javascript" language="javascript">
-        $(document).ready( function () {
-
-
-
-            $('#info').DataTable( {
-                "processing" : true,
-                'ajax': 'songs_ajax.php',
-                "columns" : [
-                  {"data" : "song_id"},
-                  {"data" : "title"},
-                  {"data" : "lyrics"},
-                  {"data" : "theme"},
-                ],
-
-       columnDefs: [
-      { targets: [0, 1, 2, 3], render: $.fn.dataTable.render.text() },
-    {
-        targets: 4,
-        render: function (data, type, row) {
-           return '<a title="View" class="btn btn-info btn-sm" href="song_info.php?song_id=' + encodeURIComponent(row.song_id) + '"><i class="fa fa-eye"></i></a> '
-    + (<?php echo is_admin() ? 'true' : 'false'; ?> ? '<a title="Modify" class="btn btn-warning btn-sm" href="modify_song.php?song_id=' + encodeURIComponent(row.song_id) + '"><i class="fa fa-pencil"></i></a> '
-    + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_song.php?song_id=' + encodeURIComponent(row.song_id) + '"><i class="fa fa-close"></i></a>' : '');
-        }
-    }
-],
-
-
-                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                dom: 'lfrtBip',
-                buttons: [
-                    'copy', 'excel', 'csv', 'pdf'
-                ] }
-            );
-
-            $('#info thead tr').clone(true).appendTo( '#info thead' );
-            $('#info thead tr:eq(1) th').each( function (i) {
-                var title = $(this).text();
-                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-
-                $( 'input', this ).on( 'keyup change', function () {
-                    if ( table.column(i).search() !== this.value ) {
-                        table
-                            .column(i)
-                            .search( this.value )
-                            .draw();
-                    }
-                } );
-            } );
-
-            var table = $('#info').DataTable( {
-                orderCellsTop: true,
-                fixedHeader: true,
-                retrieve: true,
-
-            } );
-
-        } );
-
-    </script>
-
-
-
-
-
-     <style>
-       tfoot {
-         display: table-header-group;
-       }
-     </style>
-
-
-    </div>
+<?php } ?>
+    <a class="btn btn-default" href="search_data.php?type=songs">Search songs</a>
 </div>
 
-<?php
-    db_disconnect($db);
-    include("./footer.php");
-?>
+<table id="catalog-table" class="table table-striped catalog-table" data-catalog="song">
+    <caption class="sr-only">Songs catalog</caption>
+    <thead><tr><th scope="col">ID</th><th scope="col">Title</th><th scope="col">Lyrics</th><th scope="col">Theme</th><th scope="col"><?php echo is_admin() ? 'Actions' : 'Details'; ?></th></tr></thead>
+    <tbody></tbody>
+</table>
+<p class="catalog-status" role="status">Loading the catalog…</p>
+<script type="application/json" id="catalog-config"><?php echo js_value([
+    'kind'=>'song', 'ajax'=>'songs_ajax.php', 'columns'=>[['data'=>'song_id','label'=>'ID'],['data'=>'title','label'=>'Title'],['data'=>'lyrics','label'=>'Lyrics'],['data'=>'theme','label'=>'Theme']],
+    'actions'=>array_merge([['label'=>'View','path'=>'song_info.php','class'=>'btn-default']], is_admin() ? [['label'=>'Edit','path'=>'modify_song.php','class'=>'btn-default'],['label'=>'Credits','path'=>'songs_people_list.php','class'=>'btn-default'],['label'=>'Delete','path'=>'delete_song.php','class'=>'btn-danger']] : [])
+]); ?></script>
+<noscript><p class="notice notice--info">Enable JavaScript to browse and filter the catalog table. You can also use <a href="advance_movie_search.php">movie search</a>.</p></noscript>
+<?php db_disconnect($db); include __DIR__ . '/footer.php'; ?>

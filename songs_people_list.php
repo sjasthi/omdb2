@@ -20,6 +20,7 @@ try {
     $song_id = catalog_id($_POST['song_id'] ?? $_GET['song_id'] ?? null);
     if (isset($_POST['add']) || isset($_POST['delete'])) {
         catalog_relationships($db, 'song_people', $song_id, $_POST);
+        echo ui_notice('Song credits updated. Review the list below.','success');
     }
 } catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
 
@@ -27,7 +28,7 @@ try {
 
     $sql2 = db_query($db, ['sql' => 'select title from songs where song_id = ?;', 'params' => [$song_id]]);
     $name = mysqli_fetch_assoc($sql2);
-  
+
   ?>
 
 
@@ -92,7 +93,7 @@ try {
             <input type="hidden" name="song_id" value="<?php echo h($song_id); ?>" />
             <input type="checkbox" name="add" id='addFinal' value="add" style="display:none;" required>
             </form>
-            
+
               <button type="button" name="check" id="check" onClick="selectAll()">Check/Uncheck All</button>
               <button form="add_person" type="submit" style="margin-left:0px;" onclick="return checkAdd()">Add</button>
         </form>
@@ -127,8 +128,8 @@ if(mysqli_num_rows($sql)>0){
             <td><?php echo h($row['role']); ?></td>
 
             </tr>
-            
-            
+
+
     <?php
     $count++;
         }
@@ -142,7 +143,7 @@ if(mysqli_num_rows($sql)>0){
               <button type="button" name="check" id="check" onClick="deleteAll()">Check/Uncheck All</button>
               <button form="delete_person" type="submit" style="margin-left:0px;" onclick="return checkDelete()">Delete</button>
             </form>
-    
+
 <?php
     }
 ?>

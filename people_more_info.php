@@ -24,7 +24,7 @@ if (isset($_GET['people_id'])) {
 
 <div class="right-content">
   <div class="container">
-    <h3 style="color: #01B0F1;"> People More Data </h3>
+
 
 
     <table id="info" cellpadding="0" cellspacing="0" border="0"

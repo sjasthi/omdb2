@@ -13,7 +13,7 @@ require_once __DIR__ . '/security.php';
     $flag = "";
 $native_name = "";
 $winner = null;
-    
+
 
     function mb_count_chars($input) {
         $l = mb_strlen($input, 'utf8');
@@ -35,7 +35,9 @@ $winner = null;
         FILTER_VALIDATE_INT
     );
 
-    $guess = trim($_POST['input'] ?? '');
+    $guess = $_POST['input'] ?? '';
+    if (!is_string($guess) || !mb_check_encoding($guess,'UTF-8') || mb_strlen($guess,'UTF-8')>180) { security_fail(400,'Enter a movie title of at most 180 characters.'); }
+    $guess = trim($guess);
 
     // Normalize guess by removing spaces and making it lowercase
     $normalized_guess = mb_strtolower(
@@ -90,19 +92,26 @@ $winner = null;
 <?php
 $nav_selected='GAMES'; $left_buttons='YES'; $left_selected='ANAGRAMUSER';
 $page_title='Anagrammer · OMDB';
+// Clues come from the catalog rather than trusting hidden fields submitted by a browser.
+if ($movie_id) { $anagrams=array_column(db_query($db,'SELECT anagram FROM movie_anagrams WHERE movie_id=? ORDER BY anagram_id LIMIT 3',[(int)$movie_id])->fetch_all(MYSQLI_ASSOC),'anagram'); }
 include __DIR__ . '/nav.php';
+if ($winner instanceof mysqli_result && $winner->num_rows === 1) { echo ui_notice('Correct! You solved the anagram.','success'); }
+if (!$movie_id || !$anagrams) {
+    echo ui_notice('No anagram puzzles are available yet. Try another game or ask an administrator to add one.');
+    if (is_admin()) { echo '<a class="btn btn-primary" href="createTheAnagram.php">Add anagram</a>'; }
+    include __DIR__ . '/footer.php'; exit;
+}
+
 ?>
 <link rel="stylesheet" href="vendor/toastr/toastr.min.css">
 <link rel="stylesheet" href="vendor/animate/animate.min.css">
 <link rel="stylesheet" href="basechars.css">
 <section class="anagram-game">
-<h1> ANAGRAMMER </h1>
+
     <div id="clues">
     <?php
 if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
-    echo '<h5 style="color: purple;">
-            Welcome! Guess the name of the movie based on the following clues:
-          </h5><br>';
+    echo '<p>Guess the movie’s native title from the anagram below.</p>';
 }
 ?>
     </div>
@@ -161,10 +170,10 @@ if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
         let currentGuess = [];
         let nextLetter = 0;
         <?php if(empty($flag)) { ?>
-        const characterCount = <?php echo h(mb_strlen($anagrams[0], 'utf8')); ?>;
-        var passedArray = <?php echo json_encode($anagrams);?>;
+        const characterCount = <?php echo h(mb_strlen($anagrams[0] ?? '', 'utf8')); ?>;
+        var passedArray = <?php echo js_value($anagrams); ?>;
         let display = document.getElementById("display-board")
-            
+
         for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
             let display_row = document.createElement("div")
             display_row.className = "display-row"
@@ -173,7 +182,7 @@ if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
                 let display_box = document.createElement("div")
                 display_box.className = "display-box"
                 var character = characters.charAt(j);
-                display_box.innerHTML = character
+                display_box.textContent = character
                 display_row.appendChild(display_box)
             }
             display.appendChild(display_row)
@@ -187,78 +196,40 @@ if (!($winner instanceof mysqli_result) || $winner->num_rows != 1) {
             row.setAttribute("method", "post")
             row.setAttribute("id", "anagrammer")
             let box = document.createElement("input")
-            box.className = "input"
+            box.className = "form-control"
+            box.setAttribute('aria-label','Movie native title')
             box.setAttribute("name", "input")
             box.setAttribute("minlength", "1")
-            box.setAttribute("maxlength", "100")
+            box.setAttribute("maxlength", "180")
             box.setAttribute("placeholder", "Guess The Movie")
             box.setAttribute("required", "")
             row.appendChild(box)
             let submit = document.createElement("button")
-            submit.innerHTML = "Good Luck!"
-            submit.className = "submit-button"
+            submit.textContent = "Check answer"
+            submit.className = "btn btn-primary"
+            submit.className = "btn btn-primary"
             submit.setAttribute("type","submit")
             submit.setAttribute("form", "anagrammer")
             submit.setAttribute("name", "movie_id")
-            submit.setAttribute("value", <?php echo h($movie_id);?>)
+            submit.setAttribute("value", <?php echo js_value((int)$movie_id); ?>)
             let input = document.createElement("input")
             input.setAttribute("type", "hidden")
             input.setAttribute("name", "anagrams[]")
-            input.setAttribute("value", <?php echo json_encode($anagrams); ?>)
+            input.setAttribute("value", <?php echo js_value($anagrams); ?>)
             input.setAttribute("form", "anagrammer")
             board.appendChild(row)
             board.appendChild(submit)
             board.appendChild(input)
         }
-        <?php } else { ?>
-            let board = document.getElementById("game-board")
-            let row = document.createElement("form")
-            row.className = "letter-row"
-            row.setAttribute("action","createTheAnagram.php")
-            row.setAttribute("name","createAnagram")
-            row.setAttribute("method", "post")
-            row.setAttribute("id", "anagrammer")
-            row.innerHTML = "You win! Would you like to contribute an anagram?"
-            let submit = document.createElement("button")
-            submit.innerHTML = "Yes!"
-            submit.className = "submit-button"
-            submit.setAttribute("type","submit")
-            submit.setAttribute("form", "anagrammer")
-            board.appendChild(row)
-            board.appendChild(submit)
+        <?php } elseif (is_admin()) { ?>
+            const board = document.getElementById('game-board');
+            const link = document.createElement('a'); link.className='btn btn-default';
+            link.href='createTheAnagram.php'; link.textContent='Add an anagram'; board.append(link);
         <?php } ?>
 	}
     initBoard()
 
-    var container = document.getElementsByClassName("letter-row")[0];
-    container.onkeyup = function(e) {
-        var target = e.srcElement || e.target;
-        var maxLength = parseInt(target.attributes["maxlength"].value);
-        var myLength = target.value.length;
-        if (myLength >= maxLength) {
-            var next = target;
-            while (next = next.nextElementSibling) {
-                if (next == null)
-                    break;
-                if (next.tagName.toLowerCase() === "input") {
-                    next.focus();
-                    break;
-                }
-            }
-        }
-        // Move to previous field if empty (user pressed backspace)
-        else if (myLength === 0) {
-            var previous = target;
-            while (previous = previous.previousElementSibling) {
-                if (previous == null)
-                    break;
-                if (previous.tagName.toLowerCase() === "input") {
-                    previous.focus();
-                    break;
-                }
-            }
-        }
-    }
+
 </script>
 <script type="text/javascript" language="javascript">
 $(document).ready( function () {
@@ -285,5 +256,6 @@ var table = $('#info').DataTable( {
     db_disconnect($db);
 ?>
 
+<a class="btn btn-default" href="anagrammer.php">New puzzle</a>
 </section>
 <?php include __DIR__ . '/footer.php'; ?>

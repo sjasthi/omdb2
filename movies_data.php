@@ -15,7 +15,7 @@ require_once __DIR__ . '/security.php';
 <div class="right-content">
     <div class="container">
 
-      <h3 style = "color: #01B0F1;">Movies -> Movies Data </h3>
+
 
         <img src="images/movies.png" style="max-height: 35px;" />
 

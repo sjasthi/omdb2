@@ -110,9 +110,7 @@ include("./nav.php");
 
 <div class="container">
 
-    <h2 style="color: darkgoldenrod;">
-        Delete Movie
-    </h2>
+
 
     <div
         style="

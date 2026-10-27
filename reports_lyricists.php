@@ -20,9 +20,9 @@ if (!isset($_SESSION['username'])) {
 <div class="right-content">
     <div class="container">
 
-      <h3 style = "color: #01B0F1;">Tom's Lyricist Page</h3>
 
-        <h3><img src="images/trivia.png" style="max-height: 35px;" />Lyricist Page</h3>
+
+
 
         <form action="reports_lyricists.php" method="get">
           Lyricist's Name: <input type="text" name="name"><br>

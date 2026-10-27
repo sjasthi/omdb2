@@ -3,11 +3,12 @@ require_once __DIR__ . '/database.php';
 
 function catalog_text(array $input, string $key, int $limit, bool $required = false): string {
     $value = $input[$key] ?? '';
-    if (!is_string($value)) { throw new InvalidArgumentException('Invalid form value.'); }
+    $label = preg_replace('/\d+$/','',str_replace('_',' ', $key));
+    $label = ['native name'=>'native title','english name'=>'English title','title'=>'song title'][$label] ?? $label;
+    if (!is_string($value) || !mb_check_encoding($value, 'UTF-8')) { throw new InvalidArgumentException('Enter plain text for the ' . $label . '.'); }
     $value = trim($value);
-    if (($required && $value === '') || mb_strlen($value, 'UTF-8') > $limit) {
-        throw new InvalidArgumentException('Check required fields and text lengths.');
-    }
+    if ($required && $value === '') { throw new InvalidArgumentException('Enter the ' . $label . '.'); }
+    if (mb_strlen($value, 'UTF-8') > $limit) { throw new InvalidArgumentException(ucfirst($label) . ' must be ' . $limit . ' characters or fewer.'); }
     return $value;
 }
 function catalog_id($value): int {
@@ -21,8 +22,8 @@ function catalog_insert_movie(mysqli $db, array $input): int {
     $native = catalog_text($input, 'native_name', 180, true);
     $english = catalog_text($input, 'english_name', 180, true);
     $year = filter_var($input['year'] ?? '', FILTER_VALIDATE_INT);
-    if (!$year || $year < 1888 || $year > min(2155, (int)date('Y') + 10)) {
-        throw new InvalidArgumentException('Enter a valid movie year.');
+    if (!$year || $year < 1901 || $year > min(2155, (int)date('Y') + 10)) {
+        throw new InvalidArgumentException('Enter a release year from 1901 to ' . min(2155, (int)date('Y') + 10) . '.');
     }
     $id = db_insert($db, 'INSERT INTO movies (native_name, english_name, year_made) VALUES (?, ?, ?)', [$native, $english, $year]);
     // Graphemes keep Telugu combining marks together and make imports work offline.
@@ -174,7 +175,7 @@ function catalog_update_children(mysqli $db, string $kind, int $id, array $input
 function catalog_update_movie(mysqli $db, array $input): void {
     $id=catalog_id($input['movie_id'] ?? null);
     $year=filter_var($input['year_update'] ?? '',FILTER_VALIDATE_INT);
-    if (!$year || $year<1888 || $year>min(2155,(int)date('Y')+10)) { throw new InvalidArgumentException('Enter a valid movie year.'); }
+    if (!$year || $year<1901 || $year>min(2155,(int)date('Y')+10)) { throw new InvalidArgumentException('Enter a release year from 1901 to ' . min(2155,(int)date('Y')+10) . '.'); }
     db_query($db,'UPDATE movies SET english_name=?,year_made=? WHERE movie_id=?',[
         catalog_text($input,'english_name_update',180,true),$year,$id]);
     if (isset($input['native_name_update'])) {

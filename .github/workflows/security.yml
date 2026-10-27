@@ -36,4 +36,6 @@ jobs:
           OMDB_DB_USER: root
           OMDB_DB_PASS: ''
           OMDB_DB_NAME: unused_configuration
-        run: php tests/backend.php
+        run: |
+          php tests/backend.php
+          php tests/movie-search.php

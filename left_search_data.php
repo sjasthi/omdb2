@@ -1,29 +1,3 @@
 <?php
-require_once __DIR__ . '/security.php';
-?>
-<div id="menu-left">
-
-    <form method="post"><?php echo csrf_field(); ?>
-  	<div <?php if($left_selected == "SONGS")
-  	{ echo 'class="menu-left-current-page"'; } ?>>
-    <button type="submit" name="songs"><img src="./images/songs.png">
-  	<br/>Songs<br/> </button></div>
-
-</br>
-    	<div <?php if($left_selected == "MOVIES")
-    	{ echo 'class="menu-left-current-page"'; } ?>>
-    	<button type="submit" name="movies"><img src="./images/movies.png">
-    	<br/>Movies<br/></button>
-    </div>
-
-</br>
-      	<div <?php if($left_selected == "PEOPLE")
-      	{ echo 'class="menu-left-current-page"'; } ?>>
-      	<button type="submit" name="people"><img src="./images/people.png">
-      	<br/>People<br/></button>
-      </div>
-    </form>
-
-
-
-</div>
+require_once __DIR__ . '/ui.php';
+ui_section_nav('SEARCH', $left_selected ?? '');

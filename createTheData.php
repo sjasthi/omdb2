@@ -77,17 +77,21 @@ $stmt->close();
 /*
  * Read submitted values safely.
  */
-$anagram          = trim($_POST['anagram'] ?? '');
-$keyword          = trim($_POST['keyword'] ?? '');
-$movie_quote_name = trim($_POST['movie_quote_name'] ?? '');
-$movie_trivia_name = trim($_POST['movie_trivia_name'] ?? '');
-$m_link            = trim($_POST['m_link'] ?? '');
-$m_link_type       = trim($_POST['m_link_type'] ?? '');
-$language          = trim($_POST['language'] ?? '');
-$country           = trim($_POST['country'] ?? '');
-$genre             = trim($_POST['genre'] ?? '');
-$plot              = trim($_POST['plot'] ?? '');
-$tag_line          = trim($_POST['tag_line'] ?? '');
+require_once __DIR__ . '/catalog.php';
+try {
+    $anagram=catalog_text($_POST,'anagram',180);
+    $keyword=catalog_text($_POST,'keyword',15);
+    $movie_quote_name=catalog_text($_POST,'movie_quote_name',300);
+    $movie_trivia_name=catalog_text($_POST,'movie_trivia_name',300);
+    $m_link=catalog_text($_POST,'m_link',100);
+    $m_link_type=catalog_text($_POST,'m_link_type',10);
+    $language=catalog_text($_POST,'language',10);
+    $country=catalog_text($_POST,'country',20);
+    $genre=catalog_text($_POST,'genre',15);
+    $plot=catalog_text($_POST,'plot',500);
+    $tag_line=catalog_text($_POST,'tag_line',100);
+    if (($m_link === '') !== ($m_link_type === '')) { throw new InvalidArgumentException('Enter both a media link and its type, or leave both fields blank.'); }
+} catch (InvalidArgumentException $error) { security_fail(400,$error->getMessage()); }
 
 
 try {

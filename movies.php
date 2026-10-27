@@ -1,132 +1,26 @@
 <?php
-require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/initialize.php';
+$nav_selected = 'MOVIES'; $left_buttons = 'YES'; $left_selected = 'MOVIES';
+$year_filter = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT, ['options'=>['min_range'=>1888,'max_range'=>2155]]);
+include __DIR__ . '/nav.php';
 ?>
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-}
-// Optional year filter from the Reports page.
-$year_filter = '';
-
-if (isset($_GET['id']) && preg_match('/^\d{4}$/', $_GET['id'])) {
-    $year_filter = $_GET['id'];
-}
-
-
-  $nav_selected = "MOVIES";
-  $left_buttons = "YES";
-  $left_selected = "MOVIES";
-
-
-  include("./nav.php");
-
-
-  ?>
-
-
-<div class="right-content">
-    <div class="container">
-
-      <h3 style = "color: #01B0F1;">Movies -> Movies List</h3>
-      <?php
-      if (is_admin())
-      { ?>
-       <a class="btn btn-primary" href="create_movie.php"><i class="fa fa-plus" aria-hidden="true"></i> Create movie</a>
-       <a class="btn btn-default" href="add_movie_posters.php"><i class="fa fa-file-image-o" aria-hidden="true"></i> Upload posters</a>
-      <?php } ?>
-
-
-<br>
-<br>
-
-        <table id="info" cellpadding="0" cellspacing="0" border="0"
-            class="datatable table table-striped table-bordered datatable-style table-hover"
-            width="100%" >
-              <thead>
-                <tr id="table-first-row">
-                        <th>id</th>
-                        <th>Native Name</th>
-                        <th>English Name</th>
-                        <th>Year </th>
-                        <th> Actions </th>
-                </tr>
-              </thead>
-
-            <tbody>
-
-              </tbody>
-        </table>
-
-
-        <script type="text/javascript" language="javascript">
-    $(document).ready( function () {
-
-
-
-        $('#info').DataTable( {
-            "processing" : true,
-            'ajax': 'movies_ajax.php?year=<?php echo h(urlencode($year_filter)); ?>',
-            "columns" : [
-              {"data" : "movie_id"},
-              {"data" : "native_name"},
-              {"data" : "english_name"},
-              {"data" : "year_made"},
-            ],
-
-            columnDefs: [
-      { targets: [0, 1, 2, 3], render: $.fn.dataTable.render.text() },
-      {  targets: 4,
-         render: function (data, type, row) {
-            return '<a title="View" class="btn btn-info btn-sm" href="movie_info.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-eye"></i></a>'
-                                 + (<?php echo is_admin() ? 'true' : 'false'; ?> ? '<a title="Modify" class="btn btn-warning btn-sm" href="modify.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-pencil"></i></a>'
-                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_movie.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-close"></i></a>'
-                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-music"></i></a>'
-                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class = "fa fa-id-badge"></i></a>'
-                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?movie_id='+encodeURIComponent(row.movie_id)+'"><i class="fa fa-database"></i></a>' : '');
-         }
-
-      }
-    ],
-
-
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            dom: 'lfrtBip',
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf'
-            ] }
-        );
-
-        $('#info thead tr').clone(true).appendTo( '#info thead' );
-        $('#info thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
-
-        var table = $('#info').DataTable( {
-            orderCellsTop: true,
-            fixedHeader: true,
-            retrieve: true,
-
-        } );
-
-    } );
-
-</script>
- <style>
-   tfoot {
-     display: table-header-group;
-   }
- </style>
-
-  <?php
-    db_disconnect($db);
-    include("./footer.php");
-  ?>
+<div class="page-actions">
+<?php if (is_admin()) { ?>
+    <a class="btn btn-primary" href="create_movie.php">Create movie</a>
+    <a class="btn btn-default" href="add_movie_posters.php">Upload posters</a>
+<?php } ?>
+    <a class="btn btn-default" href="advance_movie_search.php">Find movies</a>
+</div>
+<?php if ($year_filter) { echo ui_notice('Showing movies released in ' . $year_filter . '.'); ?><a href="movies.php">Clear year filter</a><?php } ?>
+<table id="catalog-table" class="table table-striped catalog-table" data-catalog="movie">
+    <caption class="sr-only">Movies catalog</caption>
+    <thead><tr><th scope="col">ID</th><th scope="col">Native title</th><th scope="col">English title</th><th scope="col">Year</th><th scope="col"><?php echo is_admin() ? 'Actions' : 'Details'; ?></th></tr></thead>
+    <tbody></tbody>
+</table>
+<p class="catalog-status" role="status">Loading the catalog…</p>
+<script type="application/json" id="catalog-config"><?php echo js_value([
+    'kind'=>'movie', 'ajax'=>'movies_ajax.php?year=' . ($year_filter ?: ''), 'columns'=>[['data'=>'movie_id','label'=>'ID'],['data'=>'native_name','label'=>'Native title'],['data'=>'english_name','label'=>'English title'],['data'=>'year_made','label'=>'Year']],
+    'actions'=>array_merge([['label'=>'View','path'=>'movie_info.php','class'=>'btn-default']], is_admin() ? [['label'=>'Edit','path'=>'modify.php','class'=>'btn-default'],['label'=>'People','path'=>'add_people.php','class'=>'btn-default'],['label'=>'Songs','path'=>'add_song.php','class'=>'btn-default'],['label'=>'More details','path'=>'create_Data.php','class'=>'btn-default'],['label'=>'Delete','path'=>'delete_movie.php','class'=>'btn-danger']] : [])
+]); ?></script>
+<noscript><p class="notice notice--info">Enable JavaScript to browse and filter the catalog table. You can also use <a href="advance_movie_search.php">movie search</a>.</p></noscript>
+<?php db_disconnect($db); include __DIR__ . '/footer.php'; ?>

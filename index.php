@@ -1,118 +1,15 @@
 <?php
-require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/initialize.php';
+$nav_selected='HOME'; $left_buttons='NO';
+$counts=[];
+foreach (['movies','people','songs'] as $table) { $counts[$table]=(int)db_query($db,'SELECT COUNT(*) FROM `'.$table.'`')->fetch_row()[0]; }
+include __DIR__ . '/nav.php';
 ?>
-<?php
-
-  // set the current page to one of the main buttons
-  $nav_selected = "HOME";
-
-  // make the left menu buttons visible; options: YES, NO
-  $left_buttons = "NO";
-
-  // set the left menu button selected; options will change based on the main selection
-  $left_selected = "";
-  include("./nav.php");
-?>
-
-
-
-
-<style>
-table.center {
-    margin-left:auto;
-    margin-right:auto;
-  }
-</style>
-
-
-
-<div class = "container">
-<h2 style = "color: #01B0F1;">Welcome to OMDB </h2>
-
-
-
-
-
-        <?php
-
-            $sql_movies = db_query($db, "select * from movies");
-            $movies_count = mysqli_num_rows($sql_movies);
-
-            $sql_songs = db_query($db, "select * from songs");
-            $songs_count = mysqli_num_rows($sql_songs);
-
-            $sql_people = db_query($db, "select * from people");
-            $people_count = mysqli_num_rows($sql_people);
-
-            ?>
-
-
-
-          
-
-
-            <table class="table">
-                        <thead>
-                          <tr>
-                        <td>Number of movies</td>
-                        <td><?php echo h($movies_count);?></td>
-                        </tr>
-
-                        <tr>
-                      <td>Number of Songs</td>
-                      <td><?php echo h($songs_count);?></td>
-                      </tr>
-
-                      <tr>
-                    <td>Number of People</td>
-                    <td><?php echo h($people_count);?></td>
-                    </tr>
-                        </thead>
-                        <tbody>
-
-
-
-                        </tbody>
-                      </table>
-            <!-- <h3>Number of movies are : <?php //echo $movies_count;?></h3>
-            <h3>Number of Songs are : <?php //echo $songs_count;?></h3>
-            <h3>Number of People are : <?php //echo $people_count;?></h3> -->
+<div class="stat-grid">
+<?php foreach (['movies'=>'Movies','people'=>'People','songs'=>'Songs'] as $key=>$label) { ?>
+    <a class="stat-card" href="<?php echo h($key); ?>.php"><span class="stat-number"><?php echo h(number_format($counts[$key])); ?></span><span><?php echo h($label); ?></span><span class="stat-link">Browse <?php echo h(strtolower($label)); ?> →</span></a>
+<?php } ?>
 </div>
-            <script type="text/javascript" language="javascript">
-              $(document).ready(function() {
-
-                $('#info').DataTable({
-                  dom: 'lfrtBip',
-                  buttons: [
-                    'copy', 'excel', 'csv', 'pdf'
-                  ]
-                });
-
-                $('#info thead tr').clone(true).appendTo('#info thead');
-                $('#info thead tr:eq(1) th').each(function(i) {
-                  var title = $(this).text();
-                  $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-
-                  $('input', this).on('keyup change', function() {
-                    if (table.column(i).search() !== this.value) {
-                      table
-                        .column(i)
-                        .search(this.value)
-                        .draw();
-                    }
-                  });
-                });
-
-                var table = $('#info').DataTable({
-                  orderCellsTop: true,
-                  fixedHeader: true,
-                  retrieve: true
-                });
-
-              });
-            </script>
-
-            <?php
-                db_disconnect($db);
-                include("./footer.php");
-            ?>
+<section class="welcome-panel"><h2>Find the connections</h2><p>Search for a movie by its cast and director, then open a result to explore its credits, songs, and other details.</p><div class="page-actions"><a class="btn btn-primary" href="advance_movie_search.php">Find movies</a><a class="btn btn-default" href="help.php">Getting started</a><?php if (is_admin()) { ?><a class="btn btn-default" href="setup.php">Admin tools</a><?php } ?></div></section>
+<?php if (!is_logged_in()) { ?><p class="notice notice--info">You can browse the public catalog. <a href="login.php">Sign in</a> to use reports and member features.</p><?php } ?>
+<?php db_disconnect($db); include __DIR__ . '/footer.php'; ?>
