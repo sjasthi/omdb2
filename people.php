@@ -1,131 +1,26 @@
 <?php
-require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/initialize.php';
+$nav_selected = 'PEOPLE'; $left_buttons = 'YES'; $left_selected = 'PEOPLE';
+$year_filter = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT, ['options'=>['min_range'=>1888,'max_range'=>2155]]);
+include __DIR__ . '/nav.php';
 ?>
-<?php
-  $nav_selected = "PEOPLE";
-  $left_buttons = "YES";
-  $left_selected = "PEOPLE";
+<div class="page-actions">
+<?php if (is_admin()) { ?>
+    <a class="btn btn-primary" href="create_people.php">Create person</a>
 
-  include("./nav.php");
+<?php } ?>
+    <a class="btn btn-default" href="search_data.php?type=people">Search people</a>
+</div>
 
-  ?>
-
-
-
-<div class="right-content">
-    <div class="container">
-
-      <h3 style = "color: #01B0F1;">People -> People List</h3>
-
-        <h3><img src="images/people.png" style="max-height: 35px;" />People List</h3>
-
-
-          <?php
-            if(is_admin()){
-              ?>
-
-          <a class="btn btn-primary" href="create_people.php"><i class="fa fa-plus" aria-hidden="true"></i> Create person</a>
-          <br><br>
-        <?php } ?>
-
-        <table id="info" cellpadding="0" cellspacing="0" border="0"
-            class="datatable table table-striped table-bordered datatable-style table-hover"
-            width="100%" >
-              <thead>
-                <tr id="table-first-row">
-                        <th>id</th>
-                        <th>Screen Name </th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Last Name</th>
-                        <th>Gender</th>
-                        <th>Image </th>
-                        <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-</tbody>
-
-        </table>
-
-        <script type="text/javascript" language="javascript">
-    $(document).ready( function () {
-
-
-
-        $('#info').DataTable( {
-            "processing" : true,
-            'ajax': 'people_ajax.php',
-            "columns" : [
-              {"data" : "people_id"},
-              {"data" : "stage_name"},
-              {"data" : "first_name"},
-              {"data" : "middle_name"},
-              {"data" : "last_name"},
-              {"data" : "gender"},
-              {"data" : "image_name"},
-            ],
-
-          
-            columnDefs: [
-      { targets: [0, 1, 2, 3, 4, 5, 6], render: $.fn.dataTable.render.text() },
-      {  targets: 7,
-         render: function (data, type, row) {
-            return '<a title="View" class="btn btn-info btn-sm" href="people_info.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-eye"></i></a>'
-                               + (<?php echo is_admin() ? 'true' : 'false'; ?> ? '<a title="Modify" class="btn btn-warning btn-sm" href="modify_people.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-pencil"></i></a>'
-                                 + '<a title="Delete" class="btn btn-danger btn-sm" href="delete_people.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-close"></i></a>'
-                                 + ' <a title="Add Song" class="btn btn-success btn-sm" href="add_song.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-music"></i></a>'
-                                 + '<a title="Add People" class="btn btn-info btn-sm" href="add_people.php?people_id='+encodeURIComponent(row.people_id)+'"><i class = "fa fa-id-badge"></i></a>'
-                                 + '  <a title="Create Data" class="btn btn-default btn-sm" href="create_Data.php?people_id='+encodeURIComponent(row.people_id)+'"><i class="fa fa-database"></i></a>' : '');
-         }
-
-      }
-    ],
-
-
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            dom: 'lfrtBip',
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf'
-            ] }
-        );
-
-        $('#info thead tr').clone(true).appendTo( '#info thead' );
-        $('#info thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
-
-        var table = $('#info').DataTable( {
-            orderCellsTop: true,
-            fixedHeader: true,
-            retrieve: true,
-
-        } );
-
-    } );
-
-</script>
-</script>
-
-
-
- <style>
-   tfoot {
-     display: table-header-group;
-   }
- </style>
-
-<?php
-    db_disconnect($db);
-    include("./footer.php");
-?>
+<table id="catalog-table" class="table table-striped catalog-table" data-catalog="person">
+    <caption class="sr-only">People catalog</caption>
+    <thead><tr><th scope="col">ID</th><th scope="col">Stage name</th><th scope="col">First name</th><th scope="col">Middle name</th><th scope="col">Last name</th><th scope="col">Gender</th><th scope="col"><?php echo is_admin() ? 'Actions' : 'Details'; ?></th></tr></thead>
+    <tbody></tbody>
+</table>
+<p class="catalog-status" role="status">Loading the catalog…</p>
+<script type="application/json" id="catalog-config"><?php echo js_value([
+    'kind'=>'person', 'ajax'=>'people_ajax.php', 'columns'=>[['data'=>'people_id','label'=>'ID'],['data'=>'stage_name','label'=>'Stage name'],['data'=>'first_name','label'=>'First name'],['data'=>'middle_name','label'=>'Middle name'],['data'=>'last_name','label'=>'Last name'],['data'=>'gender','label'=>'Gender']],
+    'actions'=>array_merge([['label'=>'View','path'=>'people_info.php','class'=>'btn-default']], is_admin() ? [['label'=>'Edit','path'=>'modify_people.php','class'=>'btn-default'],['label'=>'Delete','path'=>'delete_people.php','class'=>'btn-danger']] : [])
+]); ?></script>
+<noscript><p class="notice notice--info">Enable JavaScript to browse and filter the catalog table. You can also use <a href="advance_movie_search.php">movie search</a>.</p></noscript>
+<?php db_disconnect($db); include __DIR__ . '/footer.php'; ?>

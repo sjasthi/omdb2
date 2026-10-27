@@ -30,7 +30,7 @@ if (!$movie_id) {
 
 <form id="movieModify" action="modifyTheMovies.php" method= "POST"><?php echo csrf_field(); ?>
 
-<h1>Modify a movie</h1>
+
 <?php
 $native_name = "";
 $english_name = "";
@@ -53,7 +53,7 @@ mysqli_stmt_close($stmt);
 <div class="tab">
 
   <p>
-    <input name="native_name_update"
+    <input name="native_name_update" maxlength="180"
            value="<?php
 echo h($native_name);
 ?>"
@@ -62,7 +62,7 @@ echo h($native_name);
   </p>
 
   <p>
-    <input name="english_name_update"
+    <input name="english_name_update" maxlength="180"
            value="<?php
 echo h($english_name);
 ?>"
@@ -88,7 +88,7 @@ echo h($id);
 </div>
 <div style="overflow:auto;">
   <div  class="text-left">
-           <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Modify Movie</button>
+           <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Save changes</button>
   </div>
 </div>
 <div style="text-align:center;margin-top:40px;">
@@ -135,54 +135,7 @@ input.invalid {
   background-color: #4CAF50;
 }
 </style>
-<script>
-var currentTab = 0; // Current tab is set to be the first tab (0)
-showTab(currentTab); // Display the current tab
 
-function showTab(n) {
-  // This function will display the specified tab of the form ...
-  var x = document.getElementsByClassName("tab");
-  x[n].style.display = "block";
-  // ... and fix the Previous/Next buttons:
-  if (n == 0) {
-    document.getElementById("prevBtn").style.display = "none";
-  } else {
-    document.getElementById("prevBtn").style.display = "inline";
-  }
-  if (n == (x.length - 1)) {
-    document.getElementById("nextBtn").innerHTML = "Submit";
-  } else {
-    document.getElementById("nextBtn").innerHTML = "Next";
-  }
-  // ... and run a function that displays the correct step indicator:
-  fixStepIndicator(n)
-}
-function nextPrev(n) {
-  // This function will figure out which tab to display
-  var x = document.getElementsByClassName("tab");
-  // Hide the current tab:
-  x[currentTab].style.display = "none";
-  // Increase or decrease the current tab by 1:
-  currentTab = currentTab + n;
-  // if you have reached the end of the form... :
-  if (currentTab >= x.length) {
-    //...the form gets submitted:
-    document.getElementById("movieModify").submit();
-    return false;
-  }
-  // Otherwise, display the correct tab:
-  showTab(currentTab);
-}
-function fixStepIndicator(n) {
-  // This function removes the "active" class of all steps...
-  var i, x = document.getElementsByClassName("step");
-  for (i = 0; i < x.length; i++) {
-    x[i].className = x[i].className.replace(" active", "");
-  }
-  //... and adds the "active" class to the current step:
-  x[n].className += " active";
-}
-</script>
 <?php
 db_disconnect($db);
 include("./footer.php");

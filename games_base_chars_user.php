@@ -15,7 +15,7 @@ if (!isset($_SESSION['username'])) {
 
 $nav_selected = "GAMES";
 $left_buttons = "YES";
-$left_selected = "ANAGRAMUSER";
+$left_selected = "BASECHARSUSER";
 
 function normalize_telugu_text($text) {
     $text = trim((string)$text);
@@ -171,7 +171,7 @@ include("./nav.php");
 
 <div class="right-content">
     <div class="container">
-        <h2 style="color:#01B0F1;">Welcome to the Base Characters Game!</h2>
+
         <p>Enter a Telugu word to find its base characters and all the movies that contain them.</p>
 
         <?php if ($error !== '') { ?>

@@ -20,7 +20,7 @@ require_once __DIR__ . '/security.php';
 
 
 
-<h1>Search Movies of People</h1>
+
 <form method="post"><?php echo csrf_field(); ?>
       <div class="form-group">
             <label for="exampleFormControlSelect1">Select Role</label>

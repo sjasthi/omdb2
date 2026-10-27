@@ -13,7 +13,7 @@ require_once __DIR__ . '/security.php';
  <div class="right-content">
     <div class="container">
 
-      <h3 style = "color: #01B0F1;">Media --> Song with Media</h3>
+
 
 
     <br>

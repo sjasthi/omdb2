@@ -1,12 +1,13 @@
 <?php
 require_once __DIR__ . '/initialize.php';
 $error = '';
+$email = '';
 if (is_post_request()) {
     csrf_validate();
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
     if (!is_string($email) || !is_string($password) || !filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
-        $error = 'Invalid email or password.';
+        $error = 'Invalid email or password. Check both fields and try again.';
     } else {
         $email = trim($email);
         $stmt = db_prepare($db, 'SELECT id, email, password, role FROM users WHERE email = ? LIMIT 1');
@@ -39,7 +40,7 @@ if (is_post_request()) {
             }
             redirect_to('index.php');
         }
-        $error = 'Invalid email or password.';
+        $error = 'Invalid email or password. Check both fields and try again.';
     }
 }
 $nav_selected = '';
@@ -47,13 +48,12 @@ $left_buttons = 'NO';
 $left_selected = '';
 include __DIR__ . '/nav.php';
 ?>
-<div class="container" style="max-width:400px">
-    <h2>Sign In</h2>
+<div class="login-panel">
     <?php echo display_errors($error ? [$error] : []); ?>
-    <form action="login.php" method="post">
+    <form class="form-panel" action="login.php" method="post">
         <?php echo csrf_field(); ?>
         <label for="email">Email address</label>
-        <input type="email" id="email" name="email" class="form-control" autocomplete="username" required>
+        <input type="email" id="email" name="email" class="form-control" autocomplete="username" maxlength="100" value="<?php echo h(is_string($email) ? $email : ''); ?>" required>
         <label for="password">Password</label>
         <input type="password" id="password" name="password" class="form-control" autocomplete="current-password" required>
         <button type="submit" class="btn btn-primary">Sign in</button>

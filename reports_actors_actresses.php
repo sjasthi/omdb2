@@ -1,168 +1,21 @@
 <?php
-require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/initialize.php';
+require_login();
+require_once __DIR__ . '/movie_search.php';
+try {
+    $filters=movie_search_filters(['lead_actor'=>$_GET['name1'] ?? '', 'lead_actress'=>$_GET['name2'] ?? '']);
+    $page=filter_var($_GET['page'] ?? 1,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
+    if (!$page) { throw new InvalidArgumentException('Choose a valid results page.'); }
+} catch (InvalidArgumentException $error) { security_fail(400,$error->getMessage()); }
+$results=$filters['lead_actor'] !== '' && $filters['lead_actress'] !== '' ? movie_search_results($db,$filters,$page) : null;
+$nav_selected='REPORTS'; $left_buttons='YES'; $left_selected='ACTORS/ACTRESSES';
+include __DIR__ . '/nav.php';
 ?>
-<?php
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
-  $nav_selected = "REPORTS";
-  $left_buttons = "YES";
-  $left_selected = "ACTORS_ACTRESSES";
-
-  include("./nav.php");
-
-  ?>
-
-
-
-<div class="right-content">
-    <div class="container">
-
-      <h3 style = "color: #01B0F1;">Jerridd's Actors/Actress' Page</h3>
-
-        <h3><img src="images/trivia.png" style="max-height: 35px;" />Which Actors and Actresses' Films are to be viewed?</h3>
-
-        <form action="reports_actors_actresses.php" method="get">
-        Actor Name: <input type="text" name="name1"><br>
-        Actresses Name: <input type="text" name="name2"><br>
-        <input type="submit">
-        </form>
-
-
-
-        <table id="info" cellpadding="0" cellspacing="0" border="0"
-            class="datatable table table-striped table-bordered datatable-style table-hover"
-            width="100%" >
-              <thead>
-                <tr id="table-first-row">
-                        <th>native_name</th>
-                        <th>year_made</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-              <?php
-
-$actor_name = trim($_GET['name1'] ?? '');
-$actress_name = trim($_GET['name2'] ?? '');
-
-$actor_role = 'Lead Actor';
-$actress_role = 'Lead Actress';
-
-if ($actor_name !== '' && $actress_name !== '') {
-
-    $stmt = db_prepare($db, "SELECT DISTINCT
-            m.native_name,
-            m.year_made
-         FROM movies m
-
-         INNER JOIN movie_people mp_actor
-            ON m.movie_id = mp_actor.movie_id
-
-         INNER JOIN people p_actor
-            ON p_actor.people_id = mp_actor.people_id
-
-         INNER JOIN movie_people mp_actress
-            ON m.movie_id = mp_actress.movie_id
-
-         INNER JOIN people p_actress
-            ON p_actress.people_id = mp_actress.people_id
-
-         WHERE mp_actor.role = ?
-           AND p_actor.stage_name = ?
-           AND mp_actress.role = ?
-           AND p_actress.stage_name = ?");
-
-    mysqli_stmt_bind_param(
-        $stmt,
-        "ssss",
-        $actor_role,
-        $actor_name,
-        $actress_role,
-        $actress_name
-    );
-
-    mysqli_stmt_execute($stmt);
-
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($result->num_rows > 0) {
-
-        while ($row = $result->fetch_assoc()) {
-
-            echo '<tr>
-                    <td>' . h($row["native_name"]) . '</td>
-                    <td>' . h($row["year_made"]) . '</td>
-                  </tr>';
-        }
-
-    } else {
-
-        echo '<tr><td colspan="2">0 results</td></tr>';
-    }
-
-    $result->close();
-    mysqli_stmt_close($stmt);
-
-} else {
-
-    echo '<tr><td colspan="2">0 results</td></tr>';
-}
-
-
-
-                ?>
-
-              </tbody>
-        </table>
-
-
-        <script type="text/javascript" language="javascript">
-    $(document).ready( function () {
-
-        $('#info').DataTable( {
-            dom: 'lfrtBip',
-            buttons: [
-                'copy', 'excel', 'csv', 'pdf'
-            ] }
-        );
-
-        $('#info thead tr').clone(true).appendTo( '#info thead' );
-        $('#info thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
-
-        var table = $('#info').DataTable( {
-            orderCellsTop: true,
-            fixedHeader: true,
-            retrieve: true
-        } );
-
-    } );
-ss
-</script>
-
-
-
- <style>
-   tfoot {
-     display: table-header-group;
-   }
- </style>
-
-<?php
-    db_disconnect($db);
-    include("./footer.php");
-?>
+<form class="form-panel" method="get" action="reports_actors_actresses.php"><div class="form-group"><label for="name1">Lead actor</label><input class="form-control" id="name1" name="name1" maxlength="180" value="<?php echo h($filters['lead_actor']); ?>" required></div><div class="form-group"><label for="name2">Lead actress</label><input class="form-control" id="name2" name="name2" maxlength="180" value="<?php echo h($filters['lead_actress']); ?>" required></div><div class="form-actions"><button class="btn btn-primary" type="submit">Find shared movies</button><a class="btn btn-default" href="reports_actors_actresses.php">Clear filters</a></div></form>
+<?php if ($results === null) { ?><p>Enter both names to find movies they share.</p><?php } elseif (!$results['rows']) { echo ui_notice('No movies match both people. Try a shorter name or check their credits.'); } else { ?>
+<h2><?php echo h($results['count']); ?> matching movies</h2>
+<table class="table table-striped"><thead><tr><th scope="col">Native title</th><th scope="col">English title</th><th scope="col">Year</th></tr></thead><tbody>
+<?php foreach ($results['rows'] as $movie) { ?><tr><td><a href="movie_info.php?movie_id=<?php echo h($movie['movie_id']); ?>"><?php echo h($movie['native_name']); ?></a></td><td><?php echo h($movie['english_name']); ?></td><td><?php echo h($movie['year_made']); ?></td></tr><?php } ?>
+</tbody></table>
+<?php if ($results['pages']>1) { ?><nav class="movie-search-pagination" aria-label="Report pages"><?php foreach (['Previous'=>$results['page']-1,'Next'=>$results['page']+1] as $label=>$number) { if ($number>=1 && $number<=$results['pages']) { ?><a class="btn btn-default" href="reports_actors_actresses.php?<?php echo h(http_build_query(['name1'=>$filters['lead_actor'],'name2'=>$filters['lead_actress'],'page'=>$number])); ?>"><?php echo h($label); ?></a><?php } } ?><span>Page <?php echo h($results['page']); ?> of <?php echo h($results['pages']); ?></span></nav><?php } } ?>
+<?php include __DIR__ . '/footer.php'; ?>

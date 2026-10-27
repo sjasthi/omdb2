@@ -4,7 +4,7 @@ Options -Indexes
     php_flag display_startup_errors Off
     php_flag log_errors On
 </IfModule>
-<FilesMatch "(?i)^(security|initialize|database|catalog|db_credentials(\.example)?|functions|user_functions|query_functions|validation_functions|api_methods|nav|footer|left_menu_.*|left_search_data)\.php$">
+<FilesMatch "(?i)^(security|initialize|database|catalog|movie_search|ui|db_credentials(\.example)?|functions|user_functions|query_functions|validation_functions|api_methods|nav|footer|left_menu_.*|left_search_data)\.php$">
     Require all denied
 </FilesMatch>
 <FilesMatch "(?i)(^\.|\.(sql|log|bak|old|tmp|zip|ini|env|md|txt|yml|yaml|json|lock)$)">

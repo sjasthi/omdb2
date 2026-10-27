@@ -74,7 +74,7 @@ for route in routes['post']:
     status, _, _ = admin.request(route)
     check(route + ': GET cannot write', status==405)
 check('Rejected requests leave all tables unchanged', snapshot()==original)
-for route in ['security.php','initialize.php','database.php','db_credentials.php','functions.php','user_functions.php','query_functions.php','validation_functions.php','api_methods.php','nav.php','bin/functions.php']:
+for route in ['security.php','initialize.php','database.php','db_credentials.php','functions.php','user_functions.php','query_functions.php','validation_functions.php','api_methods.php','movie_search.php','nav.php','bin/functions.php']:
     status, body, _ = anonymous.request(route)
     check(route + ': internal path is inaccessible', status in [403,404] and 'DB_PASS' not in body)
 for route in ['tester.php','m_in_m_tester.php','test_api_file.php','session_practice_file.php','delete_media.php?movie_id=1','delete_poster.php?file=database.php']:
@@ -82,6 +82,24 @@ for route in ['tester.php','m_in_m_tester.php','test_api_file.php','session_prac
     check(route + ': debug or GET action unavailable', status in [404,405])
 status, body, _ = anonymous.request('login.php', {'email': "' OR 1=1 -- ", 'password':'incorrect', 'csrf_token':anonymous.token()})
 check('Login injection does not authenticate', status==200 and 'Invalid email or password.' in body)
+before_search = snapshot()
+for client, label in [(anonymous, 'Anonymous'), (user, 'Regular user'), (admin, 'Admin')]:
+    query = urllib.parse.urlencode({'cast_member': '"><script>alert(1)</script>', 'director': "O'Reilly"})
+    status, body, _ = client.request('advance_movie_search.php?' + query)
+    check(label + ': combined search is accessible and escapes filters', status == 200 and '<script>alert(1)</script>' not in body and '&lt;script&gt;' in body)
+phrase = 'movies with Brad Pitt directed by Steven Spielberg'
+for data in [None, {'text_search': phrase}]:
+    status, _, headers = user.request('search.php' + ('?' + urllib.parse.urlencode({'text_search': phrase}) if data is None else ''), data)
+    destination = headers.get('Location', '')
+    params = urllib.parse.parse_qs(urllib.parse.urlparse(destination).query)
+    check('GET and legacy POST phrases route to both filters', status == 303 and destination.startswith('advance_movie_search.php?') and params.get('cast_member') == ['Brad Pitt'] and params.get('director') == ['Steven Spielberg'])
+for invalid in ['cast_member[]=bad', 'director=' + 'x' * 181, 'page[]=1', 'page=0', 'movie_search=%FF']:
+    status, body, _ = user.request('advance_movie_search.php?' + invalid)
+    check('Invalid movie search returns a safe validation response', status == 400 and 'Stack trace' not in body and 'C:\\' not in body)
+for category, expected in [('songs', 'advance_song_search.php'), ('people', 'advance_people_search.php')]:
+    status, body, _ = user.request('search_data.php?type=' + category)
+    check(category + ': search category navigation still works', status == 200 and 'action="' + expected + '"' in body)
+check('Movie search and validation leave database tables unchanged', snapshot() == before_search)
 status, body, _ = admin.request('add_movie_posters.php?page=1%20UNION%20SELECT%201')
 check('Pagination input cannot alter SQL', status==200 and 'SQL syntax' not in body)
 
@@ -92,9 +110,10 @@ status, _, _=admin.request('createTheMovie.php', {'csrf_token':token,'native_nam
 check('Admin creates a movie containing quotes and markup', status==302)
 movie_id=sql('SELECT MAX(movie_id) FROM movies WHERE native_name='+hexstr(payload))
 check('Hostile movie title stored intact', sql('SELECT native_name FROM movies WHERE movie_id='+movie_id)==payload)
-for route in ['movie_info.php?movie_id='+movie_id, 'modify.php?movie_id='+movie_id, 'movies_data.php']:
+for route in ['movie_info.php?movie_id='+movie_id, 'modify.php?movie_id='+movie_id, 'movies_data.php', 'advance_movie_search.php?' + urllib.parse.urlencode({'movie_search':payload})]:
     status, body, _=admin.request(route)
     check(route + ': database text is escaped', status==200 and '<script>window.omdbXss=1</script>' not in body)
+check('Combined search displays the matching stored title as escaped text', '&lt;script&gt;window.omdbXss=1&lt;/script&gt;' in body and '1 matching movie' in body)
 status, body, _=user.request('movie_info.php?movie_id='+movie_id)
 check('Regular user can view movie safely', status==200 and '&lt;script&gt;window.omdbXss=1&lt;/script&gt;' in body)
 new_title=payload+' updated'

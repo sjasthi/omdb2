@@ -27,7 +27,7 @@ if (isset($_GET['movie_id'])) {
 
 <div class="right-content">
   <div class="container">
-    <h3 style="color: #01B0F1;">Movies Information</h3>
+
 
     <?php
 

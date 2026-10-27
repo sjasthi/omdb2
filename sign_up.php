@@ -1,277 +1,42 @@
 <?php
 require_once __DIR__ . '/security.php';
-$omdb_admin_page = true;
-require_admin();
+$omdb_admin_page=true; require_admin();
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
-?>
-<?php
-
-if (session_status() == PHP_SESSION_NONE) {
-}
-
-// set the current page to one of the main buttons
-$nav_selected = "";
-
-// make the left menu buttons visible; options: YES, NO
-$left_buttons = "NO";
-
-// set the left menu button selected
-$left_selected = "";
-
-include("./nav.php");
-
-?>
-
-
-
-
-<style>
-
-table.center {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-
-</style>
-
-
-
-
-<div class="container omdb-form">
-
-    <h1 style="color: #01B0F1;">Create User Account</h1>
-
-    <form action="sign_up.php" method="POST"><?php echo csrf_field(); ?>
-
-        <div class="form-group">
-            <label for="fName">First Name</label>
-            <input
-                type="text"
-                class="form-control"
-                id="fName"
-                name="first_name"
-                placeholder="Enter first name"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label for="lName">Last Name</label>
-            <input
-                type="text"
-                class="form-control"
-                id="lName"
-                name="last_name"
-                placeholder="Enter last name"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input
-                type="email"
-                class="form-control"
-                id="email"
-                name="email"
-                placeholder="Enter email"
-                required
-            >
-
-            <small class="form-text text-muted">
-                We'll never share your email with anyone else.
-            </small>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                placeholder="Password"
-                minlength="8"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label for="repeat_password">Repeat Password</label>
-            <input
-                type="password"
-                class="form-control"
-                id="repeat_password"
-                name="repeat_password"
-                placeholder="Repeat password"
-                minlength="8"
-                required
-            >
-        </div>
-
-        <div class="form-group form-check">
-            <input
-                type="checkbox"
-                class="form-check-input"
-                id="exampleCheck1"
-            >
-
-            <label
-                class="form-check-label"
-                for="exampleCheck1"
-            >
-                Remember me
-            </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-            Create User Account
-        </button>
-
-    </form>
-
-
-<?php
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $my_first_name = trim($_POST["first_name"] ?? '');
-    $my_last_name = trim($_POST["last_name"] ?? '');
-    $my_email = trim($_POST["email"] ?? '');
-    $my_password = $_POST["password"] ?? '';
-    $my_repeat_password = $_POST["repeat_password"] ?? '';
-
-    $error = "";
-
-    // First and last name are required.
-    if ($my_first_name === '' || $my_last_name === '') {
-
-        $error = "First name and last name are required.";
-
-    }
-
-    // Email must exist and be valid.
-    elseif (
-        $my_email === '' ||
-        !filter_var($my_email, FILTER_VALIDATE_EMAIL)
-    ) {
-
-        $error = "Please enter a valid email address.";
-
-    }
-
-    // Password cannot be blank.
-    elseif ($my_password === '') {
-
-        $error = "Password is required.";
-
-    }
-
-    // Minimum password length.
-    elseif (strlen($my_password) < 8) {
-
-        $error = "Password must be at least 8 characters long.";
-
-    }
-
-    // Password confirmation must match.
-    elseif ($my_password !== $my_repeat_password) {
-
-        $error = "Passwords do not match.";
-
-    }
-
-    else {
-
-        // Check for duplicate email.
-        $check = db_prepare($db, "
-            SELECT id
-            FROM users
-            WHERE email = ?
-            LIMIT 1
-        ");
-
-        $check->bind_param("s", $my_email);
-        $check->execute();
-
-        $existing_user = $check->get_result();
-
-        if ($existing_user->num_rows > 0) {
-
-            $error = "An account with that email already exists.";
-
-        } else {
-
-            // Securely hash password.
-            $password_hash = password_hash(
-                $my_password,
-                PASSWORD_DEFAULT
-            );
-
-            // Prepared statement prevents SQL injection.
-            $stmt = db_prepare($db, "
-                INSERT INTO users
-                (
-                    password,
-                    email,
-                    first_name,
-                    last_name,
-                    role
-                )
-                VALUES (?, ?, ?, ?, 'USER')
-            ");
-
-            $stmt->bind_param(
-                "ssss",
-                $password_hash,
-                $my_email,
-                $my_first_name,
-                $my_last_name
-            );
-
-            if ($stmt->execute()) {
-
-                echo "
-                    <p style='color:green;'>
-                        Account created successfully.
-                        You can now sign in.
-                    </p>
-                ";
-
-            } else {
-
-                echo "
-                    <p style='color:red;'>
-                        Unable to create account.
-                    </p>
-                ";
-            }
-
-            $stmt->close();
-        }
-
-        $check->close();
-    }
-
-    if ($error !== '') {
-
-        echo "<p style='color:red;'>" . h($error) . "</p>";
+require_once __DIR__ . '/initialize.php';
+require_once __DIR__ . '/catalog.php';
+$errors=[]; $success=false; $values=$_POST;
+if (is_post_request()) {
+    try {
+        $first=catalog_text($_POST,'first_name',25,true); $last=catalog_text($_POST,'last_name',25,true);
+        $email=catalog_text($_POST,'email',100,true);
+        if (!filter_var($email,FILTER_VALIDATE_EMAIL)) { throw new InvalidArgumentException('Enter an email address such as name@example.com.'); }
+        $password=$_POST['password'] ?? ''; $repeat=$_POST['repeat_password'] ?? '';
+        if (!is_string($password) || !is_string($repeat) || mb_strlen($password,'UTF-8')<8) { throw new InvalidArgumentException('Enter a password with at least 8 characters.'); }
+        if (strlen($password)>72) { throw new InvalidArgumentException('This password is too long. Choose a shorter password.'); }
+        if ($password !== $repeat) { throw new InvalidArgumentException('The passwords do not match. Enter the same password in both fields.'); }
+        if (db_query($db,'SELECT id FROM users WHERE email=?',[$email])->num_rows) { throw new InvalidArgumentException('An account already uses that email address. Enter a different email.'); }
+        $hash=password_hash($password,PASSWORD_DEFAULT);
+        db_query($db,'INSERT INTO users (password,email,first_name,last_name,role) VALUES (?,?,?,?,?)',[$hash,$email,$first,$last,'USER']);
+        $success=true; $values=[];
+    } catch (InvalidArgumentException $error) { $errors[]=$error->getMessage(); http_response_code(400); }
+    catch (mysqli_sql_exception $error) {
+        if ($error->getCode() !== 1062) { throw $error; }
+        $errors[]='An account already uses that email address. Enter a different email.'; http_response_code(400);
     }
 }
-
+$nav_selected='SETUP'; $left_buttons='YES'; $left_selected='ACCOUNTS';
+include __DIR__ . '/nav.php';
+if ($success) { echo ui_notice('User account created. The person can now sign in.','success'); }
+echo display_errors($errors);
 ?>
-
-</div>
-
-
-
-
-
-<?php
-
-db_disconnect($db);
-include("./footer.php");
-
-?>
+<form class="form-panel" method="post" action="sign_up.php">
+<?php echo csrf_field(); ?>
+<p class="form-help">All fields are required. The new account will have the Member role.</p>
+<?php foreach (['first_name'=>['First name','text',25],'last_name'=>['Last name','text',25],'email'=>['Email address','email',100]] as $key=>[$label,$type,$limit]) { ?>
+<div class="form-group"><label for="<?php echo h($key); ?>"><?php echo h($label); ?></label><input class="form-control" type="<?php echo h($type); ?>" id="<?php echo h($key); ?>" name="<?php echo h($key); ?>" maxlength="<?php echo h($limit); ?>" value="<?php echo h(ui_field_value($values,$key)); ?>" required></div>
+<?php } ?>
+<div class="form-group"><label for="password">Password</label><input class="form-control" id="password" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" aria-describedby="password-help" required><small class="form-help" id="password-help">Use at least 8 characters. Choose a unique password for this account.</small></div>
+<div class="form-group"><label for="repeat_password">Repeat password</label><input class="form-control" id="repeat_password" name="repeat_password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required></div>
+<div class="form-actions"><button class="btn btn-primary" type="submit">Create account</button><a class="btn btn-default" href="setup.php">Cancel</a></div>
+</form>
+<?php include __DIR__ . '/footer.php'; ?>

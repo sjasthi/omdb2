@@ -44,7 +44,7 @@ require_once __DIR__ . '/security.php';
     $movie_name_language = $_SESSION['language'];
 
      // getting data from db
-    $sql = $movie_name_language === 'native_name' ? 'SELECT native_name FROM movies' : 'SELECT english_name FROM movies'; // only grabbing english_name, logic changes if native_name or english_name possible
+    $sql = $movie_name_language === 'native_name' ? "SELECT native_name FROM movies WHERE TRIM(native_name) <> ''" : "SELECT english_name FROM movies WHERE TRIM(english_name) <> ''"; // only grabbing english_name, logic changes if native_name or english_name possible
     $data = array();
     $result = db_query($db, $sql);
 
@@ -54,6 +54,8 @@ require_once __DIR__ . '/security.php';
             $data[] = $row; // currently has all rows of movie titles
         }
     }
+
+    if (!$data) { echo ui_notice('No movie titles are available for this game yet.'); include __DIR__ . '/footer.php'; exit; }
 
     // A random movie picker the size of the movie list.
     $hidden_movie_name = rand(0, count($data) - 1);
@@ -271,22 +273,23 @@ require_once __DIR__ . '/security.php';
     ?>
         <form action ="movie_in_movies.php" method="get">
             <input type="checkbox" id="telugu" name="telugu" value="telugu" onClick = 'this.form.submit() '<?php if(isset($_GET['telugu'])) echo "checked='checked'"; ?>>
-                <label>Telugu</label><br>
+                <label for="telugu">Use Telugu titles</label><br>
 
         </form>
 
         <form action ="movie_in_movies.php" style="padding: 30px 0 0 0">
-            Guess answer: <input type="text" name="answer" value="">
-            <button type="submit">Click Me!</button>
+            <label for="movie-answer">Your answer</label><input class="form-control" id="movie-answer" type="text" name="answer" maxlength="180" required value="">
+            <?php if(isset($_GET['telugu'])) { ?><input type="hidden" name="telugu" value="telugu"><?php } ?>
+            <button class="btn btn-primary" type="submit">Check answer</button>
         </form>
 
 
     <?php
         if(isset($_GET['answer'])){
-            if($_GET['answer'] == $_SESSION['hidden_movie_name']){
-                echo "<h2> user guess is correct</h2>";
+            if(is_string($_GET['answer']) && mb_strtolower(trim($_GET['answer']),'UTF-8') === mb_strtolower($_SESSION['hidden_movie_name'],'UTF-8')){
+                echo ui_notice('Correct! Start a new game to play again.','success');
             } else{
-                echo "<h2> User did not guess correctly</h2>";
+                echo ui_notice('Not quite. Check the clues and try another title.');
             }
         }
 
@@ -294,21 +297,9 @@ require_once __DIR__ . '/security.php';
 
     ?>
 
-    <script type="text/javascript">
-        $('').click(function(){
-            if($(#telugu).is(':checked')){
-                <?php $_SESSION['language'] = 'native_name' ?>;
-                $(form).submit();
-            }else{
-                <?php $_SESSION['language'] = 'english_name' ?>;
-                $(form).submit();
-            }
-        });
 
 
 
-    </script>
 
-
-
+<a class="btn btn-default" href="movie_in_movies.php">New game</a>
 <?php include __DIR__ . '/footer.php'; ?>

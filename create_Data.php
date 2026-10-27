@@ -12,10 +12,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
      include("./nav.php");
     $movie_id = $_GET["movie_id"];
   ?>
-  
 
 
-<form id="movieData" action="createTheData.php" method= "post"><?php echo csrf_field(); ?>
+
+<form class="form-panel" id="movieData" action="createTheData.php" method= "post"><?php echo csrf_field(); ?>
 
 <?php
 $native_name = "";
@@ -104,59 +104,60 @@ $movie_trivia_name = [];
     }
   }
   ?>
-  <h1>Create Movie Data For <?php echo h($native_name); ?></h1>
+  <h2>Create Movie Data For <?php echo h($native_name); ?></h2>
   <?php
   if(empty($language) && empty($country) && empty($genre) && empty($plot) && empty($tag_line)){ ?>
       <label for="language"> Language </label>
-      <p><input name= "language" id="language" value="<?php echo h($language); ?>" placeholder="Add Language" class="form-control" oninput="this.className = ''"></p>
+      <p><input name= "language" maxlength="10" id="language" value="<?php echo h($language); ?>" placeholder="Add Language" class="form-control"></p>
       <label for="country"> Country </label>
-      <p><input name= "country" id="country" value="<?php echo h($country); ?>" class="form-control" placeholder="Add Country" oninput="this.className = ''"></p>
+      <p><input name= "country" maxlength="20" id="country" value="<?php echo h($country); ?>" class="form-control" placeholder="Add Country"></p>
       <label for="genre"> Genre </label>
-      <p><input name= "genre" id="genre" value="<?php echo h($genre); ?>" placeholder="Add Genre" class="form-control" oninput="this.className =''"></p>
+      <p><input name= "genre" maxlength="15" id="genre" value="<?php echo h($genre); ?>" placeholder="Add Genre" class="form-control"></p>
       <label for="plot"> Plot </label>
-      <p><input name= "plot" id="plot" value="<?php echo h($plot); ?>" placeholder="Add Plot" class="form-control" oninput="this.className = ''"></p>
+      <p><input name= "plot" maxlength="500" id="plot" value="<?php echo h($plot); ?>" placeholder="Add Plot" class="form-control"></p>
       <label for="tag_line"> Tag Line </label>
-      <p><input name= "tag_line" id="tag_line" value="<?php echo h($tag_line); ?>" class="form-control" placeholder="Add Tag Line" oninput="this.className = ''"></p><br>
+      <p><input name= "tag_line" maxlength="100" id="tag_line" value="<?php echo h($tag_line); ?>" class="form-control" placeholder="Add Tag Line"></p><br>
   <?php } ?>
- 
+
 <?php
   if(sizeof($anagram_id) >= 0){
       echo '<label for="anagram"> Add Anagram </label>';
-      echo '<p><input id="anagram" name= "anagram" class="form-control" placeholder="Add Anagram" oninput="this.className = """></p><br>';
+      echo '<p><input id="anagram" name= "anagram" maxlength="180" class="form-control" placeholder="Add Anagram"></p><br>';
   }
 
   if(sizeof($keyword) >= 0){
       echo '<label for="keyword"> Add Keyword </label>';
-      echo '<p><input id="keyword" name= "keyword" class="form-control" placeholder="Add Keyword" oninput="this.className = """></p><br>';
+      echo '<p><input id="keyword" name= "keyword" maxlength="15" class="form-control" placeholder="Add Keyword"></p><br>';
   }
 
 
   if(sizeof($movie_media_id) >= 0){
           echo '<label for="m_link"> Add Media Link </label>';
-          echo '<p><input id="m_link" name= "m_link" class="form-control" placeholder="Add Media Link" oninput="this.className = """></p>';
+          echo '<p><input id="m_link" name= "m_link" maxlength="100" class="form-control" placeholder="Add Media Link"></p>';
           echo '<label for="m_link_type"> Add Media Link Type </label>';
-          echo '<p><input id="m_link_type" name= "m_link_type" class="form-control" placeholder="Add Media Link Type" oninput="this.className = """></p><br>';
+          echo '<p><input id="m_link_type" name= "m_link_type" maxlength="10" class="form-control" placeholder="Add Media Link Type"></p><br>';
   }
 
   if(sizeof($movie_quote_id) >= 0){
       echo '<label for="quote"> Add Quote </label>';
-      echo '<p><input id="quote" name= "movie_quote_name"  class="form-control" placeholder="Add Quote" oninput="this.className = """></p><br>';
+      echo '<p><input id="quote" name= "movie_quote_name" maxlength="300"  class="form-control" placeholder="Add Quote"></p><br>';
   }
 
   if(sizeof($movie_trivia_id) >= 0){
       echo '<label for="trivia"> Add Trivia </label>';
-      echo '<p><input id="trivia" name= "movie_trivia_name" class="form-control" placeholder="Add Trivia" oninput="this.className = """></p><br>';
+      echo '<p><input id="trivia" name= "movie_trivia_name" maxlength="300" class="form-control" placeholder="Add Trivia"></p><br>';
   }
 ?>
-  
+
   <input type="hidden" name="movie_id" value="<?php echo h($movie_id); ?>">
 
   <div style="overflow:auto;">
       <div  class="text-left">
-          <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Create Data</button>
+          <button type="submit" name="submit" class="btn btn-primary btn-md align-items-center">Save details</button>
+<a class="btn btn-default" href="movie_info.php?movie_id=<?php echo h($movie_id); ?>">Cancel</a>
       </div>
   </div>
-  
+
   <div style="text-align:center;margin-top:40px;">
       <span class="step"></span>
   </div>
@@ -202,54 +203,7 @@ input.invalid {
   background-color: #4CAF50;
 }
 </style>
-<script>
-var currentTab = 0; // Current tab is set to be the first tab (0)
-showTab(currentTab); // Display the current tab
 
-function showTab(n) {
-  // This function will display the specified tab of the form ...
-  var x = document.getElementsByClassName("tab");
-  x[n].style.display = "block";
-  // ... and fix the Previous/Next buttons:
-  if (n == 0) {
-    document.getElementById("prevBtn").style.display = "none";
-  } else {
-    document.getElementById("prevBtn").style.display = "inline";
-  }
-  if (n == (x.length - 1)) {
-    document.getElementById("nextBtn").innerHTML = "Submit";
-  } else {
-    document.getElementById("nextBtn").innerHTML = "Next";
-  }
-  // ... and run a function that displays the correct step indicator:
-  fixStepIndicator(n)
-}
-function nextPrev(n) {
-  // This function will figure out which tab to display
-  var x = document.getElementsByClassName("tab");
-  // Hide the current tab:
-  x[currentTab].style.display = "none";
-  // Increase or decrease the current tab by 1:
-  currentTab = currentTab + n;
-  // if you have reached the end of the form... :
-  if (currentTab >= x.length) {
-    //...the form gets submitted:
-    document.getElementById("movieData").submit();
-    return false;
-  }
-  // Otherwise, display the correct tab:
-  showTab(currentTab);
-}
-function fixStepIndicator(n) {
-  // This function removes the "active" class of all steps...
-  var i, x = document.getElementsByClassName("step");
-  for (i = 0; i < x.length; i++) {
-    x[i].className = x[i].className.replace(" active", "");
-  }
-  //... and adds the "active" class to the current step:
-  x[n].className += " active";
-}
-</script>
 
 
 <?php include __DIR__ . '/footer.php'; ?>

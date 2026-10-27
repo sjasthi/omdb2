@@ -1,5 +1,16 @@
 <?php
-require_once __DIR__ . '/security.php';
+require_once __DIR__ . '/initialize.php';
+require_once __DIR__ . '/movie_search.php';
+try {
+    $name = movie_search_value(($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' ? $_POST : $_GET, 'text_search', 500);
+    $movie_filters = movie_search_phrase($name);
+} catch (InvalidArgumentException $error) {
+    security_fail(400, $error->getMessage());
+}
+if ($movie_filters !== null) {
+    header('Location: ' . movie_search_url($movie_filters), true, 303);
+    exit;
+}
 ?>
 <?php $page_title = 'The Cow Layer'; ?>
 <?php
@@ -12,7 +23,7 @@ require_once __DIR__ . '/security.php';
 
 
 
-<h1>Search Lists</h1>
+
 
 
 
@@ -29,7 +40,6 @@ require_once __DIR__ . '/security.php';
                   </thead>
                   <tbody>
                     <?php
-                   $name = trim($_POST['text_search'] ?? '');
 $count = 0;
 
 $search_term = '%' . $name . '%';

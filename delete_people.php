@@ -111,9 +111,7 @@ $display_name = trim(
 
 <div class="container">
 
-    <h2 style="color: darkgoldenrod;">
-        Delete Person
-    </h2>
+
 
     <div style="
         max-width: 600px;

@@ -1,10 +1,15 @@
 <?php
 require_once __DIR__ . '/security.php';
+$search_type = $_GET['type'] ?? (isset($_POST['songs']) ? 'songs' : (isset($_POST['people']) ? 'people' : ''));
+if (isset($_POST['movies']) || (empty($_POST) && !in_array($search_type, ['songs', 'people'], true))) {
+    header('Location: advance_movie_search.php', true, 303);
+    exit;
+}
 ?>
 <?php
   $nav_selected = "search_data";
   $left_buttons = "YES";
-  $left_selected = "search_data";
+  $left_selected = $search_type === 'songs' ? 'SONGS' : 'PEOPLE';
   include("./nav.php");
 
 ?>
@@ -37,7 +42,7 @@ require_once __DIR__ . '/security.php';
     <br><br>
 
       <?php
-      if(isset($_POST['songs'])){ ?>
+      if($search_type === 'songs'){ ?>
           <h3 style = "color: #01B0F1;">Search Songs</h3>
 
 
@@ -131,86 +136,7 @@ require_once __DIR__ . '/security.php';
 
 
       <?php }
-      if(isset($_POST['movies'])){ ?>
-
-        <h3 style = "color: #01B0F1;">Search movies by role</h3>
-
-
-
-  <form method="post" action="advance_movie_search.php"><?php echo csrf_field(); ?>
-
-    <div class="form-group">
-      <label for="movie_search">Search Movie</label>
-      <input type="text"
-      style="width: 100%;
-      margin: 0 auto;
-      height:30px;"
-       class="form-control" id="movie_search" name="movie_search" placeholder="Enter movie to search its record...">
-    </div><br>
-
-  <div class="form-group">
-    <label for="lead_actor">Lead Actor</label>
-    <input type="text"
-    style="width: 100%;
-    margin: 0 auto;
-    height:30px;"
-     class="form-control" id="lead_actor" name="lead_actor" placeholder="Lead Actor Name">
-  </div><br>
-
-  <div class="form-group">
-    <label for="lead_actress">Lead Actress</label>
-    <input type="text"
-    style="width: 100%;
-    margin: 0 auto;
-    height:30px;"
-    class="form-control" id="lead_actress" name="lead_actress" placeholder="Lead Actress Name">
-  </div><br>
-
-  <div class="form-group">
-    <label for="producer">Producer</label>
-    <input type="text"
-    style="width: 100%;
-    margin: 0 auto;
-    height:30px;"
-     class="form-control" id="producer" name="producer" placeholder="producer Name">
-  </div><br>
-
-  <div class="form-group">
-    <label for="director">Director</label>
-    <input type="text"
-    style="width: 100%;
-    margin: 0 auto;
-    height:30px;"
-    class="form-control" id="director" name="director" placeholder="director Name">
-  </div>
-<br>
-  <div class="form-group">
-    <label for="music_director">Music Director</label>
-    <input type="text"
-    style="width: 100%;
-    margin: 0 auto;
-    height:30px;"
-    class="form-control" id="music_director" name="music_director" placeholder="Music Director Name">
-  </div>
-<br>
-
-
-  <button type="submit"   style="
-    border-radius: 8px;
-    font-weight: bold;
-    border: 0;
-    padding: 7px 15px 7px 15px;
-    font-size: 20px;
-    margin-right: 10px;" name="movie_people_search_button" class="btn btn-primary">Search</button>
-</form>
-
-
-
-
-
-
-      <?php }
-      if(isset($_POST['people'])){ ?>
+      if($search_type === 'people'){ ?>
           <h3 style = "color: #01B0F1;">Search Peoples</h3>
 
 

@@ -38,6 +38,7 @@ try {
     $movie_id = catalog_id($_POST['movie_id'] ?? $_GET['movie_id'] ?? null);
     if (isset($_POST['add']) || isset($_POST['delete'])) {
         catalog_relationships($db, 'movie_people', $movie_id, $_POST);
+        echo ui_notice('Movie credits updated. Review the list below.','success');
     }
 } catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
 
@@ -45,7 +46,7 @@ try {
 
     $sql2 = db_query($db, ['sql' => 'select native_name from movies where movie_id = ?;', 'params' => [$movie_id]]);
     $name = mysqli_fetch_assoc($sql2);
-  
+
   ?>
 
 
@@ -113,7 +114,7 @@ try {
             <input type="hidden" name="movie_id" value="<?php echo h($movie_id); ?>" />
             <input type="checkbox" name="add" id='addFinal' value="add" style="display:none;" required>
             </form>
-            
+
               <button type="button" name="check" id="check" onClick="selectAll()">Check/Uncheck All</button>
               <button form="add_person" type="submit" style="margin-left:0px;" onclick="return checkAdd()">Add</button>
         </form>
@@ -152,8 +153,8 @@ if(mysqli_num_rows($sql)>0){
             <td><?php echo h($row['role']); ?></td>
 
             </tr>
-            
-            
+
+
     <?php
     $count++;
         }
@@ -167,7 +168,7 @@ if(mysqli_num_rows($sql)>0){
               <button type="button" name="check" id="check" onClick="deleteAll()">Check/Uncheck All</button>
               <button form="delete_person" type="submit" style="margin-left:0px;" onclick="return checkDelete()">Delete</button>
             </form>
-    
+
 <?php
     }
 ?>

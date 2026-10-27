@@ -2,9 +2,9 @@
 require_once __DIR__ . '/security.php';
 ?>
 <?php
-$nav_selected = "MOVIES";
+$nav_selected = "PEOPLE";
 $left_buttons = "YES";
-$left_selected = "NO";
+$left_selected = "PEOPLE";
 
 include("./nav.php");
 require 'bin/functions.php';
@@ -67,9 +67,9 @@ role (from song_people)
 // We will fetch it and save it as $movie_id to be used in our queries
 ======================================================================== -->
 <?php
-if (isset($_GET['people_id'])) {
-  $people_id = $_GET['people_id'];
-}
+$people_id=filter_var($_GET['people_id'] ?? null,FILTER_VALIDATE_INT);
+if (!$people_id || $people_id<1) { security_fail(400,'Choose a person from the catalog first.'); }
+if (!db_query($db,'SELECT 1 FROM people WHERE people_id=?',[$people_id])->num_rows) { security_fail(404,'This person is no longer in the catalog.'); }
 ?>
 
 
@@ -84,7 +84,7 @@ year_made
 
 <div class="right-content">
   <div class="container">
-    <h3 style="color: #01B0F1;">[A.1] People -> Basic Data</h3>
+
 
     <table id="info" cellpadding="0" cellspacing="0" border="0"
         class="datatable table table-striped table-bordered datatable-style table-hover"

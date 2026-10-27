@@ -92,9 +92,7 @@ include("./nav.php");
 
 <div class="container">
 
-    <h2 style="color: darkgoldenrod;">
-        Delete Song
-    </h2>
+
 
     <div style="
         max-width: 600px;
