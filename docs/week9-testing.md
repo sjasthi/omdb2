@@ -49,7 +49,9 @@ Changes are limited to those observed defects and the testing/evidence infrastru
 | Week 9 matrix | 361 |
 | **Total** | **1,135** |
 
-All 121 tracked PHP files passed syntax checks. The staged secret scanner and whitespace checks passed. The HTTP server log contained no PHP warnings/fatal errors or uncaught application exceptions in the final run. Every disposable database was removed. The verified PHP fixes, test entrypoint, and evidence documents were copied to the local XAMPP app; the original files were backed up outside the web root. Live accounts and catalog data were not changed.
+All 122 tracked PHP files passed syntax checks. The staged secret scanner and whitespace checks passed. The HTTP server log contained no PHP warnings/fatal errors or uncaught application exceptions in the final local run. Every disposable database was removed. The verified PHP fixes, test entrypoint, and evidence documents were copied to the local XAMPP app; the original files were backed up outside the web root. Live accounts and catalog data were not changed.
+
+Hosted verification also passed all five suites on both MariaDB 10.4 and MySQL 8.0 in [GitHub Actions](https://github.com/sjasthi/omdb2/actions/runs/41692400675). The first hosted run exposed two test-harness portability issues: the PHP development server fell back to the home page for nonexistent URLs, and the MariaDB client returned text that the test reader could not decode as UTF-8. The test server now uses an explicit missing-file router; round-trip text assertions compare stored UTF-8 bytes through HEX rather than relying on client output encoding. Failed-suite diagnostics are printed with generated login passwords redacted. These adjustments do not change production Apache routing or relax the expected results.
 
 ## Run it again
 
@@ -69,4 +71,4 @@ python tests/run_week9.py --php C:/xampp/php/php.exe --mysql C:/xampp/mysql/bin/
 
 Optional environment settings are `OMDB_TEST_DB_SERVER`, `OMDB_TEST_DB_USER`, and `OMDB_TEST_DB_PASSWORD`. Supply private values only through the environment. The runner generates random passwords, copies source to a temporary directory without local credentials, exclusively creates a randomly named `omdb_week9_<random>_test` database, starts a loopback PHP server on an available port, runs all five suites, and cleans up in `finally`. It refuses to reuse an existing database and keeps results outside the app's web root. No persistent test account or credential file is created.
 
-Results include `matrix.csv`, `matrix.md`, `matrix.json`, the security/UI JSON results, per-suite logs, and `run.json`. A failed case exits nonzero. The workflow is configured to repeat this matrix for MariaDB 10.4 and MySQL 8.0 and show expected/actual results in the GitHub job summary on the next upload; this week's new results were executed locally on MariaDB.
+Results include `matrix.csv`, `matrix.md`, `matrix.json`, the security/UI JSON results, per-suite logs, and `run.json`. A failed case exits nonzero. The workflow repeats this matrix for MariaDB 10.4 and MySQL 8.0 and shows expected/actual results in each GitHub job summary. The checked-in results capture the local MariaDB run; hosted results are available through the linked Actions run.

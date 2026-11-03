@@ -1,6 +1,6 @@
 {
-  "started_utc": "2026-11-03T18:07:52Z",
-  "base_commit": "5bd36ef51ff26c929adf92c7d3feb3862928e113",
+  "started_utc": "2026-11-03T18:18:54Z",
+  "base_commit": "3f6d869a7699626baf0ddac3c27299663c60ed51",
   "source_sha256": {
     "about.php": "89d6f9b630a98adca4985e5507d123b9481d5e97db3ba558243bed8b0d076ae1",
     "add_movie_people.php": "53259fd42395948f09518d50a207409d4487dc8825e5db14f48e23de2275687b",
@@ -217,12 +217,13 @@
     "styles/ui.css": "e20b64bc3e4d6fc525a557f02ffd0ce02b50879c6850aef147fac3d3307464ea",
     "tests/backend.php": "423f3544e980727b9e707285799bc1919728ab77f81f80f3b3497a94d114e20e",
     "tests/fixtures/week6-schema.sql": "7a68423619171bcbae096a9b85320b45032447a16c78dcd1b3ad7b22972ce0a0",
+    "tests/http_router.php": "3083dd62ad36c03100d2d315b434c0819b77293fdb61cb9130f6b6d451d2c080",
     "tests/movie-search.php": "06aa64c3b43b6569c0856aa6fda1bbee900e6d3c16bdd7c5d431fbd4bc87357c",
-    "tests/run_week9.py": "102e7a56ba4ebb43eae83b16e92e7e2291eef0e732c873ac0717cffc656de4e5",
+    "tests/run_week9.py": "8a8edc568a7d87996f6159ffaa2da9ead26f5ac3c27517d1a7196bf0c9e174e4",
     "tests/security_http_test.py": "a6ac8caaca4fb130b515ada2849779eee624aa153a8d8ce947d5aad0e7f99835",
     "tests/ui_http_test.py": "86a32f77ed48295a410d38cc52f1d8d66bb5665296f037e5cc2e32c1d9ac181a",
     "tests/week9_fixture.php": "8d893cce1169c4dfa03879c32e5aecb6e071341eb66419253cc4e976fb84058c",
-    "tests/week9_http_test.py": "fb876fb475da2f255a7af6a7cee5e229d5883f2f182b2e6119b7ef389222c105",
+    "tests/week9_http_test.py": "187e6cfc52d2d54c4b699183e945aca59c50d01ac8e9e347036fd421e2e75f55",
     "tools/check-secrets.php": "6860b4b14a2d63e50a79e3912a789fe6b8e2fcb11e55a8453a5488a785fd6b9b",
     "tools/create-admin.php": "875f5d7ff9faffe89ea83c7308fe95bf0344e9c2a1df5b4bb7fb4c4adbc8f875",
     "tools/migrate.php": "b95ae49c3aedbb11b5241dc265d09f2d0f8b58fb07903748c5bc066280aa6c79",
@@ -264,5 +265,5 @@
     }
   ],
   "database_removed": true,
-  "finished_utc": "2026-11-03T18:08:24Z"
+  "finished_utc": "2026-11-03T18:19:30Z"
 }
