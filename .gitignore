@@ -111,6 +111,8 @@ styles/._style.css
 Thumbs.db
 /work/
 /outputs/
+__pycache__/
+*.pyc
 ._search_data.php
 ._add_song.php
 ._index.php

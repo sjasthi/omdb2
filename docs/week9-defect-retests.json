@@ -1,0 +1,212 @@
+[
+  {
+    "run": "baseline",
+    "scenario": "Update a nonexistent record via modifyTheMovies.php",
+    "expected": "HTTP 400; no false success; no database changes",
+    "initial_actual": "HTTP 302; tables unchanged=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-029",
+    "final_actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "Update a nonexistent record via modifyThePeople.php",
+    "expected": "HTTP 400; no false success; no database changes",
+    "initial_actual": "HTTP 302; tables unchanged=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-030",
+    "final_actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "Update a nonexistent record via modifyTheSongs.php",
+    "expected": "HTTP 400; no false success; no database changes",
+    "initial_actual": "HTTP 302; tables unchanged=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-031",
+    "final_actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "NUL in password",
+    "expected": "HTTP 400; no database changes",
+    "initial_actual": "HTTP 200; tables unchanged=False; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-ACCOUNT-010",
+    "final_actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "Create account with attempted ADMIN role override",
+    "expected": "USER account; hashed password; no password echoed",
+    "initial_actual": "HTTP 400; role=USER; plaintext password stored/echoed=False",
+    "initial_result": "FAIL",
+    "final_id": "W9-ACCOUNT-011",
+    "final_actual": "HTTP 200; role=USER; plaintext password stored/echoed=False",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "Batch credit includes missing person",
+    "expected": "HTTP 400; complete batch rolled back",
+    "initial_actual": "HTTP 500; tables unchanged=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-RELATION-001",
+    "final_actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "Credit for nonexistent movie",
+    "expected": "HTTP 400; no orphan credit",
+    "initial_actual": "HTTP 500; tables unchanged=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-RELATION-002",
+    "final_actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "empty CSV",
+    "expected": "HTTP 400; entire database unchanged",
+    "initial_actual": "HTTP 200; atomic rollback=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-CSV-003",
+    "final_actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "blank-only CSV",
+    "expected": "HTTP 400; entire database unchanged",
+    "initial_actual": "HTTP 200; atomic rollback=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-CSV-004",
+    "final_actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "baseline",
+    "scenario": "Duplicate movie cannot bypass field validation",
+    "expected": "HTTP 400 for blank English title; no database changes",
+    "initial_actual": "HTTP 200; atomic rollback=True; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-CSV-022",
+    "final_actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "modify.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-033",
+    "final_actual": "HTTP 404; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "modify.php form with SQL text in movie_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-034",
+    "final_actual": "HTTP 400; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "modify.php form for deleted people_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-036",
+    "final_actual": "HTTP 404; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "modify.php form with SQL text in people_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-037",
+    "final_actual": "HTTP 400; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "modify.php form for deleted song_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-039",
+    "final_actual": "HTTP 404; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "modify.php form with SQL text in song_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-040",
+    "final_actual": "HTTP 400; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "create_Data.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-042",
+    "final_actual": "HTTP 404; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "create_Data.php form with SQL text in movie_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-043",
+    "final_actual": "HTTP 400; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "add_people.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-045",
+    "final_actual": "HTTP 404; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "add_song.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-048",
+    "final_actual": "HTTP 404; diagnostics hidden=True",
+    "final_result": "PASS"
+  },
+  {
+    "run": "url-pass",
+    "scenario": "songs_people_list.php form for deleted song_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "initial_actual": "HTTP 200; diagnostics hidden=True",
+    "initial_result": "FAIL",
+    "final_id": "W9-URL-051",
+    "final_actual": "HTTP 404; diagnostics hidden=True",
+    "final_result": "PASS"
+  }
+]

@@ -1,0 +1,2890 @@
+[
+  {
+    "id": "W9-AUTH-001",
+    "category": "AUTH",
+    "scenario": "USER signs in",
+    "expected": "HTTP 302 to index.php",
+    "actual": "HTTP 302; destination=index.php",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-002",
+    "category": "AUTH",
+    "scenario": "ADMIN signs in",
+    "expected": "HTTP 302 to index.php",
+    "actual": "HTTP 302; destination=index.php",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-003",
+    "category": "AUTH",
+    "scenario": "Guest GET add_movie_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-004",
+    "category": "AUTH",
+    "scenario": "Guest POST add_movie_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-005",
+    "category": "AUTH",
+    "scenario": "USER GET add_movie_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-006",
+    "category": "AUTH",
+    "scenario": "USER POST add_movie_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-007",
+    "category": "AUTH",
+    "scenario": "Guest GET add_movie_people_post.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-008",
+    "category": "AUTH",
+    "scenario": "Guest POST add_movie_people_post.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-009",
+    "category": "AUTH",
+    "scenario": "USER GET add_movie_people_post.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-010",
+    "category": "AUTH",
+    "scenario": "USER POST add_movie_people_post.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-011",
+    "category": "AUTH",
+    "scenario": "Guest GET add_movie_posters.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-012",
+    "category": "AUTH",
+    "scenario": "Guest POST add_movie_posters.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-013",
+    "category": "AUTH",
+    "scenario": "USER GET add_movie_posters.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-014",
+    "category": "AUTH",
+    "scenario": "USER POST add_movie_posters.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-015",
+    "category": "AUTH",
+    "scenario": "Guest GET add_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-016",
+    "category": "AUTH",
+    "scenario": "Guest POST add_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-017",
+    "category": "AUTH",
+    "scenario": "USER GET add_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-018",
+    "category": "AUTH",
+    "scenario": "USER POST add_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-019",
+    "category": "AUTH",
+    "scenario": "Guest GET add_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-020",
+    "category": "AUTH",
+    "scenario": "Guest POST add_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-021",
+    "category": "AUTH",
+    "scenario": "USER GET add_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-022",
+    "category": "AUTH",
+    "scenario": "USER POST add_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-023",
+    "category": "AUTH",
+    "scenario": "Guest GET add_the_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-024",
+    "category": "AUTH",
+    "scenario": "Guest POST add_the_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-025",
+    "category": "AUTH",
+    "scenario": "USER GET add_the_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-026",
+    "category": "AUTH",
+    "scenario": "USER POST add_the_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-027",
+    "category": "AUTH",
+    "scenario": "Guest GET attach_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-028",
+    "category": "AUTH",
+    "scenario": "Guest POST attach_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-029",
+    "category": "AUTH",
+    "scenario": "USER GET attach_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-030",
+    "category": "AUTH",
+    "scenario": "USER POST attach_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-031",
+    "category": "AUTH",
+    "scenario": "Guest GET createTheAnagram.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-032",
+    "category": "AUTH",
+    "scenario": "Guest POST createTheAnagram.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-033",
+    "category": "AUTH",
+    "scenario": "USER GET createTheAnagram.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-034",
+    "category": "AUTH",
+    "scenario": "USER POST createTheAnagram.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-035",
+    "category": "AUTH",
+    "scenario": "Guest GET createTheData.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-036",
+    "category": "AUTH",
+    "scenario": "Guest POST createTheData.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-037",
+    "category": "AUTH",
+    "scenario": "USER GET createTheData.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-038",
+    "category": "AUTH",
+    "scenario": "USER POST createTheData.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-039",
+    "category": "AUTH",
+    "scenario": "Guest GET createTheMovie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-040",
+    "category": "AUTH",
+    "scenario": "Guest POST createTheMovie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-041",
+    "category": "AUTH",
+    "scenario": "USER GET createTheMovie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-042",
+    "category": "AUTH",
+    "scenario": "USER POST createTheMovie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-043",
+    "category": "AUTH",
+    "scenario": "Guest GET create_Data.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-044",
+    "category": "AUTH",
+    "scenario": "Guest POST create_Data.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-045",
+    "category": "AUTH",
+    "scenario": "USER GET create_Data.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-046",
+    "category": "AUTH",
+    "scenario": "USER POST create_Data.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-047",
+    "category": "AUTH",
+    "scenario": "Guest GET create_movie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-048",
+    "category": "AUTH",
+    "scenario": "Guest POST create_movie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-049",
+    "category": "AUTH",
+    "scenario": "USER GET create_movie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-050",
+    "category": "AUTH",
+    "scenario": "USER POST create_movie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-051",
+    "category": "AUTH",
+    "scenario": "Guest GET create_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-052",
+    "category": "AUTH",
+    "scenario": "Guest POST create_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-053",
+    "category": "AUTH",
+    "scenario": "USER GET create_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-054",
+    "category": "AUTH",
+    "scenario": "USER POST create_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-055",
+    "category": "AUTH",
+    "scenario": "Guest GET create_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-056",
+    "category": "AUTH",
+    "scenario": "Guest POST create_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-057",
+    "category": "AUTH",
+    "scenario": "USER GET create_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-058",
+    "category": "AUTH",
+    "scenario": "USER POST create_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-059",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_media.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-060",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_media.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-061",
+    "category": "AUTH",
+    "scenario": "USER GET delete_media.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-062",
+    "category": "AUTH",
+    "scenario": "USER POST delete_media.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-063",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_movie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-064",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_movie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-065",
+    "category": "AUTH",
+    "scenario": "USER GET delete_movie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-066",
+    "category": "AUTH",
+    "scenario": "USER POST delete_movie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-067",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_movie_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-068",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_movie_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-069",
+    "category": "AUTH",
+    "scenario": "USER GET delete_movie_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-070",
+    "category": "AUTH",
+    "scenario": "USER POST delete_movie_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-071",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-072",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-073",
+    "category": "AUTH",
+    "scenario": "USER GET delete_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-074",
+    "category": "AUTH",
+    "scenario": "USER POST delete_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-075",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_poster.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-076",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_poster.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-077",
+    "category": "AUTH",
+    "scenario": "USER GET delete_poster.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-078",
+    "category": "AUTH",
+    "scenario": "USER POST delete_poster.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-079",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-080",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-081",
+    "category": "AUTH",
+    "scenario": "USER GET delete_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-082",
+    "category": "AUTH",
+    "scenario": "USER POST delete_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-083",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_song1.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-084",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_song1.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-085",
+    "category": "AUTH",
+    "scenario": "USER GET delete_song1.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-086",
+    "category": "AUTH",
+    "scenario": "USER POST delete_song1.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-087",
+    "category": "AUTH",
+    "scenario": "Guest GET delete_song_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-088",
+    "category": "AUTH",
+    "scenario": "Guest POST delete_song_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-089",
+    "category": "AUTH",
+    "scenario": "USER GET delete_song_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-090",
+    "category": "AUTH",
+    "scenario": "USER POST delete_song_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-091",
+    "category": "AUTH",
+    "scenario": "Guest GET games_base_chars_admin.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-092",
+    "category": "AUTH",
+    "scenario": "Guest POST games_base_chars_admin.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-093",
+    "category": "AUTH",
+    "scenario": "USER GET games_base_chars_admin.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-094",
+    "category": "AUTH",
+    "scenario": "USER POST games_base_chars_admin.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-095",
+    "category": "AUTH",
+    "scenario": "Guest GET modify.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-096",
+    "category": "AUTH",
+    "scenario": "Guest POST modify.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-097",
+    "category": "AUTH",
+    "scenario": "USER GET modify.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-098",
+    "category": "AUTH",
+    "scenario": "USER POST modify.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-099",
+    "category": "AUTH",
+    "scenario": "Guest GET modifyTheMovies.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-100",
+    "category": "AUTH",
+    "scenario": "Guest POST modifyTheMovies.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-101",
+    "category": "AUTH",
+    "scenario": "USER GET modifyTheMovies.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-102",
+    "category": "AUTH",
+    "scenario": "USER POST modifyTheMovies.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-103",
+    "category": "AUTH",
+    "scenario": "Guest GET modifyThePeople.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-104",
+    "category": "AUTH",
+    "scenario": "Guest POST modifyThePeople.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-105",
+    "category": "AUTH",
+    "scenario": "USER GET modifyThePeople.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-106",
+    "category": "AUTH",
+    "scenario": "USER POST modifyThePeople.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-107",
+    "category": "AUTH",
+    "scenario": "Guest GET modifyTheSongs.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-108",
+    "category": "AUTH",
+    "scenario": "Guest POST modifyTheSongs.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-109",
+    "category": "AUTH",
+    "scenario": "USER GET modifyTheSongs.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-110",
+    "category": "AUTH",
+    "scenario": "USER POST modifyTheSongs.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-111",
+    "category": "AUTH",
+    "scenario": "Guest GET modify_movie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-112",
+    "category": "AUTH",
+    "scenario": "Guest POST modify_movie.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-113",
+    "category": "AUTH",
+    "scenario": "USER GET modify_movie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-114",
+    "category": "AUTH",
+    "scenario": "USER POST modify_movie.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-115",
+    "category": "AUTH",
+    "scenario": "Guest GET modify_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-116",
+    "category": "AUTH",
+    "scenario": "Guest POST modify_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-117",
+    "category": "AUTH",
+    "scenario": "USER GET modify_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-118",
+    "category": "AUTH",
+    "scenario": "USER POST modify_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-119",
+    "category": "AUTH",
+    "scenario": "Guest GET modify_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-120",
+    "category": "AUTH",
+    "scenario": "Guest POST modify_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-121",
+    "category": "AUTH",
+    "scenario": "USER GET modify_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-122",
+    "category": "AUTH",
+    "scenario": "USER POST modify_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-123",
+    "category": "AUTH",
+    "scenario": "Guest GET post_create_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-124",
+    "category": "AUTH",
+    "scenario": "Guest POST post_create_song.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-125",
+    "category": "AUTH",
+    "scenario": "USER GET post_create_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-126",
+    "category": "AUTH",
+    "scenario": "USER POST post_create_song.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-127",
+    "category": "AUTH",
+    "scenario": "Guest GET post_modify_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-128",
+    "category": "AUTH",
+    "scenario": "Guest POST post_modify_people.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-129",
+    "category": "AUTH",
+    "scenario": "USER GET post_modify_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-130",
+    "category": "AUTH",
+    "scenario": "USER POST post_modify_people.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-131",
+    "category": "AUTH",
+    "scenario": "Guest GET setup.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-132",
+    "category": "AUTH",
+    "scenario": "Guest POST setup.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-133",
+    "category": "AUTH",
+    "scenario": "USER GET setup.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-134",
+    "category": "AUTH",
+    "scenario": "USER POST setup.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-135",
+    "category": "AUTH",
+    "scenario": "Guest GET sign_up.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-136",
+    "category": "AUTH",
+    "scenario": "Guest POST sign_up.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-137",
+    "category": "AUTH",
+    "scenario": "USER GET sign_up.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-138",
+    "category": "AUTH",
+    "scenario": "USER POST sign_up.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-139",
+    "category": "AUTH",
+    "scenario": "Guest GET song_people_list_post.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-140",
+    "category": "AUTH",
+    "scenario": "Guest POST song_people_list_post.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-141",
+    "category": "AUTH",
+    "scenario": "USER GET song_people_list_post.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-142",
+    "category": "AUTH",
+    "scenario": "USER POST song_people_list_post.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-143",
+    "category": "AUTH",
+    "scenario": "Guest GET songs_people_list.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-144",
+    "category": "AUTH",
+    "scenario": "Guest POST songs_people_list.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-145",
+    "category": "AUTH",
+    "scenario": "USER GET songs_people_list.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-146",
+    "category": "AUTH",
+    "scenario": "USER POST songs_people_list.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-147",
+    "category": "AUTH",
+    "scenario": "Guest GET movies_anagram.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-148",
+    "category": "AUTH",
+    "scenario": "Guest POST movies_anagram.php",
+    "expected": "HTTP 302; no diagnostics",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-149",
+    "category": "AUTH",
+    "scenario": "USER GET movies_anagram.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-150",
+    "category": "AUTH",
+    "scenario": "USER POST movies_anagram.php",
+    "expected": "HTTP 403; no diagnostics",
+    "actual": "HTTP 403; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-151",
+    "category": "AUTH",
+    "scenario": "All blocked admin requests",
+    "expected": "Every database table unchanged",
+    "actual": "Tables unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-152",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL add_movie_people_post.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-153",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL add_the_song.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-154",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL attach_song.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-155",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL createTheData.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-156",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL createTheMovie.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-157",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL delete_media.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-158",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL delete_movie_people.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-159",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL delete_poster.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-160",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL delete_song1.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-161",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL delete_song_people.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-162",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL modifyTheMovies.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-163",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL modifyThePeople.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-164",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL modifyTheSongs.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-165",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL post_create_song.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-166",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL post_modify_people.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-167",
+    "category": "AUTH",
+    "scenario": "ADMIN opens write-only URL song_people_list_post.php",
+    "expected": "HTTP 405 with Allow: POST",
+    "actual": "HTTP 405; Allow=POST",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-168",
+    "category": "AUTH",
+    "scenario": "Create movie with missing CSRF",
+    "expected": "HTTP 403; movie count unchanged",
+    "actual": "HTTP 403; movie delta=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-169",
+    "category": "AUTH",
+    "scenario": "Create movie with invalid CSRF",
+    "expected": "HTTP 403; movie count unchanged",
+    "actual": "HTTP 403; movie delta=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-170",
+    "category": "AUTH",
+    "scenario": "Create movie with invalid CSRF",
+    "expected": "HTTP 403; movie count unchanged",
+    "actual": "HTTP 403; movie delta=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-001",
+    "category": "INPUT",
+    "scenario": "Movie native_name empty",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-002",
+    "category": "INPUT",
+    "scenario": "Movie native_name whitespace",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-003",
+    "category": "INPUT",
+    "scenario": "Movie native_name array",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-004",
+    "category": "INPUT",
+    "scenario": "Movie english_name empty",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-005",
+    "category": "INPUT",
+    "scenario": "Movie english_name whitespace",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-006",
+    "category": "INPUT",
+    "scenario": "Movie english_name array",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-007",
+    "category": "INPUT",
+    "scenario": "Movie year empty",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-008",
+    "category": "INPUT",
+    "scenario": "Movie year whitespace",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-009",
+    "category": "INPUT",
+    "scenario": "Movie year array",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-010",
+    "category": "INPUT",
+    "scenario": "Movie native_name exceeds 180",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-011",
+    "category": "INPUT",
+    "scenario": "Movie english_name exceeds 180",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-012",
+    "category": "INPUT",
+    "scenario": "Invalid release year 1900",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-013",
+    "category": "INPUT",
+    "scenario": "Invalid release year 2156",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-014",
+    "category": "INPUT",
+    "scenario": "Invalid release year 2020 OR 1=1",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-015",
+    "category": "INPUT",
+    "scenario": "Invalid release year 2020.5",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-016",
+    "category": "INPUT",
+    "scenario": "Invalid release year 99999999999999999999999999",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-017",
+    "category": "INPUT",
+    "scenario": "create_people.php overlong stage_name",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-018",
+    "category": "INPUT",
+    "scenario": "create_people.php overlong first_name",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-019",
+    "category": "INPUT",
+    "scenario": "create_song.php overlong title",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-020",
+    "category": "INPUT",
+    "scenario": "create_song.php overlong lyrics",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-021",
+    "category": "INPUT",
+    "scenario": "create_song.php overlong theme",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-022",
+    "category": "INPUT",
+    "scenario": "create_people.php empty required field",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-023",
+    "category": "INPUT",
+    "scenario": "create_people.php array text field",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-024",
+    "category": "INPUT",
+    "scenario": "create_song.php empty required field",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-025",
+    "category": "INPUT",
+    "scenario": "create_song.php array text field",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-001",
+    "category": "URL",
+    "scenario": "movie_info.php invalid ID ",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-002",
+    "category": "URL",
+    "scenario": "movie_info.php invalid ID 0",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-003",
+    "category": "URL",
+    "scenario": "movie_info.php invalid ID -1",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-004",
+    "category": "URL",
+    "scenario": "movie_info.php invalid ID abc",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-005",
+    "category": "URL",
+    "scenario": "movie_info.php invalid ID 1 OR 1=1",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-006",
+    "category": "URL",
+    "scenario": "movie_info.php invalid ID 999999999999999999999999",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-007",
+    "category": "URL",
+    "scenario": "movie_info.php invalid ID ['1']",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-008",
+    "category": "URL",
+    "scenario": "movie_info.php nonexistent positive ID",
+    "expected": "HTTP 404",
+    "actual": "HTTP 404",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-009",
+    "category": "URL",
+    "scenario": "people_info.php invalid ID ",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-010",
+    "category": "URL",
+    "scenario": "people_info.php invalid ID 0",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-011",
+    "category": "URL",
+    "scenario": "people_info.php invalid ID -1",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-012",
+    "category": "URL",
+    "scenario": "people_info.php invalid ID abc",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-013",
+    "category": "URL",
+    "scenario": "people_info.php invalid ID 1 OR 1=1",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-014",
+    "category": "URL",
+    "scenario": "people_info.php invalid ID 999999999999999999999999",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-015",
+    "category": "URL",
+    "scenario": "people_info.php invalid ID ['1']",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-016",
+    "category": "URL",
+    "scenario": "people_info.php nonexistent positive ID",
+    "expected": "HTTP 404",
+    "actual": "HTTP 404",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-017",
+    "category": "URL",
+    "scenario": "song_info.php invalid ID ",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-018",
+    "category": "URL",
+    "scenario": "song_info.php invalid ID 0",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-019",
+    "category": "URL",
+    "scenario": "song_info.php invalid ID -1",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-020",
+    "category": "URL",
+    "scenario": "song_info.php invalid ID abc",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-021",
+    "category": "URL",
+    "scenario": "song_info.php invalid ID 1 OR 1=1",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-022",
+    "category": "URL",
+    "scenario": "song_info.php invalid ID 999999999999999999999999",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-023",
+    "category": "URL",
+    "scenario": "song_info.php invalid ID ['1']",
+    "expected": "HTTP 400; diagnostics hidden",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-024",
+    "category": "URL",
+    "scenario": "song_info.php nonexistent positive ID",
+    "expected": "HTTP 404",
+    "actual": "HTTP 404",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-025",
+    "category": "URL",
+    "scenario": "Unknown/CLI-only URL no-such-page.php",
+    "expected": "HTTP 404; no server path",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-026",
+    "category": "URL",
+    "scenario": "Unknown/CLI-only URL removed-endpoint.php",
+    "expected": "HTTP 404; no server path",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-027",
+    "category": "URL",
+    "scenario": "Unknown/CLI-only URL tools/week9_fixture.php",
+    "expected": "HTTP 404; no server path",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-028",
+    "category": "URL",
+    "scenario": "Unknown/CLI-only URL tests/week9_fixture.php",
+    "expected": "HTTP 404; no server path",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-029",
+    "category": "URL",
+    "scenario": "Update a nonexistent record via modifyTheMovies.php",
+    "expected": "HTTP 400; no false success; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-030",
+    "category": "URL",
+    "scenario": "Update a nonexistent record via modifyThePeople.php",
+    "expected": "HTTP 400; no false success; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-031",
+    "category": "URL",
+    "scenario": "Update a nonexistent record via modifyTheSongs.php",
+    "expected": "HTTP 400; no false success; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-032",
+    "category": "URL",
+    "scenario": "modify.php valid movie_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-033",
+    "category": "URL",
+    "scenario": "modify.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-034",
+    "category": "URL",
+    "scenario": "modify.php form with SQL text in movie_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-035",
+    "category": "URL",
+    "scenario": "modify.php valid people_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-036",
+    "category": "URL",
+    "scenario": "modify.php form for deleted people_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-037",
+    "category": "URL",
+    "scenario": "modify.php form with SQL text in people_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-038",
+    "category": "URL",
+    "scenario": "modify.php valid song_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-039",
+    "category": "URL",
+    "scenario": "modify.php form for deleted song_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-040",
+    "category": "URL",
+    "scenario": "modify.php form with SQL text in song_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-041",
+    "category": "URL",
+    "scenario": "create_Data.php valid movie_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-042",
+    "category": "URL",
+    "scenario": "create_Data.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-043",
+    "category": "URL",
+    "scenario": "create_Data.php form with SQL text in movie_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-044",
+    "category": "URL",
+    "scenario": "add_people.php valid movie_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-045",
+    "category": "URL",
+    "scenario": "add_people.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-046",
+    "category": "URL",
+    "scenario": "add_people.php form with SQL text in movie_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-047",
+    "category": "URL",
+    "scenario": "add_song.php valid movie_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-048",
+    "category": "URL",
+    "scenario": "add_song.php form for deleted movie_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-049",
+    "category": "URL",
+    "scenario": "add_song.php form with SQL text in movie_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 302; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-050",
+    "category": "URL",
+    "scenario": "songs_people_list.php valid song_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-051",
+    "category": "URL",
+    "scenario": "songs_people_list.php form for deleted song_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-052",
+    "category": "URL",
+    "scenario": "songs_people_list.php form with SQL text in song_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-053",
+    "category": "URL",
+    "scenario": "modify_people.php valid people_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-054",
+    "category": "URL",
+    "scenario": "modify_people.php form for deleted people_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-055",
+    "category": "URL",
+    "scenario": "modify_people.php form with SQL text in people_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-056",
+    "category": "URL",
+    "scenario": "modify_song.php valid song_id",
+    "expected": "HTTP 200; existing admin form remains usable",
+    "actual": "HTTP 200; form present=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-057",
+    "category": "URL",
+    "scenario": "modify_song.php form for deleted song_id",
+    "expected": "HTTP 404; no empty or unrelated edit form",
+    "actual": "HTTP 404; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-URL-058",
+    "category": "URL",
+    "scenario": "modify_song.php form with SQL text in song_id",
+    "expected": "HTTP 400 or redirect; never opens record 1",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-001",
+    "category": "ACCOUNT",
+    "scenario": "Empty first_name",
+    "expected": "HTTP 400; no account created",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-002",
+    "category": "ACCOUNT",
+    "scenario": "Empty last_name",
+    "expected": "HTTP 400; no account created",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-003",
+    "category": "ACCOUNT",
+    "scenario": "Empty email",
+    "expected": "HTTP 400; no account created",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-004",
+    "category": "ACCOUNT",
+    "scenario": "Empty password",
+    "expected": "HTTP 400; no account created",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-005",
+    "category": "ACCOUNT",
+    "scenario": "Empty repeat_password",
+    "expected": "HTTP 400; no account created",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-006",
+    "category": "ACCOUNT",
+    "scenario": "invalid email",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-007",
+    "category": "ACCOUNT",
+    "scenario": "mismatched passwords",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-008",
+    "category": "ACCOUNT",
+    "scenario": "short password",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-009",
+    "category": "ACCOUNT",
+    "scenario": "overlong password",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-010",
+    "category": "ACCOUNT",
+    "scenario": "NUL in password",
+    "expected": "HTTP 400; no database changes",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-011",
+    "category": "ACCOUNT",
+    "scenario": "Create account with attempted ADMIN role override",
+    "expected": "USER account; hashed password; no password echoed",
+    "actual": "HTTP 200; role=USER; plaintext password stored/echoed=False",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-012",
+    "category": "ACCOUNT",
+    "scenario": "Duplicate account same email",
+    "expected": "HTTP 400; existing account unchanged",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-013",
+    "category": "ACCOUNT",
+    "scenario": "Duplicate account case variant",
+    "expected": "HTTP 400; existing account unchanged",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-014",
+    "category": "ACCOUNT",
+    "scenario": "Login attack string ' OR 1=1 -- ",
+    "expected": "HTTP 200 invalid credentials; no authenticated session",
+    "actual": "HTTP 200; admin form remains inaccessible=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-015",
+    "category": "ACCOUNT",
+    "scenario": "Login attack string admin@example.invalid' #",
+    "expected": "HTTP 200 invalid credentials; no authenticated session",
+    "actual": "HTTP 200; admin form remains inaccessible=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-ACCOUNT-016",
+    "category": "ACCOUNT",
+    "scenario": "Login attack string <script>alert(9)</script>",
+    "expected": "HTTP 200 invalid credentials; no authenticated session",
+    "actual": "HTTP 200; admin form remains inaccessible=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CRUD-001",
+    "category": "CRUD",
+    "scenario": "Create movie with apostrophe/markup",
+    "expected": "HTTP 302; exact text stored",
+    "actual": "HTTP 302; exact text stored=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CRUD-002",
+    "category": "CRUD",
+    "scenario": "Create person with apostrophe/markup",
+    "expected": "HTTP 302; exact text stored",
+    "actual": "HTTP 302; exact text stored=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CRUD-003",
+    "category": "CRUD",
+    "scenario": "Create song with apostrophe/markup",
+    "expected": "HTTP 302; exact text stored",
+    "actual": "HTTP 302; exact text stored=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-XSS-001",
+    "category": "XSS",
+    "scenario": "View hostile movie text",
+    "expected": "HTTP 200; escaped markup; no executable HTML",
+    "actual": "HTTP 200; raw markup present=False; escaped markup present=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-XSS-002",
+    "category": "XSS",
+    "scenario": "View hostile person text",
+    "expected": "HTTP 200; escaped markup; no executable HTML",
+    "actual": "HTTP 200; raw markup present=False; escaped markup present=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-XSS-003",
+    "category": "XSS",
+    "scenario": "View hostile song text",
+    "expected": "HTTP 200; escaped markup; no executable HTML",
+    "actual": "HTTP 200; raw markup present=False; escaped markup present=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-026",
+    "category": "INPUT",
+    "scenario": "movie title exactly 180 Unicode characters",
+    "expected": "Create succeeds at documented limit",
+    "actual": "HTTP 302; exact text stored=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-027",
+    "category": "INPUT",
+    "scenario": "person title exactly 30 Unicode characters",
+    "expected": "Create succeeds at documented limit",
+    "actual": "HTTP 302; exact text stored=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-INPUT-028",
+    "category": "INPUT",
+    "scenario": "song title exactly 20 Unicode characters",
+    "expected": "Create succeeds at documented limit",
+    "actual": "HTTP 302; exact text stored=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-001",
+    "category": "SEARCH",
+    "scenario": "zero results",
+    "expected": "HTTP 200; exactly 0 matches; escaped text",
+    "actual": "HTTP 200; matching count=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-002",
+    "category": "SEARCH",
+    "scenario": "one results",
+    "expected": "HTTP 200; exactly 1 matches; escaped text",
+    "actual": "HTTP 200; matching count=1",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-003",
+    "category": "SEARCH",
+    "scenario": "many results",
+    "expected": "HTTP 200; exactly 2 matches; escaped text",
+    "actual": "HTTP 200; matching count=2",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-004",
+    "category": "SEARCH",
+    "scenario": "apostrophe and Unicode results",
+    "expected": "HTTP 200; exactly 1 matches; escaped text",
+    "actual": "HTTP 200; matching count=1",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-005",
+    "category": "SEARCH",
+    "scenario": "SQL injection results",
+    "expected": "HTTP 200; exactly 0 matches; escaped text",
+    "actual": "HTTP 200; matching count=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-006",
+    "category": "SEARCH",
+    "scenario": "SQL UNION results",
+    "expected": "HTTP 200; exactly 0 matches; escaped text",
+    "actual": "HTTP 200; matching count=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-007",
+    "category": "SEARCH",
+    "scenario": "XSS filter results",
+    "expected": "HTTP 200; exactly 0 matches; escaped text",
+    "actual": "HTTP 200; matching count=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-008",
+    "category": "SEARCH",
+    "scenario": "literal wildcard results",
+    "expected": "HTTP 200; exactly 0 matches; escaped text",
+    "actual": "HTTP 200; matching count=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-009",
+    "category": "SEARCH",
+    "scenario": "Invalid query cast_member[]=bad",
+    "expected": "HTTP 400; no diagnostics",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-010",
+    "category": "SEARCH",
+    "scenario": "Invalid query director=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "expected": "HTTP 400; no diagnostics",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-011",
+    "category": "SEARCH",
+    "scenario": "Invalid query page=0",
+    "expected": "HTTP 400; no diagnostics",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-012",
+    "category": "SEARCH",
+    "scenario": "Invalid query page=-1",
+    "expected": "HTTP 400; no diagnostics",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-013",
+    "category": "SEARCH",
+    "scenario": "Invalid query page[]=1",
+    "expected": "HTTP 400; no diagnostics",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-014",
+    "category": "SEARCH",
+    "scenario": "Invalid query page=99999999999999999999999999",
+    "expected": "HTTP 400; no diagnostics",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-015",
+    "category": "SEARCH",
+    "scenario": "Invalid query movie_search=%FF",
+    "expected": "HTTP 400; no diagnostics",
+    "actual": "HTTP 400; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-016",
+    "category": "SEARCH",
+    "scenario": "No filters",
+    "expected": "HTTP 200 with enter-a-filter guidance",
+    "actual": "HTTP 200; guidance present=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-017",
+    "category": "SEARCH",
+    "scenario": "Repeat combined search 1",
+    "expected": "Same single result; no database changes",
+    "actual": "HTTP 200; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-018",
+    "category": "SEARCH",
+    "scenario": "Repeat combined search 2",
+    "expected": "Same single result; no database changes",
+    "actual": "HTTP 200; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-019",
+    "category": "SEARCH",
+    "scenario": "Repeat combined search 3",
+    "expected": "Same single result; no database changes",
+    "actual": "HTTP 200; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-REPEAT-001",
+    "category": "REPEAT",
+    "scenario": "Add same movie/person credit 1",
+    "expected": "HTTP 200; exactly one credit",
+    "actual": "HTTP 200; credits=1",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-REPEAT-002",
+    "category": "REPEAT",
+    "scenario": "Add same movie/person credit 2",
+    "expected": "HTTP 200; exactly one credit",
+    "actual": "HTTP 200; credits=1",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-RELATION-001",
+    "category": "RELATION",
+    "scenario": "Batch credit includes missing person",
+    "expected": "HTTP 400; complete batch rolled back",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-RELATION-002",
+    "category": "RELATION",
+    "scenario": "Credit for nonexistent movie",
+    "expected": "HTTP 400; no orphan credit",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-RELATION-003",
+    "category": "RELATION",
+    "scenario": "Credit with empty role",
+    "expected": "HTTP 400; database unchanged",
+    "actual": "HTTP 400; tables unchanged=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-001",
+    "category": "DELETE",
+    "scenario": "Prepare records with every owned relationship type",
+    "expected": "All children exist before deletion",
+    "actual": "Fixture created all movie/person/song child and association types",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-002",
+    "category": "DELETE",
+    "scenario": "Delete person, attempt 1",
+    "expected": "HTTP 302; record absent; repeat is harmless",
+    "actual": "HTTP 302; remaining parents=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-003",
+    "category": "DELETE",
+    "scenario": "Delete person, attempt 2",
+    "expected": "HTTP 302; record absent; repeat is harmless",
+    "actual": "HTTP 302; remaining parents=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-004",
+    "category": "DELETE",
+    "scenario": "person cleanup in movie_people",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-005",
+    "category": "DELETE",
+    "scenario": "person cleanup in song_people",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-006",
+    "category": "DELETE",
+    "scenario": "person cleanup in people_trivia",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-007",
+    "category": "DELETE",
+    "scenario": "person deletion preserves related movies",
+    "expected": "Related entity still exists",
+    "actual": "Remaining related entities=1",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-008",
+    "category": "DELETE",
+    "scenario": "person deletion preserves related songs",
+    "expected": "Related entity still exists",
+    "actual": "Remaining related entities=1",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-009",
+    "category": "DELETE",
+    "scenario": "Delete song, attempt 1",
+    "expected": "HTTP 302; record absent; repeat is harmless",
+    "actual": "HTTP 302; remaining parents=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-010",
+    "category": "DELETE",
+    "scenario": "Delete song, attempt 2",
+    "expected": "HTTP 302; record absent; repeat is harmless",
+    "actual": "HTTP 302; remaining parents=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-011",
+    "category": "DELETE",
+    "scenario": "song cleanup in movie_song",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-012",
+    "category": "DELETE",
+    "scenario": "song cleanup in song_people",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-013",
+    "category": "DELETE",
+    "scenario": "song cleanup in song_media",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-014",
+    "category": "DELETE",
+    "scenario": "song cleanup in song_trivia",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-015",
+    "category": "DELETE",
+    "scenario": "song cleanup in song_keywords",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-016",
+    "category": "DELETE",
+    "scenario": "song deletion preserves related movies",
+    "expected": "Related entity still exists",
+    "actual": "Remaining related entities=1",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-017",
+    "category": "DELETE",
+    "scenario": "Delete movie, attempt 1",
+    "expected": "HTTP 302; record absent; repeat is harmless",
+    "actual": "HTTP 302; remaining parents=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-018",
+    "category": "DELETE",
+    "scenario": "Delete movie, attempt 2",
+    "expected": "HTTP 302; record absent; repeat is harmless",
+    "actual": "HTTP 302; remaining parents=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-019",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_anagrams",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-020",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_data",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-021",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_numbers",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-022",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_trivia",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-023",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_quotes",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-024",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_media",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-025",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_keywords",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-026",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_people",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-027",
+    "category": "DELETE",
+    "scenario": "movie cleanup in movie_song",
+    "expected": "Zero children for deleted record",
+    "actual": "Remaining rows=0",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-001",
+    "category": "CSV",
+    "scenario": "no file",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-002",
+    "category": "CSV",
+    "scenario": "wrong extension",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-003",
+    "category": "CSV",
+    "scenario": "empty CSV",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-004",
+    "category": "CSV",
+    "scenario": "blank-only CSV",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-005",
+    "category": "CSV",
+    "scenario": "wrong column count",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-006",
+    "category": "CSV",
+    "scenario": "bad year after valid row",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-007",
+    "category": "CSV",
+    "scenario": "overlong song after valid row",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-008",
+    "category": "CSV",
+    "scenario": "invalid UTF-8",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-009",
+    "category": "CSV",
+    "scenario": "unexpected table",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-010",
+    "category": "CSV",
+    "scenario": "more than 10000 records",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-011",
+    "category": "CSV",
+    "scenario": "over 5 MB",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-012",
+    "category": "CSV",
+    "scenario": "unclosed quoted field",
+    "expected": "HTTP 400; entire database unchanged",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-013",
+    "category": "CSV",
+    "scenario": "UTF-8 BOM, apostrophe, quoted comma and CRLF",
+    "expected": "2 movies and derived rows imported",
+    "actual": "HTTP 200; inserted=2; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-014",
+    "category": "CSV",
+    "scenario": "Repeat existing movie CSV",
+    "expected": "0 imported, 2 skipped",
+    "actual": "HTTP 200; inserted=0; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-015",
+    "category": "CSV",
+    "scenario": "Duplicate movie within same upload",
+    "expected": "One imported, one skipped",
+    "actual": "HTTP 200; inserted=1; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-016",
+    "category": "CSV",
+    "scenario": "Quoted multiline lyrics and escaped double quotes",
+    "expected": "One song with exact newline/quotes",
+    "actual": "HTTP 200; exact multiline lyrics=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-017",
+    "category": "CSV",
+    "scenario": "People CSV with apostrophe and optional empty names",
+    "expected": "One person imported",
+    "actual": "HTTP 200; inserted=1; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-018",
+    "category": "CSV",
+    "scenario": "Repeat people import 1",
+    "expected": "One new row per upload, as documented",
+    "actual": "HTTP 200; inserted=1; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-019",
+    "category": "CSV",
+    "scenario": "Repeat people import 2",
+    "expected": "One new row per upload, as documented",
+    "actual": "HTTP 200; inserted=1; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-020",
+    "category": "CSV",
+    "scenario": "Repeat song import 1",
+    "expected": "One new row per upload, as documented",
+    "actual": "HTTP 200; inserted=1; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-021",
+    "category": "CSV",
+    "scenario": "Repeat song import 2",
+    "expected": "One new row per upload, as documented",
+    "actual": "HTTP 200; inserted=1; summary correct=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-CSV-022",
+    "category": "CSV",
+    "scenario": "Duplicate movie cannot bypass field validation",
+    "expected": "HTTP 400 for blank English title; no database changes",
+    "actual": "HTTP 400; atomic rollback=True; diagnostics hidden=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-020",
+    "category": "SEARCH",
+    "scenario": "Pagination requested page 1",
+    "expected": "51 matches; 50 rows; out-of-range page clamped",
+    "actual": "HTTP 200; rendered rows=50; 51 matches=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-021",
+    "category": "SEARCH",
+    "scenario": "Pagination requested page 2",
+    "expected": "51 matches; 1 rows; out-of-range page clamped",
+    "actual": "HTTP 200; rendered rows=1; 51 matches=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-SEARCH-022",
+    "category": "SEARCH",
+    "scenario": "Pagination requested page 999",
+    "expected": "51 matches; 1 rows; out-of-range page clamped",
+    "actual": "HTTP 200; rendered rows=1; 51 matches=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-028",
+    "category": "DELETE",
+    "scenario": "Delete invalid/nonexistent movie ID 0",
+    "expected": "400 for malformed IDs; harmless redirect for absent positive ID; no changes",
+    "actual": "HTTP 400; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-029",
+    "category": "DELETE",
+    "scenario": "Delete invalid/nonexistent movie ID -1",
+    "expected": "400 for malformed IDs; harmless redirect for absent positive ID; no changes",
+    "actual": "HTTP 400; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-030",
+    "category": "DELETE",
+    "scenario": "Delete invalid/nonexistent movie ID abc",
+    "expected": "400 for malformed IDs; harmless redirect for absent positive ID; no changes",
+    "actual": "HTTP 400; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-031",
+    "category": "DELETE",
+    "scenario": "Delete invalid/nonexistent movie ID 1 OR 1=1",
+    "expected": "400 for malformed IDs; harmless redirect for absent positive ID; no changes",
+    "actual": "HTTP 400; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-DELETE-032",
+    "category": "DELETE",
+    "scenario": "Delete invalid/nonexistent movie ID 2147483648",
+    "expected": "400 for malformed IDs; harmless redirect for absent positive ID; no changes",
+    "actual": "HTTP 302; unchanged=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-171",
+    "category": "AUTH",
+    "scenario": "Logout",
+    "expected": "HTTP 302 and subsequent admin form requires login",
+    "actual": "HTTP 302; admin access revoked=True",
+    "result": "PASS"
+  },
+  {
+    "id": "W9-AUTH-172",
+    "category": "AUTH",
+    "scenario": "Replay a write after logout",
+    "expected": "HTTP 302; database unchanged",
+    "actual": "HTTP 302; unchanged=True",
+    "result": "PASS"
+  }
+]

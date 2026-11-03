@@ -3,6 +3,12 @@ require_once __DIR__ . '/security.php';
 $omdb_admin_page = true;
 require_admin();
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+require_once __DIR__ . '/initialize.php';
+require_once __DIR__ . '/catalog.php';
+$record_types = ['movie_id'=>'movies', 'people_id'=>'people', 'song_id'=>'songs'];
+$record_ids = array_intersect_key($_GET, $record_types);
+if (count($record_ids) !== 1) { security_fail(400, 'Choose one record from the catalog to edit.'); }
+foreach ($record_ids as $key=>$value) { catalog_form_id($db, $record_types[$key], $value); }
 ?>
 <?php
   if (!isset($_SESSION['username']))

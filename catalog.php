@@ -17,14 +17,18 @@ function catalog_id($value): int {
     return $id;
 }
 
-// Call inside db_transaction(): the movie and its derived numbers are one operation.
-function catalog_insert_movie(mysqli $db, array $input): int {
+function catalog_movie_values(array $input): array {
     $native = catalog_text($input, 'native_name', 180, true);
     $english = catalog_text($input, 'english_name', 180, true);
     $year = filter_var($input['year'] ?? '', FILTER_VALIDATE_INT);
     if (!$year || $year < 1901 || $year > min(2155, (int)date('Y') + 10)) {
         throw new InvalidArgumentException('Enter a release year from 1901 to ' . min(2155, (int)date('Y') + 10) . '.');
     }
+    return [$native, $english, $year];
+}
+// Call inside db_transaction(): the movie and its derived numbers are one operation.
+function catalog_insert_movie(mysqli $db, array $input): int {
+    [$native, $english, $year] = catalog_movie_values($input);
     $id = db_insert($db, 'INSERT INTO movies (native_name, english_name, year_made) VALUES (?, ?, ?)', [$native, $english, $year]);
     // Graphemes keep Telugu combining marks together and make imports work offline.
     preg_match_all('/\X/u', preg_replace('/\s+/u', '', mb_strtolower($native, 'UTF-8')), $characters);
@@ -60,10 +64,12 @@ function catalog_import_csv(mysqli $db, string $table, $handle): array {
                 throw new InvalidArgumentException('CSV column count is incorrect at record ' . $rowNumber . '. No records were imported.');
             }
             if ($table === 'movies') {
+                // Validate even an existing title/year before applying the skip policy.
+                [$native, $english, $year] = catalog_movie_values(['native_name'=>$row[0], 'english_name'=>$row[1], 'year'=>$row[2]]);
                 // Retain the existing importer policy: skip an existing native title/year.
-                $exists = db_query($db, 'SELECT movie_id FROM movies WHERE native_name = ? AND year_made = ? LIMIT 1', [trim($row[0]), trim($row[2])])->num_rows;
+                $exists = db_query($db, 'SELECT movie_id FROM movies WHERE native_name = ? AND year_made = ? LIMIT 1', [$native, $year])->num_rows;
                 if ($exists) { $counts['skipped']++; continue; }
-                catalog_insert_movie($db, ['native_name'=>$row[0], 'english_name'=>$row[1], 'year'=>$row[2]]);
+                catalog_insert_movie($db, ['native_name'=>$native, 'english_name'=>$english, 'year'=>$year]);
             } elseif ($table === 'people') {
                 catalog_insert_person($db, array_combine(['stage_name','first_name','middle_name','last_name','gender'], $row));
             } else {
@@ -72,8 +78,30 @@ function catalog_import_csv(mysqli $db, string $table, $handle): array {
             $counts['imported']++;
         }
         if (!feof($handle)) { throw new RuntimeException('CSV could not be read.'); }
+        if ($rowNumber === 0) { throw new InvalidArgumentException('The CSV file is empty. Add at least one record before importing.'); }
         return $counts;
     });
+}
+
+// Use inside the surrounding write transaction so deletion cannot race an edit.
+function catalog_require_record(mysqli $db, string $table, int $id): void {
+    $keys = ['movies'=>'movie_id', 'people'=>'people_id', 'songs'=>'song_id'];
+    if (!isset($keys[$table])) { throw new InvalidArgumentException('Select a valid record type.'); }
+    if (!db_query($db, "SELECT `{$keys[$table]}` FROM `$table` WHERE `{$keys[$table]}`=? FOR UPDATE", [$id])->num_rows) {
+        throw new InvalidArgumentException('This record is no longer in the catalog. Reload the list and choose an existing record.');
+    }
+}
+
+// A saved form URL must identify an existing record before any form is rendered.
+function catalog_form_id(mysqli $db, string $table, $value): int {
+    $keys = ['movies'=>'movie_id', 'people'=>'people_id', 'songs'=>'song_id'];
+    if (!isset($keys[$table])) { throw new InvalidArgumentException('Select a valid record type.'); }
+    try { $id = catalog_id($value); }
+    catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+    if (!db_query($db, "SELECT `{$keys[$table]}` FROM `$table` WHERE `{$keys[$table]}`=?", [$id])->num_rows) {
+        security_fail(404, 'This record is no longer in the catalog. Choose an existing record from the list.');
+    }
+    return $id;
 }
 
 // Match selected row suffixes rather than pairing independent arrays by position.
@@ -86,10 +114,12 @@ function catalog_relationships(mysqli $db, string $kind, int $parent, array $inp
     if (!isset($specs[$kind])) { throw new InvalidArgumentException('Invalid relationship.'); }
     [$parentColumn, $childColumn, $fields] = $specs[$kind];
     db_transaction($db, function () use ($db, $kind, $parent, $input, $parentColumn, $childColumn, $fields): void {
+        catalog_require_record($db, $parentColumn === 'movie_id' ? 'movies' : 'songs', $parent);
         foreach ($input as $key=>$value) {
             if (!preg_match('/^' . $childColumn . '(\d+)$/D', $key, $match)) { continue; }
             $columns = [$parentColumn, $childColumn];
             $values = [$parent, catalog_id($value)];
+            catalog_require_record($db, $childColumn === 'people_id' ? 'people' : 'songs', $values[1]);
             foreach ($fields as $field=>$limit) {
                 $columns[] = $field;
                 $values[] = catalog_text($input, $field . $match[1], $limit, $field === 'role');
@@ -109,6 +139,7 @@ function catalog_relationships(mysqli $db, string $kind, int $parent, array $inp
 
 function catalog_update_person(mysqli $db, array $input): void {
     $id = catalog_id($input['people_id'] ?? $input['id'] ?? null);
+    catalog_require_record($db, 'people', $id);
     db_query($db, 'UPDATE people SET stage_name=?, first_name=?, middle_name=?, last_name=?, gender=? WHERE people_id=?', [
         catalog_text($input,'stage_name',30,true), catalog_text($input,'first_name',20),
         catalog_text($input,'middle_name',20), catalog_text($input,'last_name',20), catalog_text($input,'gender',6), $id]);
@@ -129,6 +160,7 @@ function catalog_update_person(mysqli $db, array $input): void {
 }
 function catalog_update_song(mysqli $db, array $input): void {
     $id=catalog_id($input['song_id'] ?? null);
+    catalog_require_record($db, 'songs', $id);
     db_query($db,'UPDATE songs SET title=?, lyrics=?, theme=? WHERE song_id=?',[
         catalog_text($input,'title',20,true),catalog_text($input,'lyrics',500),catalog_text($input,'theme',20),$id]);
     catalog_update_children($db,'song',$id,$input);
@@ -174,6 +206,7 @@ function catalog_update_children(mysqli $db, string $kind, int $id, array $input
 }
 function catalog_update_movie(mysqli $db, array $input): void {
     $id=catalog_id($input['movie_id'] ?? null);
+    catalog_require_record($db, 'movies', $id);
     $year=filter_var($input['year_update'] ?? '',FILTER_VALIDATE_INT);
     if (!$year || $year<1901 || $year>min(2155,(int)date('Y')+10)) { throw new InvalidArgumentException('Enter a release year from 1901 to ' . min(2155,(int)date('Y')+10) . '.'); }
     db_query($db,'UPDATE movies SET english_name=?,year_made=? WHERE movie_id=?',[

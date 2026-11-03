@@ -3,6 +3,9 @@ require_once __DIR__ . '/security.php';
 $omdb_admin_page = true;
 require_admin();
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
+require_once __DIR__ . '/initialize.php';
+require_once __DIR__ . '/catalog.php';
+$movie_id = catalog_form_id($db, 'movies', $_POST['movie_id'] ?? $_GET['movie_id'] ?? null);
 ?>
 <?php $page_title = 'The Cow Layer'; ?>
 <?php
@@ -10,7 +13,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') { csrf_validate(); }
     $left_buttons = "NO";
     $left_selected = "";
      include("./nav.php");
-    $movie_id = $_GET["movie_id"];
   ?>
 
 

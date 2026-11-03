@@ -23,6 +23,7 @@ try {
         echo ui_notice('Song credits updated. Review the list below.','success');
     }
 } catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+if (!is_post_request()) { $song_id = catalog_form_id($db, 'songs', $song_id); }
 
     $sql = db_query($db, ['sql' => 'select people.*, song_people.* from people left join song_people on people.people_id = song_people.people_id where song_people.song_id = ?;', 'params' => [$song_id]]);
 
