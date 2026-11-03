@@ -194,7 +194,8 @@ def create_entity(kind, title):
     status, body, _ = admin.post(route, data)
     ids[kind] = sql('SELECT MAX(`' + pk + '`) FROM `' + table + '`')
     column = {'movie': 'native_name', 'person': 'stage_name', 'song': 'title'}[kind]
-    intact = sql('SELECT `' + column + '` FROM `' + table + '` WHERE `' + pk + '`=' + ids[kind]) == title
+    # HEX checks the stored UTF-8 bytes without depending on the CLI's output encoding.
+    intact = sql('SELECT HEX(`' + column + '`) FROM `' + table + '` WHERE `' + pk + '`=' + ids[kind]).lower() == title.encode('utf8').hex()
     return status == 302 and intact and safe(body), f'HTTP {status}; exact text stored={intact}'
 for kind, title in [('movie', hostile), ('person', "O'Neil <b>W9</b>"), ('song', "O'Neil <b>W9</b>")]:
     case('CRUD', 'Create ' + kind + ' with apostrophe/markup', 'HTTP 302; exact text stored', lambda k=kind, t=title: create_entity(k, t))

@@ -82,7 +82,7 @@ def main():
             env.update(OMDB_TEST_URL=f'http://127.0.0.1:{port}/', OMDB_TEST_RESULTS=str(output / 'security.json'),
                        OMDB_UI_RESULTS=str(output / 'ui.json'), OMDB_WEEK9_RESULTS=str(output / 'matrix.json'))
             with (output / 'http-server.log').open('wb') as log:
-                server = subprocess.Popen([args.php, '-S', f'127.0.0.1:{port}', '-t', str(source)], cwd=source,
+                server = subprocess.Popen([args.php, '-S', f'127.0.0.1:{port}', '-t', str(source), str(source / 'tests/http_router.php')], cwd=source,
                                           env=env, stdout=log, stderr=log)
                 try:
                     for _ in range(100):
