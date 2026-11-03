@@ -41,6 +41,7 @@ try {
         echo ui_notice('Movie credits updated. Review the list below.','success');
     }
 } catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+if (!is_post_request()) { $movie_id = catalog_form_id($db, 'movies', $movie_id); }
 
     $sql = db_query($db, ['sql' => 'select people.*, movie_people.* from people left join movie_people on people.people_id = movie_people.people_id where movie_people.movie_id = ?;', 'params' => [$movie_id]]);
 

@@ -30,12 +30,16 @@ jobs:
           --health-retries=10
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Fresh schema and legacy migration regression tests
+      - name: Database, security, UI and Week 9 edge-case matrix
         env:
           OMDB_DB_SERVER: '127.0.0.1'
           OMDB_DB_USER: root
           OMDB_DB_PASS: ''
           OMDB_DB_NAME: unused_configuration
+        run: python3 tests/run_week9.py --php php --mysql mysql --output "${{ runner.temp }}/omdb-week9-results"
+      - name: Record expected and actual test results
+        if: always()
         run: |
-          php tests/backend.php
-          php tests/movie-search.php
+          if [ -f "${{ runner.temp }}/omdb-week9-results/matrix.md" ]; then
+            cat "${{ runner.temp }}/omdb-week9-results/matrix.md" >> "$GITHUB_STEP_SUMMARY"
+          fi

@@ -41,6 +41,7 @@ try {
         echo ui_notice('Movie songs updated. Review the list below.','success');
     }
 } catch (InvalidArgumentException $error) { security_fail(400, $error->getMessage()); }
+if (!is_post_request()) { $movie_id = catalog_form_id($db, 'movies', $movie_id); }
 
     $sql = db_query($db, ['sql' => 'select songs.* from songs left join movie_song on songs.song_id = movie_song.song_id where movie_song.movie_id = ?;', 'params' => [$movie_id]]);
 

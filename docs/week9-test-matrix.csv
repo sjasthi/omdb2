@@ -1,0 +1,362 @@
+﻿id,category,scenario,expected,actual,result
+W9-AUTH-001,AUTH,USER signs in,HTTP 302 to index.php,HTTP 302; destination=index.php,PASS
+W9-AUTH-002,AUTH,ADMIN signs in,HTTP 302 to index.php,HTTP 302; destination=index.php,PASS
+W9-AUTH-003,AUTH,Guest GET add_movie_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-004,AUTH,Guest POST add_movie_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-005,AUTH,USER GET add_movie_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-006,AUTH,USER POST add_movie_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-007,AUTH,Guest GET add_movie_people_post.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-008,AUTH,Guest POST add_movie_people_post.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-009,AUTH,USER GET add_movie_people_post.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-010,AUTH,USER POST add_movie_people_post.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-011,AUTH,Guest GET add_movie_posters.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-012,AUTH,Guest POST add_movie_posters.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-013,AUTH,USER GET add_movie_posters.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-014,AUTH,USER POST add_movie_posters.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-015,AUTH,Guest GET add_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-016,AUTH,Guest POST add_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-017,AUTH,USER GET add_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-018,AUTH,USER POST add_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-019,AUTH,Guest GET add_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-020,AUTH,Guest POST add_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-021,AUTH,USER GET add_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-022,AUTH,USER POST add_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-023,AUTH,Guest GET add_the_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-024,AUTH,Guest POST add_the_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-025,AUTH,USER GET add_the_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-026,AUTH,USER POST add_the_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-027,AUTH,Guest GET attach_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-028,AUTH,Guest POST attach_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-029,AUTH,USER GET attach_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-030,AUTH,USER POST attach_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-031,AUTH,Guest GET createTheAnagram.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-032,AUTH,Guest POST createTheAnagram.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-033,AUTH,USER GET createTheAnagram.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-034,AUTH,USER POST createTheAnagram.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-035,AUTH,Guest GET createTheData.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-036,AUTH,Guest POST createTheData.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-037,AUTH,USER GET createTheData.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-038,AUTH,USER POST createTheData.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-039,AUTH,Guest GET createTheMovie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-040,AUTH,Guest POST createTheMovie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-041,AUTH,USER GET createTheMovie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-042,AUTH,USER POST createTheMovie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-043,AUTH,Guest GET create_Data.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-044,AUTH,Guest POST create_Data.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-045,AUTH,USER GET create_Data.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-046,AUTH,USER POST create_Data.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-047,AUTH,Guest GET create_movie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-048,AUTH,Guest POST create_movie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-049,AUTH,USER GET create_movie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-050,AUTH,USER POST create_movie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-051,AUTH,Guest GET create_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-052,AUTH,Guest POST create_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-053,AUTH,USER GET create_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-054,AUTH,USER POST create_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-055,AUTH,Guest GET create_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-056,AUTH,Guest POST create_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-057,AUTH,USER GET create_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-058,AUTH,USER POST create_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-059,AUTH,Guest GET delete_media.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-060,AUTH,Guest POST delete_media.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-061,AUTH,USER GET delete_media.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-062,AUTH,USER POST delete_media.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-063,AUTH,Guest GET delete_movie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-064,AUTH,Guest POST delete_movie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-065,AUTH,USER GET delete_movie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-066,AUTH,USER POST delete_movie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-067,AUTH,Guest GET delete_movie_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-068,AUTH,Guest POST delete_movie_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-069,AUTH,USER GET delete_movie_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-070,AUTH,USER POST delete_movie_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-071,AUTH,Guest GET delete_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-072,AUTH,Guest POST delete_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-073,AUTH,USER GET delete_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-074,AUTH,USER POST delete_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-075,AUTH,Guest GET delete_poster.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-076,AUTH,Guest POST delete_poster.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-077,AUTH,USER GET delete_poster.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-078,AUTH,USER POST delete_poster.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-079,AUTH,Guest GET delete_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-080,AUTH,Guest POST delete_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-081,AUTH,USER GET delete_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-082,AUTH,USER POST delete_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-083,AUTH,Guest GET delete_song1.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-084,AUTH,Guest POST delete_song1.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-085,AUTH,USER GET delete_song1.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-086,AUTH,USER POST delete_song1.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-087,AUTH,Guest GET delete_song_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-088,AUTH,Guest POST delete_song_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-089,AUTH,USER GET delete_song_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-090,AUTH,USER POST delete_song_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-091,AUTH,Guest GET games_base_chars_admin.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-092,AUTH,Guest POST games_base_chars_admin.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-093,AUTH,USER GET games_base_chars_admin.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-094,AUTH,USER POST games_base_chars_admin.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-095,AUTH,Guest GET modify.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-096,AUTH,Guest POST modify.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-097,AUTH,USER GET modify.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-098,AUTH,USER POST modify.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-099,AUTH,Guest GET modifyTheMovies.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-100,AUTH,Guest POST modifyTheMovies.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-101,AUTH,USER GET modifyTheMovies.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-102,AUTH,USER POST modifyTheMovies.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-103,AUTH,Guest GET modifyThePeople.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-104,AUTH,Guest POST modifyThePeople.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-105,AUTH,USER GET modifyThePeople.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-106,AUTH,USER POST modifyThePeople.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-107,AUTH,Guest GET modifyTheSongs.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-108,AUTH,Guest POST modifyTheSongs.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-109,AUTH,USER GET modifyTheSongs.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-110,AUTH,USER POST modifyTheSongs.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-111,AUTH,Guest GET modify_movie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-112,AUTH,Guest POST modify_movie.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-113,AUTH,USER GET modify_movie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-114,AUTH,USER POST modify_movie.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-115,AUTH,Guest GET modify_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-116,AUTH,Guest POST modify_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-117,AUTH,USER GET modify_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-118,AUTH,USER POST modify_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-119,AUTH,Guest GET modify_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-120,AUTH,Guest POST modify_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-121,AUTH,USER GET modify_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-122,AUTH,USER POST modify_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-123,AUTH,Guest GET post_create_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-124,AUTH,Guest POST post_create_song.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-125,AUTH,USER GET post_create_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-126,AUTH,USER POST post_create_song.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-127,AUTH,Guest GET post_modify_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-128,AUTH,Guest POST post_modify_people.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-129,AUTH,USER GET post_modify_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-130,AUTH,USER POST post_modify_people.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-131,AUTH,Guest GET setup.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-132,AUTH,Guest POST setup.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-133,AUTH,USER GET setup.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-134,AUTH,USER POST setup.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-135,AUTH,Guest GET sign_up.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-136,AUTH,Guest POST sign_up.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-137,AUTH,USER GET sign_up.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-138,AUTH,USER POST sign_up.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-139,AUTH,Guest GET song_people_list_post.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-140,AUTH,Guest POST song_people_list_post.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-141,AUTH,USER GET song_people_list_post.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-142,AUTH,USER POST song_people_list_post.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-143,AUTH,Guest GET songs_people_list.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-144,AUTH,Guest POST songs_people_list.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-145,AUTH,USER GET songs_people_list.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-146,AUTH,USER POST songs_people_list.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-147,AUTH,Guest GET movies_anagram.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-148,AUTH,Guest POST movies_anagram.php,HTTP 302; no diagnostics,HTTP 302; diagnostics hidden=True,PASS
+W9-AUTH-149,AUTH,USER GET movies_anagram.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-150,AUTH,USER POST movies_anagram.php,HTTP 403; no diagnostics,HTTP 403; diagnostics hidden=True,PASS
+W9-AUTH-151,AUTH,All blocked admin requests,Every database table unchanged,Tables unchanged=True,PASS
+W9-AUTH-152,AUTH,ADMIN opens write-only URL add_movie_people_post.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-153,AUTH,ADMIN opens write-only URL add_the_song.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-154,AUTH,ADMIN opens write-only URL attach_song.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-155,AUTH,ADMIN opens write-only URL createTheData.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-156,AUTH,ADMIN opens write-only URL createTheMovie.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-157,AUTH,ADMIN opens write-only URL delete_media.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-158,AUTH,ADMIN opens write-only URL delete_movie_people.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-159,AUTH,ADMIN opens write-only URL delete_poster.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-160,AUTH,ADMIN opens write-only URL delete_song1.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-161,AUTH,ADMIN opens write-only URL delete_song_people.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-162,AUTH,ADMIN opens write-only URL modifyTheMovies.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-163,AUTH,ADMIN opens write-only URL modifyThePeople.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-164,AUTH,ADMIN opens write-only URL modifyTheSongs.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-165,AUTH,ADMIN opens write-only URL post_create_song.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-166,AUTH,ADMIN opens write-only URL post_modify_people.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-167,AUTH,ADMIN opens write-only URL song_people_list_post.php,HTTP 405 with Allow: POST,HTTP 405; Allow=POST,PASS
+W9-AUTH-168,AUTH,Create movie with missing CSRF,HTTP 403; movie count unchanged,HTTP 403; movie delta=0,PASS
+W9-AUTH-169,AUTH,Create movie with invalid CSRF,HTTP 403; movie count unchanged,HTTP 403; movie delta=0,PASS
+W9-AUTH-170,AUTH,Create movie with invalid CSRF,HTTP 403; movie count unchanged,HTTP 403; movie delta=0,PASS
+W9-INPUT-001,INPUT,Movie native_name empty,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-002,INPUT,Movie native_name whitespace,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-003,INPUT,Movie native_name array,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-004,INPUT,Movie english_name empty,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-005,INPUT,Movie english_name whitespace,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-006,INPUT,Movie english_name array,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-007,INPUT,Movie year empty,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-008,INPUT,Movie year whitespace,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-009,INPUT,Movie year array,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-010,INPUT,Movie native_name exceeds 180,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-011,INPUT,Movie english_name exceeds 180,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-012,INPUT,Invalid release year 1900,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-013,INPUT,Invalid release year 2156,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-014,INPUT,Invalid release year 2020 OR 1=1,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-015,INPUT,Invalid release year 2020.5,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-016,INPUT,Invalid release year 99999999999999999999999999,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-017,INPUT,create_people.php overlong stage_name,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-018,INPUT,create_people.php overlong first_name,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-019,INPUT,create_song.php overlong title,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-020,INPUT,create_song.php overlong lyrics,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-021,INPUT,create_song.php overlong theme,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-022,INPUT,create_people.php empty required field,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-023,INPUT,create_people.php array text field,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-024,INPUT,create_song.php empty required field,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-INPUT-025,INPUT,create_song.php array text field,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-URL-001,URL,movie_info.php invalid ID ,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-002,URL,movie_info.php invalid ID 0,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-003,URL,movie_info.php invalid ID -1,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-004,URL,movie_info.php invalid ID abc,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-005,URL,movie_info.php invalid ID 1 OR 1=1,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-006,URL,movie_info.php invalid ID 999999999999999999999999,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-007,URL,movie_info.php invalid ID ['1'],HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-008,URL,movie_info.php nonexistent positive ID,HTTP 404,HTTP 404,PASS
+W9-URL-009,URL,people_info.php invalid ID ,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-010,URL,people_info.php invalid ID 0,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-011,URL,people_info.php invalid ID -1,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-012,URL,people_info.php invalid ID abc,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-013,URL,people_info.php invalid ID 1 OR 1=1,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-014,URL,people_info.php invalid ID 999999999999999999999999,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-015,URL,people_info.php invalid ID ['1'],HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-016,URL,people_info.php nonexistent positive ID,HTTP 404,HTTP 404,PASS
+W9-URL-017,URL,song_info.php invalid ID ,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-018,URL,song_info.php invalid ID 0,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-019,URL,song_info.php invalid ID -1,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-020,URL,song_info.php invalid ID abc,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-021,URL,song_info.php invalid ID 1 OR 1=1,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-022,URL,song_info.php invalid ID 999999999999999999999999,HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-023,URL,song_info.php invalid ID ['1'],HTTP 400; diagnostics hidden,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-024,URL,song_info.php nonexistent positive ID,HTTP 404,HTTP 404,PASS
+W9-URL-025,URL,Unknown/CLI-only URL no-such-page.php,HTTP 404; no server path,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-026,URL,Unknown/CLI-only URL removed-endpoint.php,HTTP 404; no server path,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-027,URL,Unknown/CLI-only URL tools/week9_fixture.php,HTTP 404; no server path,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-028,URL,Unknown/CLI-only URL tests/week9_fixture.php,HTTP 404; no server path,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-029,URL,Update a nonexistent record via modifyTheMovies.php,HTTP 400; no false success; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-URL-030,URL,Update a nonexistent record via modifyThePeople.php,HTTP 400; no false success; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-URL-031,URL,Update a nonexistent record via modifyTheSongs.php,HTTP 400; no false success; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-URL-032,URL,modify.php valid movie_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-033,URL,modify.php form for deleted movie_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-034,URL,modify.php form with SQL text in movie_id,HTTP 400 or redirect; never opens record 1,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-035,URL,modify.php valid people_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-036,URL,modify.php form for deleted people_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-037,URL,modify.php form with SQL text in people_id,HTTP 400 or redirect; never opens record 1,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-038,URL,modify.php valid song_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-039,URL,modify.php form for deleted song_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-040,URL,modify.php form with SQL text in song_id,HTTP 400 or redirect; never opens record 1,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-041,URL,create_Data.php valid movie_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-042,URL,create_Data.php form for deleted movie_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-043,URL,create_Data.php form with SQL text in movie_id,HTTP 400 or redirect; never opens record 1,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-044,URL,add_people.php valid movie_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-045,URL,add_people.php form for deleted movie_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-046,URL,add_people.php form with SQL text in movie_id,HTTP 400 or redirect; never opens record 1,HTTP 302; diagnostics hidden=True,PASS
+W9-URL-047,URL,add_song.php valid movie_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-048,URL,add_song.php form for deleted movie_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-049,URL,add_song.php form with SQL text in movie_id,HTTP 400 or redirect; never opens record 1,HTTP 302; diagnostics hidden=True,PASS
+W9-URL-050,URL,songs_people_list.php valid song_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-051,URL,songs_people_list.php form for deleted song_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-052,URL,songs_people_list.php form with SQL text in song_id,HTTP 400 or redirect; never opens record 1,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-053,URL,modify_people.php valid people_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-054,URL,modify_people.php form for deleted people_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-055,URL,modify_people.php form with SQL text in people_id,HTTP 400 or redirect; never opens record 1,HTTP 400; diagnostics hidden=True,PASS
+W9-URL-056,URL,modify_song.php valid song_id,HTTP 200; existing admin form remains usable,HTTP 200; form present=True; diagnostics hidden=True,PASS
+W9-URL-057,URL,modify_song.php form for deleted song_id,HTTP 404; no empty or unrelated edit form,HTTP 404; diagnostics hidden=True,PASS
+W9-URL-058,URL,modify_song.php form with SQL text in song_id,HTTP 400 or redirect; never opens record 1,HTTP 400; diagnostics hidden=True,PASS
+W9-ACCOUNT-001,ACCOUNT,Empty first_name,HTTP 400; no account created,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-002,ACCOUNT,Empty last_name,HTTP 400; no account created,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-003,ACCOUNT,Empty email,HTTP 400; no account created,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-004,ACCOUNT,Empty password,HTTP 400; no account created,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-005,ACCOUNT,Empty repeat_password,HTTP 400; no account created,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-006,ACCOUNT,invalid email,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-007,ACCOUNT,mismatched passwords,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-008,ACCOUNT,short password,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-009,ACCOUNT,overlong password,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-010,ACCOUNT,NUL in password,HTTP 400; no database changes,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-011,ACCOUNT,Create account with attempted ADMIN role override,USER account; hashed password; no password echoed,HTTP 200; role=USER; plaintext password stored/echoed=False,PASS
+W9-ACCOUNT-012,ACCOUNT,Duplicate account same email,HTTP 400; existing account unchanged,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-013,ACCOUNT,Duplicate account case variant,HTTP 400; existing account unchanged,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-ACCOUNT-014,ACCOUNT,Login attack string ' OR 1=1 -- ,HTTP 200 invalid credentials; no authenticated session,HTTP 200; admin form remains inaccessible=True,PASS
+W9-ACCOUNT-015,ACCOUNT,Login attack string admin@example.invalid' #,HTTP 200 invalid credentials; no authenticated session,HTTP 200; admin form remains inaccessible=True,PASS
+W9-ACCOUNT-016,ACCOUNT,Login attack string <script>alert(9)</script>,HTTP 200 invalid credentials; no authenticated session,HTTP 200; admin form remains inaccessible=True,PASS
+W9-CRUD-001,CRUD,Create movie with apostrophe/markup,HTTP 302; exact text stored,HTTP 302; exact text stored=True,PASS
+W9-CRUD-002,CRUD,Create person with apostrophe/markup,HTTP 302; exact text stored,HTTP 302; exact text stored=True,PASS
+W9-CRUD-003,CRUD,Create song with apostrophe/markup,HTTP 302; exact text stored,HTTP 302; exact text stored=True,PASS
+W9-XSS-001,XSS,View hostile movie text,HTTP 200; escaped markup; no executable HTML,HTTP 200; raw markup present=False; escaped markup present=True,PASS
+W9-XSS-002,XSS,View hostile person text,HTTP 200; escaped markup; no executable HTML,HTTP 200; raw markup present=False; escaped markup present=True,PASS
+W9-XSS-003,XSS,View hostile song text,HTTP 200; escaped markup; no executable HTML,HTTP 200; raw markup present=False; escaped markup present=True,PASS
+W9-INPUT-026,INPUT,movie title exactly 180 Unicode characters,Create succeeds at documented limit,HTTP 302; exact text stored=True,PASS
+W9-INPUT-027,INPUT,person title exactly 30 Unicode characters,Create succeeds at documented limit,HTTP 302; exact text stored=True,PASS
+W9-INPUT-028,INPUT,song title exactly 20 Unicode characters,Create succeeds at documented limit,HTTP 302; exact text stored=True,PASS
+W9-SEARCH-001,SEARCH,zero results,HTTP 200; exactly 0 matches; escaped text,HTTP 200; matching count=0,PASS
+W9-SEARCH-002,SEARCH,one results,HTTP 200; exactly 1 matches; escaped text,HTTP 200; matching count=1,PASS
+W9-SEARCH-003,SEARCH,many results,HTTP 200; exactly 2 matches; escaped text,HTTP 200; matching count=2,PASS
+W9-SEARCH-004,SEARCH,apostrophe and Unicode results,HTTP 200; exactly 1 matches; escaped text,HTTP 200; matching count=1,PASS
+W9-SEARCH-005,SEARCH,SQL injection results,HTTP 200; exactly 0 matches; escaped text,HTTP 200; matching count=0,PASS
+W9-SEARCH-006,SEARCH,SQL UNION results,HTTP 200; exactly 0 matches; escaped text,HTTP 200; matching count=0,PASS
+W9-SEARCH-007,SEARCH,XSS filter results,HTTP 200; exactly 0 matches; escaped text,HTTP 200; matching count=0,PASS
+W9-SEARCH-008,SEARCH,literal wildcard results,HTTP 200; exactly 0 matches; escaped text,HTTP 200; matching count=0,PASS
+W9-SEARCH-009,SEARCH,Invalid query cast_member[]=bad,HTTP 400; no diagnostics,HTTP 400; diagnostics hidden=True,PASS
+W9-SEARCH-010,SEARCH,Invalid query director=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,HTTP 400; no diagnostics,HTTP 400; diagnostics hidden=True,PASS
+W9-SEARCH-011,SEARCH,Invalid query page=0,HTTP 400; no diagnostics,HTTP 400; diagnostics hidden=True,PASS
+W9-SEARCH-012,SEARCH,Invalid query page=-1,HTTP 400; no diagnostics,HTTP 400; diagnostics hidden=True,PASS
+W9-SEARCH-013,SEARCH,Invalid query page[]=1,HTTP 400; no diagnostics,HTTP 400; diagnostics hidden=True,PASS
+W9-SEARCH-014,SEARCH,Invalid query page=99999999999999999999999999,HTTP 400; no diagnostics,HTTP 400; diagnostics hidden=True,PASS
+W9-SEARCH-015,SEARCH,Invalid query movie_search=%FF,HTTP 400; no diagnostics,HTTP 400; diagnostics hidden=True,PASS
+W9-SEARCH-016,SEARCH,No filters,HTTP 200 with enter-a-filter guidance,HTTP 200; guidance present=True,PASS
+W9-SEARCH-017,SEARCH,Repeat combined search 1,Same single result; no database changes,HTTP 200; unchanged=True,PASS
+W9-SEARCH-018,SEARCH,Repeat combined search 2,Same single result; no database changes,HTTP 200; unchanged=True,PASS
+W9-SEARCH-019,SEARCH,Repeat combined search 3,Same single result; no database changes,HTTP 200; unchanged=True,PASS
+W9-REPEAT-001,REPEAT,Add same movie/person credit 1,HTTP 200; exactly one credit,HTTP 200; credits=1,PASS
+W9-REPEAT-002,REPEAT,Add same movie/person credit 2,HTTP 200; exactly one credit,HTTP 200; credits=1,PASS
+W9-RELATION-001,RELATION,Batch credit includes missing person,HTTP 400; complete batch rolled back,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-RELATION-002,RELATION,Credit for nonexistent movie,HTTP 400; no orphan credit,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-RELATION-003,RELATION,Credit with empty role,HTTP 400; database unchanged,HTTP 400; tables unchanged=True; diagnostics hidden=True,PASS
+W9-DELETE-001,DELETE,Prepare records with every owned relationship type,All children exist before deletion,Fixture created all movie/person/song child and association types,PASS
+W9-DELETE-002,DELETE,"Delete person, attempt 1",HTTP 302; record absent; repeat is harmless,HTTP 302; remaining parents=0,PASS
+W9-DELETE-003,DELETE,"Delete person, attempt 2",HTTP 302; record absent; repeat is harmless,HTTP 302; remaining parents=0,PASS
+W9-DELETE-004,DELETE,person cleanup in movie_people,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-005,DELETE,person cleanup in song_people,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-006,DELETE,person cleanup in people_trivia,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-007,DELETE,person deletion preserves related movies,Related entity still exists,Remaining related entities=1,PASS
+W9-DELETE-008,DELETE,person deletion preserves related songs,Related entity still exists,Remaining related entities=1,PASS
+W9-DELETE-009,DELETE,"Delete song, attempt 1",HTTP 302; record absent; repeat is harmless,HTTP 302; remaining parents=0,PASS
+W9-DELETE-010,DELETE,"Delete song, attempt 2",HTTP 302; record absent; repeat is harmless,HTTP 302; remaining parents=0,PASS
+W9-DELETE-011,DELETE,song cleanup in movie_song,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-012,DELETE,song cleanup in song_people,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-013,DELETE,song cleanup in song_media,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-014,DELETE,song cleanup in song_trivia,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-015,DELETE,song cleanup in song_keywords,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-016,DELETE,song deletion preserves related movies,Related entity still exists,Remaining related entities=1,PASS
+W9-DELETE-017,DELETE,"Delete movie, attempt 1",HTTP 302; record absent; repeat is harmless,HTTP 302; remaining parents=0,PASS
+W9-DELETE-018,DELETE,"Delete movie, attempt 2",HTTP 302; record absent; repeat is harmless,HTTP 302; remaining parents=0,PASS
+W9-DELETE-019,DELETE,movie cleanup in movie_anagrams,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-020,DELETE,movie cleanup in movie_data,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-021,DELETE,movie cleanup in movie_numbers,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-022,DELETE,movie cleanup in movie_trivia,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-023,DELETE,movie cleanup in movie_quotes,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-024,DELETE,movie cleanup in movie_media,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-025,DELETE,movie cleanup in movie_keywords,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-026,DELETE,movie cleanup in movie_people,Zero children for deleted record,Remaining rows=0,PASS
+W9-DELETE-027,DELETE,movie cleanup in movie_song,Zero children for deleted record,Remaining rows=0,PASS
+W9-CSV-001,CSV,no file,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-002,CSV,wrong extension,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-003,CSV,empty CSV,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-004,CSV,blank-only CSV,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-005,CSV,wrong column count,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-006,CSV,bad year after valid row,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-007,CSV,overlong song after valid row,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-008,CSV,invalid UTF-8,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-009,CSV,unexpected table,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-010,CSV,more than 10000 records,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-011,CSV,over 5 MB,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-012,CSV,unclosed quoted field,HTTP 400; entire database unchanged,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-CSV-013,CSV,"UTF-8 BOM, apostrophe, quoted comma and CRLF",2 movies and derived rows imported,HTTP 200; inserted=2; summary correct=True,PASS
+W9-CSV-014,CSV,Repeat existing movie CSV,"0 imported, 2 skipped",HTTP 200; inserted=0; summary correct=True,PASS
+W9-CSV-015,CSV,Duplicate movie within same upload,"One imported, one skipped",HTTP 200; inserted=1; summary correct=True,PASS
+W9-CSV-016,CSV,Quoted multiline lyrics and escaped double quotes,One song with exact newline/quotes,HTTP 200; exact multiline lyrics=True,PASS
+W9-CSV-017,CSV,People CSV with apostrophe and optional empty names,One person imported,HTTP 200; inserted=1; summary correct=True,PASS
+W9-CSV-018,CSV,Repeat people import 1,"One new row per upload, as documented",HTTP 200; inserted=1; summary correct=True,PASS
+W9-CSV-019,CSV,Repeat people import 2,"One new row per upload, as documented",HTTP 200; inserted=1; summary correct=True,PASS
+W9-CSV-020,CSV,Repeat song import 1,"One new row per upload, as documented",HTTP 200; inserted=1; summary correct=True,PASS
+W9-CSV-021,CSV,Repeat song import 2,"One new row per upload, as documented",HTTP 200; inserted=1; summary correct=True,PASS
+W9-CSV-022,CSV,Duplicate movie cannot bypass field validation,HTTP 400 for blank English title; no database changes,HTTP 400; atomic rollback=True; diagnostics hidden=True,PASS
+W9-SEARCH-020,SEARCH,Pagination requested page 1,51 matches; 50 rows; out-of-range page clamped,HTTP 200; rendered rows=50; 51 matches=True,PASS
+W9-SEARCH-021,SEARCH,Pagination requested page 2,51 matches; 1 rows; out-of-range page clamped,HTTP 200; rendered rows=1; 51 matches=True,PASS
+W9-SEARCH-022,SEARCH,Pagination requested page 999,51 matches; 1 rows; out-of-range page clamped,HTTP 200; rendered rows=1; 51 matches=True,PASS
+W9-DELETE-028,DELETE,Delete invalid/nonexistent movie ID 0,400 for malformed IDs; harmless redirect for absent positive ID; no changes,HTTP 400; unchanged=True,PASS
+W9-DELETE-029,DELETE,Delete invalid/nonexistent movie ID -1,400 for malformed IDs; harmless redirect for absent positive ID; no changes,HTTP 400; unchanged=True,PASS
+W9-DELETE-030,DELETE,Delete invalid/nonexistent movie ID abc,400 for malformed IDs; harmless redirect for absent positive ID; no changes,HTTP 400; unchanged=True,PASS
+W9-DELETE-031,DELETE,Delete invalid/nonexistent movie ID 1 OR 1=1,400 for malformed IDs; harmless redirect for absent positive ID; no changes,HTTP 400; unchanged=True,PASS
+W9-DELETE-032,DELETE,Delete invalid/nonexistent movie ID 2147483648,400 for malformed IDs; harmless redirect for absent positive ID; no changes,HTTP 302; unchanged=True,PASS
+W9-AUTH-171,AUTH,Logout,HTTP 302 and subsequent admin form requires login,HTTP 302; admin access revoked=True,PASS
+W9-AUTH-172,AUTH,Replay a write after logout,HTTP 302; database unchanged,HTTP 302; unchanged=True,PASS

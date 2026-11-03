@@ -12,6 +12,7 @@ if (is_post_request()) {
         if (!filter_var($email,FILTER_VALIDATE_EMAIL)) { throw new InvalidArgumentException('Enter an email address such as name@example.com.'); }
         $password=$_POST['password'] ?? ''; $repeat=$_POST['repeat_password'] ?? '';
         if (!is_string($password) || !is_string($repeat) || mb_strlen($password,'UTF-8')<8) { throw new InvalidArgumentException('Enter a password with at least 8 characters.'); }
+        if (!mb_check_encoding($password,'UTF-8') || strpos($password,"\0") !== false) { throw new InvalidArgumentException('Enter a password using valid text without null characters.'); }
         if (strlen($password)>72) { throw new InvalidArgumentException('This password is too long. Choose a shorter password.'); }
         if ($password !== $repeat) { throw new InvalidArgumentException('The passwords do not match. Enter the same password in both fields.'); }
         if (db_query($db,'SELECT id FROM users WHERE email=?',[$email])->num_rows) { throw new InvalidArgumentException('An account already uses that email address. Enter a different email.'); }

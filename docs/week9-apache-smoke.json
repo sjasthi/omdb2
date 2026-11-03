@@ -1,0 +1,217 @@
+[
+  {
+    "scenario": "index.php",
+    "expected": [
+      200
+    ],
+    "actual": 200,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "movies.php",
+    "expected": [
+      200
+    ],
+    "actual": 200,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "people.php",
+    "expected": [
+      200
+    ],
+    "actual": 200,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "songs.php",
+    "expected": [
+      200
+    ],
+    "actual": 200,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "help.php",
+    "expected": [
+      200
+    ],
+    "actual": 200,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "advance_movie_search.php?cast_member=NoSuchWeek9Person",
+    "expected": [
+      200
+    ],
+    "actual": 200,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "advance_movie_search.php?page=0",
+    "expected": [
+      400
+    ],
+    "actual": 400,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "movie_info.php?movie_id=0",
+    "expected": [
+      400
+    ],
+    "actual": 400,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "movie_info.php?movie_id=2147483647",
+    "expected": [
+      404
+    ],
+    "actual": 404,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "people_info.php?people_id=2147483647",
+    "expected": [
+      404
+    ],
+    "actual": 404,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "song_info.php?song_id=2147483647",
+    "expected": [
+      404
+    ],
+    "actual": 404,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "setup.php",
+    "expected": [
+      302
+    ],
+    "actual": 302,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "create_movie.php",
+    "expected": [
+      302
+    ],
+    "actual": 302,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "modify.php?movie_id=1",
+    "expected": [
+      302
+    ],
+    "actual": 302,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "db_credentials.php",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 403,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "catalog.php",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 403,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "sql/schema.sql",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 403,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "tests/week9_fixture.php",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 404,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "tests/run_week9.py",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 404,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "tools/create-admin.php",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 404,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "docs/week9-testing.md",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 403,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": ".git/config",
+    "expected": [
+      403,
+      404
+    ],
+    "actual": 403,
+    "safe_response": true,
+    "result": "PASS"
+  },
+  {
+    "scenario": "no-such-week9-page.php",
+    "expected": [
+      404
+    ],
+    "actual": 404,
+    "safe_response": true,
+    "result": "PASS"
+  }
+]
