@@ -58,6 +58,11 @@ def main():
         (output / (label + '.log')).write_text(result.stdout + result.stderr, encoding='utf8')
         suites.append({'suite': label, 'exit_code': result.returncode})
         print(label + ': ' + ('PASS' if result.returncode == 0 else 'FAIL'), flush=True)
+        if result.returncode:
+            diagnostic = result.stdout + result.stderr
+            for role in ['ADMIN', 'USER']:
+                diagnostic = diagnostic.replace(env['OMDB_TEST_' + role + '_PASSWORD'], '[redacted]')
+            print(diagnostic, flush=True)
         return result
     try:
         with tempfile.TemporaryDirectory(prefix='omdb-week9-') as temp:
