@@ -1,60 +1,185 @@
-# OMDB2 — online movie directory
+# OMDB2 — Online Movie Database
 
-PHP 8.0+ with `mysqli`/mysqlnd, `mbstring`, and `fileinfo`; MariaDB 10.4+ or MySQL 8.0; Apache with `.htaccess` enabled. XAMPP's local URL is http://localhost/omdb/ when installed in `C:\xampp\htdocs\omdb`.
+OMDB2 is a PHP/MySQL catalog for movies, people, songs, and their credits. Visitors can browse and search; signed-in members also use reports and games. Administrators maintain the catalog, relationships, posters, imports, and member accounts.
 
-## New installation
+This repository contains the application, an empty schema, fictional sample data, installation instructions, screenshots, and reproducible tests. Start here for a new installation; an old developer database or password is not required.
 
-1. Create an empty database named `omdb` with `utf8mb4` / `utf8mb4_unicode_ci`. Import **sql/schema.sql** into that database using phpMyAdmin's Import tab or the MySQL client: `mysql -u YOUR_USER -p omdb < sql/schema.sql` (use Command Prompt or a Unix shell for `<` redirection).
-2. Copy `db_credentials.example.php` to the ignored `db_credentials.php` and fill in your own server, database, username, and password. Alternatively set `OMDB_DB_SERVER`, `OMDB_DB_USER`, `OMDB_DB_PASS`, and `OMDB_DB_NAME`. Never commit the local file. Use a dedicated database account in deployment; the migration account needs DDL privileges, while the application account only needs SELECT/INSERT/UPDATE/DELETE.
-3. Create the first administrator using `php tools/create-admin.php your-email@example.com`. Supply a private password of at least 12 characters through `OMDB_ADMIN_PASSWORD` in the process environment, then clear that variable. This CLI bootstrap only runs when `users` is empty. There are no default accounts or seeded passwords.
-4. Open the app, log in, and import movie/people/song CSV files through the administrator Setup page. The schema contains no movie data. Optional existing poster files belong in `posters/`; allow the PHP process to write there for uploads.
+![OMDB home page with the fictional sample catalog](docs/screenshots/home.jpg)
 
-Normal users browse and play user games. ADMIN and SUPER-ADMIN accounts manage database records, relationships, posters, and user accounts. Administrators create additional USER accounts using `sign_up.php`.
+## Requirements
 
-## Upgrade an existing installation
+| Component | Requirement |
+|---|---|
+| Web server | Apache with PHP and `.htaccess` enabled (`AllowOverride All`) |
+| PHP | 8.0+; `mysqli` with mysqlnd, `mbstring`, `fileinfo`, `session`, and `json` |
+| Database | MariaDB 10.4+ or MySQL 8.0; InnoDB and UTF-8 support |
+| Browser | JavaScript and cookies enabled |
+| Source download | Git, or GitHub's **Code → Download ZIP** |
+| Tests / ZIP builder only | Python 3.12+, Git, PHP CLI, MySQL command-line client |
 
-Do **not** import the fresh schema over an existing database. Back up the entire database and `posters/`, stop web requests and other database writers, and keep the backup outside the repository/web root.
+XAMPP supplies Apache, PHP and MariaDB on Windows. Fresh installation was verified with PHP 8.0.30 / MariaDB 10.4.32; GitHub Actions also exercises MySQL 8.0. Application assets are included locally. Composer, Node/npm, a movie API key, and a cloud account are not needed. See [known limitations](docs/known-limitations.md) for deployment scope and legacy dependencies.
 
-```sh
-php tools/migrate.php --check
-php tools/migrate.php --apply
+## Install with XAMPP on Windows
+
+These examples use a **new** folder `C:\xampp\htdocs\omdb-final`, a **new** database `omdb_final`, Apache port 80 and database port 3306. Use your chosen names/ports consistently. Keep an existing installation in its own folder/database.
+
+### 1. Start XAMPP and check PHP
+
+Start **Apache** and **MySQL** in XAMPP Control Panel. The MySQL button starts MariaDB in XAMPP. Confirm `http://localhost/` and `http://localhost/phpmyadmin/` open.
+
+```powershell
+& C:\xampp\php\php.exe -v
+& C:\xampp\php\php.exe -m
 ```
 
-The preflight reports counts without printing account data. It rejects duplicate primary IDs, incompatible existing keys, duplicate emails, and non-InnoDB tables. Resolve ambiguous records explicitly before retrying. For the known legacy defects only, use:
+Confirm the required extensions. Enable missing extensions in `C:\xampp\php\php.ini`, then restart Apache. Preserve the repository's `.htaccess` files; they protect configuration, includes, tooling, and database files.
 
-```sh
-php tools/migrate.php --apply --repair-legacy
-php tools/migrate.php --check
+### 2. Download a fresh copy from GitHub
+
+```powershell
+git clone https://github.com/sjasthi/omdb2.git C:\xampp\htdocs\omdb-final
+Set-Location C:\xampp\htdocs\omdb-final
+git rev-parse HEAD
 ```
 
-`--repair-legacy` preserves original rows in `omdb_migration_archive`: it assigns generated IDs when **all** existing anagram IDs are the placeholder 0, and moves orphan child rows out of active tables before adding foreign keys. It never deletes or reassigns movie, people, song, or account IDs. Mixed/duplicate nonzero anagram IDs require explicit correction. The archive may contain private application data; keep it in the database, outside exported source files.
+Record the commit for your installation notes. For a ZIP download, extract so `README.md`, `index.php`, `sql`, and `vendor` are directly inside `omdb-final`, rather than an extra `omdb2-main` folder. The app runs from a ZIP; Git is needed for the package builder and tracked-source checks.
 
-[DDL implicitly commits in MySQL](https://dev.mysql.com/doc/refman/8.0/en/implicit-commit.html). The runner preflights first, uses a migration lock, and skips completed DDL steps on a retry; the backup is the recovery path for an unrecoverable failure. A migration lock does not stop ordinary application writes: keep the site offline until migration and code deployment are complete. `sql/migrations/007_database_cleanup.sql` records the DDL; execute it through the runner so preflight, archival repairs, email uniqueness, and version tracking run too. Deploy the matching PHP files before reopening the site. Accounts and password hashes are preserved.
+### 3. Create and import the database
 
-## Database and backend design
+In phpMyAdmin, choose **New**, create `omdb_final` with collation **utf8mb4_unicode_ci**, select that database, then use **Import** to load `C:\xampp\htdocs\omdb-final\sql\schema.sql`.
 
-See [docs/database.md](docs/database.md) for keys, ownership, deletion behavior, transactions, legacy tables, and retired handlers. New records use AUTO_INCREMENT and the connection's insert ID. Imports no longer call an external service: native title length/base characters use local Unicode graphemes, including Telugu combining marks. Existing stored values are preserved until their title is edited.
+Expected: **23 tables**, **17 cascading foreign keys**, and **zero accounts**. This schema contains no production records or passwords. Historical dumps are not installation inputs.
 
-CSV imports are UTF-8, contain no header, and have at most 10,000 records / 5 MB. Quoted commas and line breaks are supported. An invalid record rolls back the entire upload. Columns: movies = native name, English name, year; people = stage name, first, middle, last, gender; songs = title, lyrics, theme. Existing movie native-title/year pairs are skipped; people and songs are imported as new records.
+Alternatively, use PowerShell. `-p` prompts privately for your local database administrator password; on stock local XAMPP with no root password, press Enter.
 
-## Combined movie search
+```powershell
+& C:\xampp\mysql\bin\mysql.exe -h 127.0.0.1 -u root -p -e "CREATE DATABASE omdb_final CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+& C:\xampp\mysql\bin\mysql.exe -h 127.0.0.1 -u root -p omdb_final -e "SOURCE C:/xampp/htdocs/omdb-final/sql/schema.sql"
+```
 
-Choose **Search** to filter movies by a cast member and director together. Every filled field is required on the same movie; supporting/cameo cast, partial names, stage names, full names, and legacy role labels are supported. Optional title, lead actor/actress, producer, and music director fields narrow the results further. Results have shareable URLs and 50 movies per page.
+Use **one** import method on an empty database. An existing-table error usually means it was already imported. [Schema diagram and data dictionary](docs/schema.md) explain the tables.
 
-The main search box also recognizes phrases such as `movies with Brad Pitt directed by Steven Spielberg` or `movies directed by Steven Spielberg with Brad Pitt`. Other text keeps the ordinary movie/people/song search. This is a local catalog search: the people and their actual credits must already be stored in OMDB. It does not import missing people or guess film credits.
+### 4. Configure the database connection
 
-`movie_search.php` contains the shared filter validation, phrase parser, parameterized AND/EXISTS query, and form. Search performs SELECT queries only. Run `php tests/movie-search.php` with the same database environment as the backend tests to check combinations, legacy roles, pagination, input handling, and read-only execution against an automatically removed test database.
+For a restricted application account, use phpMyAdmin **User accounts** to create a database user with a private password and **SELECT, INSERT, UPDATE, DELETE on `omdb_final` only**. Import/migration uses a separate account with DDL privileges. A stock local XAMPP root account can be used for a classroom-only installation; the fresh verification tested a restricted application account.
 
-## UI and usability
+```powershell
+Copy-Item db_credentials.example.php db_credentials.php
+notepad db_credentials.php
+```
 
-Shared headings, role-aware navigation, notices, forms, and catalog tables are documented in [docs/week8-ui-polish.md](docs/week8-ui-polish.md). Members receive only view actions; administrators receive the management actions for the relevant entity. Direct endpoint authorization remains enforced. Help describes the current workflows and shows admin tools only to administrators. `tests/ui_http_test.py` checks rendered controls and validation using the same isolated HTTP-test environment as the security suite.
+Fill in the existing constants:
 
-## Validation checks
+| Setting | Local value |
+|---|---|
+| `DB_SERVER` | `127.0.0.1`; use `127.0.0.1:3307` for database port 3307 |
+| `DB_USER` | The database account you selected |
+| `DB_PASS` | Its private password; blank only if that local account has no password |
+| `DB_NAME` | `omdb_final` |
 
-Week 9 adds a reproducible HTTP edge-case matrix with expected results, observed results, and pass/fail in CSV, Markdown and JSON. Run `python tests/run_week9.py --output /path/outside/the/repository/week9-results` with PHP and the MySQL client on PATH (or specify `--php` and `--mysql`). The database server must already be running; supply `OMDB_TEST_DB_SERVER`, `OMDB_TEST_DB_USER`, and `OMDB_TEST_DB_PASSWORD` if it is not the local XAMPP test server. The test account needs CREATE/DROP DATABASE privileges. The runner makes a temporary source copy without local credentials, creates random accounts and a new database, runs the backend/search/security/UI/matrix suites, then removes its server, source copy, and database. It never points HTTP tests at the live catalog. See [docs/week9-testing.md](docs/week9-testing.md) for coverage and the defect/retest record.
+Save locally. This file is ignored by Git and must never be uploaded. This is the **database** login, not an application email/password. Verify with `git check-ignore db_credentials.php`.
 
-The shared UI adapts to phones, tablets, laptops and desktops, with a collapsible menu below 992px, flexible forms, and local horizontal scrolling for wide tables. See [docs/responsive-ui.md](docs/responsive-ui.md) for the six-size verification matrix and refactoring details. Shared UI assets load locally from `vendor/`; preserve that directory when deploying.
+Alternatively provide all four server-environment variables: `OMDB_DB_SERVER`, `OMDB_DB_USER`, `OMDB_DB_PASS`, `OMDB_DB_NAME`. Environment variables in a PowerShell window do not configure an already-running Apache process; the local file is simplest for XAMPP.
 
-`php tests/backend.php` creates randomly named isolated databases ending in `_test`, tests fresh setup and a schema-only legacy fixture, and drops only its own databases. Its database user must be able to create/drop test databases; set `OMDB_TEST_DB_SERVER`, `OMDB_TEST_DB_USER`, and `OMDB_TEST_DB_PASSWORD` if needed. Application configuration must also be present, as above. Never point HTTP tests at a live database: `tests/security_http_test.py` requires a separate configured app/database ending in `_test` and test login values through environment variables.
+### 5. Create your first administrator
 
-GitHub Actions runs PHP syntax checks, the secret scanner, and backend regression tests against MariaDB 10.4 and MySQL 8.0. Enable local hooks with `git config core.hooksPath .githooks`, ensure PHP is on PATH, and run `php tools/check-secrets.php --all` before uploading. Only the reviewed schema, migration, and schema-only test fixture are exempt from the SQL dump ignore rule. See [SECURITY.md](SECURITY.md) for access controls and historical credential follow-up.
+Run the CLI bootstrap once while `users` is empty. Choose your own email and a private password of **12–72 UTF-8 bytes**. This example prompts without putting the password in command history:
+
+```powershell
+$adminEmail = Read-Host 'Administrator email'
+$adminSecret = Read-Host 'Administrator password (12-72 bytes)' -AsSecureString
+$env:OMDB_ADMIN_PASSWORD = [System.Net.NetworkCredential]::new('', $adminSecret).Password
+try {
+    & C:\xampp\php\php.exe tools/create-admin.php $adminEmail
+} finally {
+    Remove-Item Env:OMDB_ADMIN_PASSWORD -ErrorAction SilentlyContinue
+    $adminSecret.Dispose()
+}
+```
+
+Expected: **Initial administrator created.** Bootstrap refuses another administrator once any account exists. There are **no default application logins**; a previous developer's accounts are not created by the schema.
+
+Optional read-only schema check:
+
+```powershell
+& C:\xampp\php\php.exe tools/migrate.php --check
+```
+
+Expected: exit 0 and no blockers. Fresh setup already has migration `007_database_cleanup`; do not import the schema again.
+
+### 6. Open the application and sign in
+
+Open **http://localhost/omdb-final/**, choose **Sign in**, and enter the application email/password you created. You should see **Administrator** and **Admin**.
+
+Use **Admin → Create user account** to create a member. Account creation always creates `USER`; submitted role overrides cannot create administrators. Sign out and sign in as the member to confirm that Admin and catalog write controls are absent.
+
+| Role | Functions |
+|---|---|
+| Guest | Browse/view/search the public catalog |
+| `USER` / Member | Public features, signed-in reports and member games; catalog is read-only |
+| `ADMIN` | Create/edit/delete records, manage relationships, CSV imports, posters, puzzle data, and USER accounts |
+| `SUPER-ADMIN` | Same management policy as ADMIN; no separate promotion screen |
+
+Administrative endpoints enforce login, role, method and CSRF protection when opened directly, too.
+
+### 7. Import optional samples and try the main workflow
+
+An empty catalog is expected. To reproduce the screenshots, import [movies.csv](examples/movies.csv), [people.csv](examples/people.csv), and [songs.csv](examples/songs.csv) through **Admin → Import data**, selecting the matching record type. Expected: 3 movies, 3 people, 1 song. These records are fictional.
+
+Follow [the sample guide](examples/README.md) to attach credits through a movie's **People** and **Songs** actions. Search for **Avery Stone** under Cast member and **Morgan River** under Director: Harbor Lights should be the single match. The app searches stored records; it does not download movie information.
+
+CSV is UTF-8, **no header**, at most 10,000 records and a 5 MB application cap. Quoted commas/newlines work. Invalid rows roll back the upload. Movie native-title/year duplicates are skipped; people/songs create new rows on repeat imports. PHP may impose a lower upload limit. To allow 5 MB, configure `upload_max_filesize=5M` and `post_max_size=8M` in PHP, then restart Apache.
+
+## Screenshots and help
+
+[Screenshot walkthrough](docs/screenshots.md): home, sign-in, member/admin controls, combined search, imports, forms, Help, and a phone layout. **Help** inside the app explains current user workflows.
+
+## Troubleshooting
+
+| Symptom | Check |
+|---|---|
+| Cannot connect | Apache is running; use its port, e.g. `http://localhost:8080/omdb-final/` |
+| Whole app is 404 | `index.php` is directly under `htdocs/omdb-final`; URL matches folder |
+| Generic database error | Private Apache/PHP log, all connection settings, database port, schema and grants |
+| Unknown table / empty catalog | Import schema into `DB_NAME`; an empty catalog is normal before adding data |
+| Bootstrap fails | Empty `users`, valid email/password, CLI uses the same local configuration |
+| USER cannot open Admin | Expected role enforcement; use the administrator account |
+| Search has no matches | Add people and credits first; shorten a name or clear filters |
+| CSV rejected | File type, encoding, column order, field lengths and PHP upload limits |
+| Styling/tables missing | Preserve local assets, enable JavaScript, inspect browser console |
+| XAMPP permission-table corruption | Database-server installation issue; use a clean instance or verified server backup. App schema import cannot repair MariaDB system tables |
+
+For database port 3307, add `-P 3307` to MySQL CLI commands and use `127.0.0.1:3307` for `DB_SERVER`. The independent clean verification instance on this PC used 3307. Keep technical log details out of public screenshots/reports.
+
+## Database, changes and limitations
+
+- [Schema diagram and table/column dictionary](docs/schema.md)
+- [Backend ownership, transactions and migration](docs/database.md)
+- [Changes from the original sjasthi/omdb2](docs/changes-from-original.md)
+- [Known limitations and remaining work](docs/known-limitations.md)
+- [Deployment, backups and upgrades](docs/deployment.md)
+- [Security model and historical credential follow-up](SECURITY.md)
+
+## Tests and final results
+
+With the database server running, from a Git clone:
+
+```powershell
+python tests/run_week9.py --php C:/xampp/php/php.exe --mysql C:/xampp/mysql/bin/mysql.exe --output C:/omdb-test-results/final
+```
+
+The **test** database account needs CREATE/DROP DATABASE privileges. Set `OMDB_TEST_DB_SERVER`, `OMDB_TEST_DB_USER`, and `OMDB_TEST_DB_PASSWORD` if needed. This runner creates random accounts and exclusive disposable databases, copies source without local credentials, runs five suites, records expected/actual/pass/fail, and cleans up. Never point standalone HTTP scripts at a live database.
+
+The final run from a fresh GitHub clone passed **1,135 functional checks**: 62 backend, 273 search, 307 security HTTP, 132 UI HTTP, 361 matrix cases. Another **38 fresh-install acceptance checks** passed. See [final static-analysis and functional-test report](docs/final-test-report.md) and [fresh-install record](docs/fresh-installation.md). GitHub Actions repeats syntax, secrets and all five suites on MariaDB 10.4 and MySQL 8.0.
+
+Enable local hooks with `git config core.hooksPath .githooks` and PHP on PATH. Before uploading, run `php tools/check-secrets.php --all`. These checks do not erase old Git history.
+
+## Build a deployment ZIP
+
+From a clean Git clone at the commit you want to deliver:
+
+```powershell
+python tools/package-release.py --output C:/omdb-delivery/omdb2-final.zip
+```
+
+The ZIP contains tracked source, schema/migration, examples, screenshots, docs and local assets under `omdb-final/`. Its adjacent JSON manifest records the commit, source-tree ID and ZIP SHA-256. Local configuration, Git history, test logs and live database rows are excluded. Extract into XAMPP and follow the same steps above. See [deployment details](docs/deployment.md).

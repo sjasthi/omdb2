@@ -1,0 +1,1016 @@
+{
+  "verification_date": "2026-11-09",
+  "source_repository": "https://github.com/sjasthi/omdb2",
+  "application_source_commit": "240e3f64305706546160abc01711721b0b9552b8",
+  "runtime": {
+    "php": "PHP 8.0.30 (cli) (built: Sep  1 2023 14:15:38) ( ZTS Visual C++ 2019 x64 )",
+    "database": "10.4.32-MariaDB",
+    "database_port": 3307
+  },
+  "functional": {
+    "suite_pass_counts": {
+      "backend": 62,
+      "movie-search": 273,
+      "security": 307,
+      "ui": 132,
+      "matrix": 361
+    },
+    "total_passed": 1135,
+    "failed": 0,
+    "disposable_database_removed": true
+  },
+  "fresh_installation": {
+    "source_commit": "240e3f64305706546160abc01711721b0b9552b8",
+    "source_url": "https://github.com/sjasthi/omdb2",
+    "folder": "C:/xampp/htdocs/omdb-final",
+    "database": "omdb_final",
+    "database_port": 3307,
+    "old_application_used": false,
+    "checks": [
+      {
+        "test": "Fresh source downloaded from GitHub",
+        "expected": "main at 240e3f6",
+        "actual": "240e3f64305706546160abc01711721b0b9552b8",
+        "result": "PASS"
+      },
+      {
+        "test": "New database does not exist",
+        "expected": "0",
+        "actual": "0",
+        "result": "PASS"
+      },
+      {
+        "test": "Schema import into empty database",
+        "expected": "23 application/support tables",
+        "actual": "23",
+        "result": "PASS"
+      },
+      {
+        "test": "Fresh schema contains no default accounts",
+        "expected": "0",
+        "actual": "0",
+        "result": "PASS"
+      },
+      {
+        "test": "17 cascade foreign keys",
+        "expected": "17",
+        "actual": "17",
+        "result": "PASS"
+      },
+      {
+        "test": "Local configuration excluded by Git",
+        "expected": "ignored",
+        "actual": "True",
+        "result": "PASS"
+      },
+      {
+        "test": "Empty catalog opens under Apache",
+        "expected": "200",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "First administrator created through documented CLI",
+        "expected": "exit 0, ADMIN",
+        "actual": 0,
+        "result": "PASS"
+      },
+      {
+        "test": "Bootstrap refuses a second administrator",
+        "expected": "exit 1, account count remains 1",
+        "actual": 1,
+        "result": "PASS"
+      },
+      {
+        "test": "Read-only schema preflight",
+        "expected": "exit 0",
+        "actual": 0,
+        "result": "PASS"
+      },
+      {
+        "test": "Fresh admin signs in",
+        "expected": "302 to index.php",
+        "actual": 302,
+        "result": "PASS"
+      },
+      {
+        "test": "Administrator creates member account",
+        "expected": "200, USER",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Fresh member signs in",
+        "expected": "302",
+        "actual": 302,
+        "result": "PASS"
+      },
+      {
+        "test": "Member cannot open Admin",
+        "expected": "403",
+        "actual": 403,
+        "result": "PASS"
+      },
+      {
+        "test": "Member catalog hides admin actions",
+        "expected": "200, View only",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "movies sample CSV imported",
+        "expected": "3 records",
+        "actual": "3",
+        "result": "PASS"
+      },
+      {
+        "test": "people sample CSV imported",
+        "expected": "3 records",
+        "actual": "3",
+        "result": "PASS"
+      },
+      {
+        "test": "songs sample CSV imported",
+        "expected": "1 records",
+        "actual": "1",
+        "result": "PASS"
+      },
+      {
+        "test": "Movie 1 / person 1 credit",
+        "expected": "200",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Movie 1 / person 2 credit",
+        "expected": "200",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Movie 2 / person 1 credit",
+        "expected": "200",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Movie 3 / person 2 credit",
+        "expected": "200",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Attach imported song",
+        "expected": "200",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Attach singer credit",
+        "expected": "200",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Search cast_member=Avery&director=Morgan",
+        "expected": "1 matches",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Search cast_member=Avery",
+        "expected": "2 matches",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Search cast_member=MissingPerson",
+        "expected": "0 matches",
+        "actual": 200,
+        "result": "PASS"
+      },
+      {
+        "test": "Create from fresh administrator",
+        "expected": "302",
+        "actual": 302,
+        "result": "PASS"
+      },
+      {
+        "test": "Edit created movie",
+        "expected": "302",
+        "actual": 302,
+        "result": "PASS"
+      },
+      {
+        "test": "Delete disposable movie and numbers",
+        "expected": "302; 3 demo movies remain",
+        "actual": 302,
+        "result": "PASS"
+      },
+      {
+        "test": "Apache protects db_credentials.php",
+        "expected": "403 or 404",
+        "actual": 403,
+        "result": "PASS"
+      },
+      {
+        "test": "Apache protects sql/schema.sql",
+        "expected": "403 or 404",
+        "actual": 403,
+        "result": "PASS"
+      },
+      {
+        "test": "Apache protects tools/create-admin.php",
+        "expected": "403 or 404",
+        "actual": 404,
+        "result": "PASS"
+      },
+      {
+        "test": "Apache protects tests/run_week9.py",
+        "expected": "403 or 404",
+        "actual": 404,
+        "result": "PASS"
+      },
+      {
+        "test": "Apache protects docs/week9-testing.md",
+        "expected": "403 or 404",
+        "actual": 403,
+        "result": "PASS"
+      },
+      {
+        "test": "Apache protects .git/config",
+        "expected": "403 or 404",
+        "actual": 404,
+        "result": "PASS"
+      },
+      {
+        "test": "Bad URL",
+        "expected": "404",
+        "actual": 404,
+        "result": "PASS"
+      },
+      {
+        "test": "Application account cannot create schema",
+        "expected": "nonzero exit",
+        "actual": 1,
+        "result": "PASS"
+      }
+    ]
+  },
+  "static": {
+    "date": "2026-11-09",
+    "php_syntax": [
+      {
+        "file": "about.php",
+        "result": "PASS"
+      },
+      {
+        "file": "add_movie_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "add_movie_people_post.php",
+        "result": "PASS"
+      },
+      {
+        "file": "add_movie_posters.php",
+        "result": "PASS"
+      },
+      {
+        "file": "add_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "add_song.php",
+        "result": "PASS"
+      },
+      {
+        "file": "add_the_song.php",
+        "result": "PASS"
+      },
+      {
+        "file": "advance_movie_search.php",
+        "result": "PASS"
+      },
+      {
+        "file": "advance_people_search.php",
+        "result": "PASS"
+      },
+      {
+        "file": "advance_song_search.php",
+        "result": "PASS"
+      },
+      {
+        "file": "anagrammer.php",
+        "result": "PASS"
+      },
+      {
+        "file": "api_methods.php",
+        "result": "PASS"
+      },
+      {
+        "file": "attach_song.php",
+        "result": "PASS"
+      },
+      {
+        "file": "bin/functions.php",
+        "result": "PASS"
+      },
+      {
+        "file": "catalog.php",
+        "result": "PASS"
+      },
+      {
+        "file": "createTheAnagram.php",
+        "result": "PASS"
+      },
+      {
+        "file": "createTheData.php",
+        "result": "PASS"
+      },
+      {
+        "file": "createTheMovie.php",
+        "result": "PASS"
+      },
+      {
+        "file": "create_Data.php",
+        "result": "PASS"
+      },
+      {
+        "file": "create_movie.php",
+        "result": "PASS"
+      },
+      {
+        "file": "create_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "create_song.php",
+        "result": "PASS"
+      },
+      {
+        "file": "database.php",
+        "result": "PASS"
+      },
+      {
+        "file": "db_credentials.example.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_media.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_movie.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_movie_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_poster.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_song.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_song1.php",
+        "result": "PASS"
+      },
+      {
+        "file": "delete_song_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "footer.php",
+        "result": "PASS"
+      },
+      {
+        "file": "functions.php",
+        "result": "PASS"
+      },
+      {
+        "file": "games.php",
+        "result": "PASS"
+      },
+      {
+        "file": "games_base_chars_admin.php",
+        "result": "PASS"
+      },
+      {
+        "file": "games_base_chars_user.php",
+        "result": "PASS"
+      },
+      {
+        "file": "help.php",
+        "result": "PASS"
+      },
+      {
+        "file": "index.php",
+        "result": "PASS"
+      },
+      {
+        "file": "initialize.php",
+        "result": "PASS"
+      },
+      {
+        "file": "left_menu_games.php",
+        "result": "PASS"
+      },
+      {
+        "file": "left_menu_movies.php",
+        "result": "PASS"
+      },
+      {
+        "file": "left_menu_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "left_menu_puzzles.php",
+        "result": "PASS"
+      },
+      {
+        "file": "left_menu_reports.php",
+        "result": "PASS"
+      },
+      {
+        "file": "left_menu_songs.php",
+        "result": "PASS"
+      },
+      {
+        "file": "left_search_data.php",
+        "result": "PASS"
+      },
+      {
+        "file": "log_out.php",
+        "result": "PASS"
+      },
+      {
+        "file": "login.php",
+        "result": "PASS"
+      },
+      {
+        "file": "modify.php",
+        "result": "PASS"
+      },
+      {
+        "file": "modifyTheMovies.php",
+        "result": "PASS"
+      },
+      {
+        "file": "modifyThePeople.php",
+        "result": "PASS"
+      },
+      {
+        "file": "modifyTheSongs.php",
+        "result": "PASS"
+      },
+      {
+        "file": "modify_movie.php",
+        "result": "PASS"
+      },
+      {
+        "file": "modify_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "modify_song.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movie_in_movies.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movie_info.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movie_more_info.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movie_search.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_ajax.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_anagram.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_data.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_keywords.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_media.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_movies.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_numbers.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_quotes.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_songs.php",
+        "result": "PASS"
+      },
+      {
+        "file": "movies_trivia.php",
+        "result": "PASS"
+      },
+      {
+        "file": "nav.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people_ajax.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people_info.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people_more_info.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people_movies.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people_songs.php",
+        "result": "PASS"
+      },
+      {
+        "file": "people_trivia.php",
+        "result": "PASS"
+      },
+      {
+        "file": "post_create_song.php",
+        "result": "PASS"
+      },
+      {
+        "file": "post_modify_people.php",
+        "result": "PASS"
+      },
+      {
+        "file": "query_functions.php",
+        "result": "PASS"
+      },
+      {
+        "file": "query_movies.php",
+        "result": "PASS"
+      },
+      {
+        "file": "query_songs.php",
+        "result": "PASS"
+      },
+      {
+        "file": "reports.php",
+        "result": "PASS"
+      },
+      {
+        "file": "reports_actors.php",
+        "result": "PASS"
+      },
+      {
+        "file": "reports_actors_actresses.php",
+        "result": "PASS"
+      },
+      {
+        "file": "reports_lyricist.php",
+        "result": "PASS"
+      },
+      {
+        "file": "reports_lyricists.php",
+        "result": "PASS"
+      },
+      {
+        "file": "scanner_errors.php",
+        "result": "PASS"
+      },
+      {
+        "file": "scanner_goofy.php",
+        "result": "PASS"
+      },
+      {
+        "file": "scanner_not_found.php",
+        "result": "PASS"
+      },
+      {
+        "file": "scanner_releases.php",
+        "result": "PASS"
+      },
+      {
+        "file": "scanner_warnings.php",
+        "result": "PASS"
+      },
+      {
+        "file": "search.php",
+        "result": "PASS"
+      },
+      {
+        "file": "search_data.php",
+        "result": "PASS"
+      },
+      {
+        "file": "security.php",
+        "result": "PASS"
+      },
+      {
+        "file": "setup.php",
+        "result": "PASS"
+      },
+      {
+        "file": "sign_up.php",
+        "result": "PASS"
+      },
+      {
+        "file": "song_info.php",
+        "result": "PASS"
+      },
+      {
+        "file": "song_people_list_post.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_ajax.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_keyword.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_list.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_media.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_more_info.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_movie_list.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_people_list.php",
+        "result": "PASS"
+      },
+      {
+        "file": "songs_trivia.php",
+        "result": "PASS"
+      },
+      {
+        "file": "tests/backend.php",
+        "result": "PASS"
+      },
+      {
+        "file": "tests/http_router.php",
+        "result": "PASS"
+      },
+      {
+        "file": "tests/movie-search.php",
+        "result": "PASS"
+      },
+      {
+        "file": "tests/week9_fixture.php",
+        "result": "PASS"
+      },
+      {
+        "file": "tools/check-secrets.php",
+        "result": "PASS"
+      },
+      {
+        "file": "tools/create-admin.php",
+        "result": "PASS"
+      },
+      {
+        "file": "tools/migrate.php",
+        "result": "PASS"
+      },
+      {
+        "file": "ui.php",
+        "result": "PASS"
+      },
+      {
+        "file": "user_functions.php",
+        "result": "PASS"
+      },
+      {
+        "file": "validation_functions.php",
+        "result": "PASS"
+      }
+    ],
+    "shared_javascript_syntax": [
+      {
+        "file": "scripts/layout.js",
+        "result": "PASS"
+      },
+      {
+        "file": "scripts/catalog-ui.js",
+        "result": "PASS"
+      }
+    ],
+    "package_builder_python_syntax": "PASS",
+    "scope": "Syntax and reviewed source checks; not a PHPStan/Sonar or dependency vulnerability audit."
+  },
+  "browser": {
+    "desktop": {
+      "client": 1366,
+      "scroll": 1366,
+      "width": 1366
+    },
+    "phone": {
+      "client": 375,
+      "scroll": 375,
+      "width": 390
+    },
+    "console": []
+  },
+  "source_sha256": {
+    "about.php": "0de2ebc693cff5111d39408997dde6a703c99c5cca325e551d5f5618f8078a1e",
+    "add_movie_people.php": "53259fd42395948f09518d50a207409d4487dc8825e5db14f48e23de2275687b",
+    "add_movie_people_post.php": "c406a2daeff11597287b97b52700bad92d1faf95d5f297cafeb7978dd26fbb57",
+    "add_movie_posters.php": "4f9e90bd17135bee4dd803b635267349cbbd5c434609278adcd594347b984e1b",
+    "add_people.php": "22ed9f1fe9fd4f6a1142eacbb50acc14c72fb04899fdfe2e8e941c7efe02d43e",
+    "add_song.php": "965b6f3eeb33db27d530998aaedb17daf0ce6209ca0cd2f4a80672793a46eb00",
+    "add_the_song.php": "c406a2daeff11597287b97b52700bad92d1faf95d5f297cafeb7978dd26fbb57",
+    "advance_movie_search.php": "98bd0d6559c2fc9e5c983cb1953a5c9a88455a85e5ab8e250ff7220f40f21d1a",
+    "advance_people_search.php": "2f77a2044a2ac036ee09f080e5d3308c9588d123a7bb13def595d22bbb91698b",
+    "advance_song_search.php": "e9511504dc6eeb559a054803088eecc604c9af704de2ea55f88269e3f3139bb9",
+    "ajax/jquery-3.2.1.min.js": "75b707d8761e2bfbd25fbd661f290a4f7fd11c48e1bf53a36dc6bd8a0034fa35",
+    "ajax/select2/dist/css/select2.css": "fb104bb8f1d1b08591bbabd920dc6e4155a619190ced89e2d6e14fc5a242ec45",
+    "ajax/select2/dist/css/select2.min.css": "ea237985427db5573da7d02e2ce688fe2337a308f9a08dbd73697430f6bc0aed",
+    "ajax/select2/dist/js/i18n/af.js": "5e8acb20e7b181f27fb583c8f01eff04ab88f7ed9c0b5e7b1a9e650dc169ecdd",
+    "ajax/select2/dist/js/i18n/ar.js": "c82e3dd1be163ba2adea2b3dd9dcae68a91167dfd124a1fe8af3028e6bcfa2f9",
+    "ajax/select2/dist/js/i18n/az.js": "66e8f1fc4ad8dd19c2a759d6e0b22ff49b14eed3ce103e09fbfcd0b394ebb8ab",
+    "ajax/select2/dist/js/i18n/bg.js": "8b93b1ee662ce086aca23ced5563cffac783e3a8cbd694c282657e11132f9096",
+    "ajax/select2/dist/js/i18n/bs.js": "d9b3aa0b81da7f1751158da686825b4a6b5f2ea8b2e6c12f0ea551ec13d5ae35",
+    "ajax/select2/dist/js/i18n/ca.js": "884f12fa27ef60b8669e1fca094b4f3ce7ea10418cb7725eb01704803ccab1c1",
+    "ajax/select2/dist/js/i18n/cs.js": "39961d461238cf1a75d47c249df982e1e78b94db372a4a35aec1a5a5941b8c0f",
+    "ajax/select2/dist/js/i18n/da.js": "982c0acb53aa34014fbe0ace2ce69d310cd1ea6ade4393f75280d64d2d6dde71",
+    "ajax/select2/dist/js/i18n/de.js": "1fa4afe36ef2a25ea22aca4d1d0d3b49d777480b3e53956d53cbc4b520d9490f",
+    "ajax/select2/dist/js/i18n/dsb.js": "89a4865b4167caee2ec876fcc0da56e4edb982b64d00a5fca793fe877ff5df9a",
+    "ajax/select2/dist/js/i18n/el.js": "033accb923e81096c0ca4e8feaf35a72f35d36ee5c1bef218f2028050b86b087",
+    "ajax/select2/dist/js/i18n/en.js": "1322366c007de8440e3d13d440c5a176c264b169d687141187babca8074d6c84",
+    "ajax/select2/dist/js/i18n/es.js": "d5fbb3fab4bd8fe202f8d8e392a043d7b151b687a5eb2bff58989f46cb9063d8",
+    "ajax/select2/dist/js/i18n/et.js": "8f8a9245756a86f37a15c57b448019d9822bf3f0c54cb62c5a2f74af02190567",
+    "ajax/select2/dist/js/i18n/eu.js": "adffa623665b0f3381bf42ff73596569d41fa073d4efc0ae543ccecf85ce01e9",
+    "ajax/select2/dist/js/i18n/fa.js": "073387a9ae46455c029cf7425f4204477a4c4ef63f583b24600d8786da0d0158",
+    "ajax/select2/dist/js/i18n/fi.js": "ad55d575fe71bf38b1678dca0e16563cb2c49235a81ff926c6fdc94e548153cc",
+    "ajax/select2/dist/js/i18n/fr.js": "a90e99fa0cb4fa04f26dc5d9bef01969fc617152d4304c505fb32fbd733a315e",
+    "ajax/select2/dist/js/i18n/gl.js": "ca1ce4fec18b6b281b51116a74ff78f8c3eb6e45a3de45a639ec83141aa7c44a",
+    "ajax/select2/dist/js/i18n/he.js": "140f3073d1838f19f1568665668ca201eca025721791643f7438b8f04c08fcf8",
+    "ajax/select2/dist/js/i18n/hi.js": "b9774ef57aa2fbf35d4952c8b11b58cf662f5e8c17fc9b90a609d3269a19208c",
+    "ajax/select2/dist/js/i18n/hr.js": "da79fbde5ed9fe3bb9c5d807abafa314186fe6ba957edae557255ee6c4deb321",
+    "ajax/select2/dist/js/i18n/hsb.js": "804153c32f8aae1237d01c73e53fb193e8bf55c9eb7d18d8399ec2a513d06d1a",
+    "ajax/select2/dist/js/i18n/hu.js": "2385fd9a2390b0bbe8a8a206be5f7063fa71c04e84d80e173a4fc4dcefb37308",
+    "ajax/select2/dist/js/i18n/hy.js": "7163d95367a612d4607fa9b69da4535a1c846cee8b611f6cd805a725633aec4a",
+    "ajax/select2/dist/js/i18n/id.js": "a88c19f236473c4e214b8ab2e35a9a789eda69b245b8a86f97eadac0d0add922",
+    "ajax/select2/dist/js/i18n/is.js": "6e6728cdb4cdd89e129c0ec88b67534587d624cc06d10e9e3e92cfbc5c6b4b38",
+    "ajax/select2/dist/js/i18n/it.js": "a88e1463b9512ae0f88a0c5a1970ce614651d3bf44921371714784e664580173",
+    "ajax/select2/dist/js/i18n/ja.js": "d537e88d2f5b957c6a162afdc387120e5bedf215325d299b5d2b2ec29eb3f3cb",
+    "ajax/select2/dist/js/i18n/km.js": "2330529cae2f21cce1eeb6c11eb9484120182b733d024673b32d2a74e4ad0867",
+    "ajax/select2/dist/js/i18n/ko.js": "77f85a3895952480bcea0f15fd1096e5c079e6d5fdcec4889ef0cd6c5c3d3a38",
+    "ajax/select2/dist/js/i18n/lt.js": "0fc65bfc673e2df1d1cb395115e48fe0a2e447a7cb90bf5c2c55d43ab52a7ea6",
+    "ajax/select2/dist/js/i18n/lv.js": "424fe05cce7bd5492d96f05370818b9d31e151de0d9fdfd6204554f5527bd3d3",
+    "ajax/select2/dist/js/i18n/mk.js": "5e9f7dd2a0f46717dfec2d06c9c633ffdc974ae01ab4e5c353d18a1aff20c69e",
+    "ajax/select2/dist/js/i18n/ms.js": "d4d61fa60ef30b1247ebb00d9f0b60580326715cbde03d784efaea3c2ab460ce",
+    "ajax/select2/dist/js/i18n/nb.js": "a3cf8a7ffb789c5bb13f0c4b1df2582cc0e046d3eca2688d97563b887fc6bcd3",
+    "ajax/select2/dist/js/i18n/nl.js": "76061a6422e1062b230d02c5d5e2aeeaae4b90d37a86a73ac61e9f06c7b6b3ee",
+    "ajax/select2/dist/js/i18n/pl.js": "55b7acedcab49b46bdb3991235a78ddb7ccfe2eba203d50799d9e0e0074f419b",
+    "ajax/select2/dist/js/i18n/ps.js": "b8f4a8dc5607cdc1d48ec84df423791b0536932d5be107d41cc41bc62ce83b0b",
+    "ajax/select2/dist/js/i18n/pt-BR.js": "54948ba6b2a42e3c688dffebdd862a2769e389f1e27caa6355dbe9497048ce24",
+    "ajax/select2/dist/js/i18n/pt.js": "5d729deef7825cf58dbb178ae3f05cc44b490cbcdcaaad68e4d8c895ec11a33e",
+    "ajax/select2/dist/js/i18n/ro.js": "a505f72b9700467c3f274c62fcb99b1de429810e871e61e63054a3e7bb0ca7dc",
+    "ajax/select2/dist/js/i18n/ru.js": "495a98894e1c015378609e16aa6357ea949b54a3dd3b407a29e23ad0284f55c4",
+    "ajax/select2/dist/js/i18n/sk.js": "212cb4d0c008270b579b183e2dd200d7c3547a438e441521448c464add947b30",
+    "ajax/select2/dist/js/i18n/sl.js": "8d5d06bd77ca832e769fc3fa3097c0615446ec8d4fb62384ffc4df832097e434",
+    "ajax/select2/dist/js/i18n/sr-Cyrl.js": "51c673d3f5dd8fbe36c3f3286a019354c607fa4fe270c207ba0c261a319d19d7",
+    "ajax/select2/dist/js/i18n/sr.js": "057c5f863a65524bcf192d9a2a2a18d872df3cc5c816f285f49cbc59aa51b515",
+    "ajax/select2/dist/js/i18n/sv.js": "cba25059bc1e79e0e197d9b70f339e3e90cbec0caf628b462664843f77fbfef8",
+    "ajax/select2/dist/js/i18n/th.js": "6b24055cb0185870fea5350202d7f885cc7fcb4529c1a2a5b6b3b62cd204551c",
+    "ajax/select2/dist/js/i18n/tr.js": "ce1a3e77b1c76e0c8cb24752317c832f8a214a3bc74bf9ef7cc78c0e4223d6f8",
+    "ajax/select2/dist/js/i18n/uk.js": "ff35cf284f14d45a48ea7257a55a35a6077db0a146675d80834cb63767ffc6ec",
+    "ajax/select2/dist/js/i18n/vi.js": "c0240b8cd23393e8c1cb9275164166c5373fd5e3094c152286984f8e6cfd4a48",
+    "ajax/select2/dist/js/i18n/zh-CN.js": "602ffbd1da29fb77bb459a4152a825fe30eef6f8a3e191bb84abbeef4e30c017",
+    "ajax/select2/dist/js/i18n/zh-TW.js": "6232917e6928582a893c50ca7456e5066c55567c0993cc3da755af430257f28c",
+    "ajax/select2/dist/js/select2.full.js": "2473d65eb8fca0b5cd5e9d059d39790419d5cf6f0b6fd676398e6187b7acbaf0",
+    "ajax/select2/dist/js/select2.full.min.js": "15c54892706255193928b41e2016fd55076d15132ac1f7d7c99f83f2ad2042ba",
+    "ajax/select2/dist/js/select2.js": "eb27ac6cc230e8d4fca0aab9dd70a0017872503a7061eb5e3db40a95e5579bd0",
+    "ajax/select2/dist/js/select2.min.js": "140d78b4123cbfeff506d707f57b49a5c35b0a898112975ac14640e813d7455c",
+    "anagrammer.php": "8b9f1198c85bb768b00fd0db373e4d337ecb64cf7ac4da7949b9d84093db8019",
+    "api_methods.php": "b1ec3078ea00f89f882c10422144e7fc38088acf7102b0f8fac6b204ddbdf429",
+    "attach_song.php": "c406a2daeff11597287b97b52700bad92d1faf95d5f297cafeb7978dd26fbb57",
+    "basechars.css": "72de95b1481f9f7799ac7a7a3b8f00f5b1de235f215a7496498a9faf0b6ca16e",
+    "bin/functions.php": "8ca1eb503fc080630b8b316a8fd51636f1171d9add9eb657df44f47e29aa63db",
+    "catalog.php": "1a8f47207b86d149b8227e90a9e9b675fe5a54e49ab76f0aeb860cdea5f6a555",
+    "create_Data.php": "13ceef7039165427789ea2a9e3665b35c6e8f9c2082710081d1f57f3e4d5d182",
+    "create_movie.php": "789427e6d70eba18df294c6ca137bf6e1c20fa1c12f630e9af4ebabcac3802bc",
+    "create_people.php": "279259c448cb60336084e564e68ee3ee9c07e69c8bf14944498887dd84f848b0",
+    "create_song.php": "99ce7d96f3eb435497ddac7c6748555a42fd88f4da24b87e3e00144538ce1a87",
+    "createTheAnagram.php": "e4133e4df61cada686256b8a29a0e4a20a48c1fc1c1f1ad87691779a81020389",
+    "createTheData.php": "367a57f3d17d0ae6dfe43febdbe6c43fdb2ca037b0f6fe64c3b791f39199ab9a",
+    "createTheMovie.php": "1877462a8d58dcd034db93e48164e862c89e0ddcf17febc574e3ca0c4ba1492e",
+    "database.php": "d3e721d9801fa2848f12a828059726261343411033091b9e361038005e43e901",
+    "db_credentials.example.php": "c67e940a28f27002168b37e0f785dc1a657b5ca1ddb71ee205f5c924c6bfcbe9",
+    "delete_media.php": "a579fa0b6532e7cf3bf0db6022bf2940d260961e13d3b715ab66634ecba6fc40",
+    "delete_movie.php": "86d1f188af1f1e7e25b507a572c7b804e701331270f16447c49397b24eff9627",
+    "delete_movie_people.php": "c406a2daeff11597287b97b52700bad92d1faf95d5f297cafeb7978dd26fbb57",
+    "delete_people.php": "e9731ab905b3b3951cb67304b90919fc52c87528c41a19beec031dedcdc4e61e",
+    "delete_poster.php": "29c1477b885bc0e11c07ad8ab2d97e31ffd72ee07d4ac2741e429f1d30c21b60",
+    "delete_song.php": "bdefd7c2968f322d8c420b83de4fd6dfc5f152e904e7b8db9067fd51b6802faf",
+    "delete_song1.php": "13d88527b244db5a3c109d78fbc3fbfcdcc77b2eeda8a2a2424d38087752145b",
+    "delete_song_people.php": "c406a2daeff11597287b97b52700bad92d1faf95d5f297cafeb7978dd26fbb57",
+    "fonts/attribution.js": "0ef380252dc273c4dd2759cf6cf6beda6ca6c62f5d54cd9da4ec457d22fe5f4a",
+    "fonts/css/all.css": "86e3b5d09a2b8ed12ca2b0481992a3a6a73ba1dad564bd872b2e5acfce70f4ee",
+    "fonts/css/all.min.css": "fd493524c8be6d84cf95959f93103680b3faa2a47c92482d43ff1836d8c08055",
+    "fonts/css/brands.css": "48124b1b7b827855047c8ed4adc7727cab96cd918d39264603b66e7709fbfc89",
+    "fonts/css/brands.min.css": "40fdad8ff06c62f0b4c76f3069ab5c49151ceb9a209e5ae3d394c6910075f791",
+    "fonts/css/fontawesome.css": "61f0ff17da2af285be4603339db545f222c5f8272eccbd59d2f4677ceb5a145b",
+    "fonts/css/fontawesome.min.css": "e0351876703417eb2a9985cb15ecf9910966d2941e7c61c8f3907a2834c38383",
+    "fonts/css/regular.css": "921f4190c4ef55924b4928f26a1234f62ed115183c0852cbb553bc817858e6ab",
+    "fonts/css/regular.min.css": "aca59e5bfbee1c60b4afc1dc50df02cddc78c6fe437e08437701644555a4e444",
+    "fonts/css/solid.css": "b339eed7c4786adc269c88323a6261f01e32313e0b2dbfa01e50ab00321ab59b",
+    "fonts/css/solid.min.css": "7854d8e44687343f7178f324562de684a174684f0e92c66ce00d4c4bf1795fc1",
+    "fonts/css/svg-with-js.css": "e091ccf996a59b86f163910471c62d791e7d9d268f9f48c726dff84f1e820512",
+    "fonts/css/svg-with-js.min.css": "4a002f847f5c346b48f244bba5acdff77bf095cd75cdfb15c3b7a1d7774769cf",
+    "fonts/css/v4-shims.css": "73915342f79a49aea9395d8004fd280663d37a97c9eb4b663f1a2f1467ce9666",
+    "fonts/css/v4-shims.min.css": "b246d7e20b23701878ad45c1a0399fba1c66a23f87ee3cdc78d0429ab885d997",
+    "fonts/js/all.js": "557181af312922e3e7611750549179dbbaf2393cabdfbb788ffdd803498f36f4",
+    "fonts/js/all.min.js": "ff1f5195f06cc6216aadb398b0ae481802438dbe4ad08fb924d00f51589e5326",
+    "fonts/js/brands.js": "ea08906ef30db40b5ba0f1329fb6491a64b0f9a2024dd6288e2342a6030f40f7",
+    "fonts/js/brands.min.js": "aa27dffbd4c1882d4a0a468061e6177efc7360d2953f5e6c1c9a8cc91556fe20",
+    "fonts/js/conflict-detection.js": "cd50a7ad35124e01d19632d2d98ed35f9901dc861eb1b7819b04f9433d6e3172",
+    "fonts/js/conflict-detection.min.js": "c96c825de34960a72a0359e851df075a4468fea2d726cd2415aaddc15462e5c7",
+    "fonts/js/fontawesome.js": "ed8ffff87aaa8e92824a71d84859af993e5bfb749d9a3185633dbc047f9e9f7d",
+    "fonts/js/fontawesome.min.js": "5d7e210ed2b83195a44739c018e98630e16e85cf068da1a5321c774437543f08",
+    "fonts/js/regular.js": "07f777a9d25cd5db367648d628db5be0fa1402b791edc1fd6e5e841ca5843c6d",
+    "fonts/js/regular.min.js": "7a6d1c1e8f4cb02c63ef6b13720b65595b8dd34b3a1a5f8c566c654078480b8f",
+    "fonts/js/solid.js": "701210876bc918c90518c0d27bf04a69207f33132b773946215d8b98ddef6e73",
+    "fonts/js/solid.min.js": "d847f7cb8bf31be787551f0229410e5f29feb1455c44c67060037111a4e0797c",
+    "fonts/js/v4-shims.js": "c074ec895273ac3d82f4b1b366535eee924ac956bf4ebf375abe4afedf6870cb",
+    "fonts/js/v4-shims.min.js": "30ece761cf41de8c359742862f0efe7344619e6d500a4d2caf473ed69aa933ee",
+    "footer.php": "c8c8c27afb5e64bae5eed7c080aaaba96d44527759a8ed5a6c8e7c8e9a2a8e4c",
+    "functions.php": "dae74d9e915793644b5ace7dd7dd262307438e93591e23da502af6f3b6985f11",
+    "games.php": "9a9bc46d30fd397defd38bef4c4cbededa7c86f7ea9a1570f5296657faa7133e",
+    "games_base_chars_admin.php": "3259c5e4fb438fa6785bd8f4b0743933ea1a03f5882a39c01ec3f4ba894d080f",
+    "games_base_chars_user.php": "163c6e4e7361dea35ac6375e2451720e10f2dff2f4884b20fd35dd043beda39e",
+    "help.php": "4de842f2d6a1cf3cf8cd259365a21a00141ec65352136482dd4eea7f371a9021",
+    "index.php": "c92f9442c57c6fc2df30be44d54bc51891a8eedc1d3b66dbac927c42ed81c999",
+    "initialize.php": "4b38d85c81b8079bbe05c2b5da143b58e69700f9ab41325cb6fdc4f8526032fb",
+    "jquery-3.2.1.min.js": "75b707d8761e2bfbd25fbd661f290a4f7fd11c48e1bf53a36dc6bd8a0034fa35",
+    "left_menu_games.php": "f15937e12ff3f9f9ee5c95347182c15bacf437b2956cab37c14ace88e8f60302",
+    "left_menu_movies.php": "89fd29f1199d52b6bcb56fe01708d151ddac9259c8a4a5ed506c494f3347cccd",
+    "left_menu_people.php": "7b8c3b003e054bf2f377ff8cf201033a459f6b1130e7dbbf3cdca7dc9271e286",
+    "left_menu_puzzles.php": "59e99b8d4a7a9ded36d060e112cb518b212b6db769e0ff70bdcaa08ec16d3a05",
+    "left_menu_reports.php": "07b548e97f7c65689481357ccdbd5a4a997f96b6ce48b92c536678be837deb5c",
+    "left_menu_songs.php": "99759f6cedba2ba59b1348ffbf4f72cf5780a8fbcbfbade5ab1c83f3ed136b92",
+    "left_search_data.php": "bc055512fac1de534cca219e3d9e0adc6736bccd2298f46ac1a9974a8c83d4ff",
+    "log_out.php": "cb0828c5ffa34f4c051365d580b92ddf44b48119b2f6b59cacd98a3574656dee",
+    "login.php": "69db0d077223239a134af76d8f1b533c8be3208fa443e11b7b3cfc13b6cd69c3",
+    "modify.php": "ad3999216438864a6735a9924b0241ccb976c314bf6d3457eb84ba6312bdffd1",
+    "modify_movie.php": "ca1638c7a23f363a52d4f29b5928c1f6b7f1bb1a902d7d4037949b6d71a9d056",
+    "modify_people.php": "474d69dbb28173fd4d58e3ffef45d2e4c56e4bfb9fc0bfb4c583a37ac97f7861",
+    "modify_song.php": "f1d093080b31417dd11954b75901e83caaa242ab2296b1b0182cfaf4601db6a8",
+    "modifyTheMovies.php": "db9fdfe39877287aee2b6c5bd322c560b97382a3e890ff97948d43b9c737d06f",
+    "modifyThePeople.php": "90d72807d87ec055ee64699700eea7ac84093ec72f98567e45ae91d069ba574c",
+    "modifyTheSongs.php": "41b510a2d3a44dff1c1d67fa21c46bb141be4d4643314ff56f93a73a76c68f3b",
+    "movie_in_movies.php": "ccb63a661f5ca3eb9cb18cef18018d631a638b0f85838cb3af7d4ea841e2f230",
+    "movie_info.php": "9f157ee17836c67c36ab8e3097219cb0c2ed33e6c290036fb31b53c6b6d67c8d",
+    "movie_more_info.php": "14af2f795afa6cb42f2c144fa970099e859223c29c7001cb793bf0c57aee67ec",
+    "movie_search.php": "5904aae3106ccae1b46643925732dace3d4f5f9fe5b657fb765c3c1a768d41e5",
+    "movies.php": "a4b62cba82937c945e733e109b7edd7ed962930baf8d60977f685f2c74ab97ed",
+    "movies_ajax.php": "f5ced0e3d653d5685d44bc7bd04abe6f76080c98515c0f18929f67209bd7133b",
+    "movies_anagram.php": "46439cb77b0e888606517963404b111b28f5fbda411fa1e144745fbb750875d2",
+    "movies_data.php": "6df7eb4d8b5760bab9acc622d53533657cb3e29820a9134da8e74e1e8ff8bb03",
+    "movies_keywords.php": "332c9b697e93a219cb6ea0f4bf330ac0052831ffc96e314215171b84cd397835",
+    "movies_media.php": "8b0a4d4752a7c15add1b64522113926c686483ad9470dc4678c8b8c9be957a06",
+    "movies_movies.php": "6405cb16a99a444f17e2f7f5fdce6af3989407cefe1aed19a7a3edf643605048",
+    "movies_numbers.php": "1328c9287fe71363958b396b093e71c4bf1b4c3d133c21fe05f243233e655d74",
+    "movies_people.php": "e26c811c38087761d83485a074391b94239ea63952b0fb28a9c44ebe70e57841",
+    "movies_quotes.php": "9a9dbc81ab05dcfbb3b71ae990a71a6c18063670f080806853e21cdae5ce185f",
+    "movies_songs.php": "a407cb4951f3213741618a4ab51f33705ce2c0b10dbbf6d42ac7dc91889c52b2",
+    "movies_trivia.php": "9e8d64f379a65b60752c0c8a94f706b03ad99169bd359c1e8df0f4bc5cacce4a",
+    "nav.php": "db5579264dca208a4561b35858f3b465d3ee59c0d9cf069e4900ec05546ce1e0",
+    "people.php": "1a85256e323ab2557d9eccaccdf186491ce736c23ba2571b804a5ff5ab8a051b",
+    "people_ajax.php": "c38c6e0c96e62f625eff43d85b2f263db9945e34541345c4122d3eacd4bedc66",
+    "people_info.php": "dec32d2a9e498e43af318ddaad39083e210aac43aa0903083f7d05fe4ea4a78a",
+    "people_more_info.php": "b74600feffb4816015e314e0ab24f7fbd1d3b6fb64811514b36a099bedd11a55",
+    "people_movies.php": "da1d709538fe2ee0c102ee4da21edb849d1283acd87a408e4b192b8429a166dd",
+    "people_people.php": "921ab670ce473379f6dcb21275a71d71edba583c8fdbc955726b99844a4c6e22",
+    "people_songs.php": "7080e68f5448c5d4a2a603b6c6093fb47f59a9357c3c37fbb5073b8c16a43380",
+    "people_trivia.php": "b5b7960cfc7a5f15ca7071eb691c0e2768aac38c07fdc2c2ac25ff8b015de336",
+    "post_create_song.php": "c10fa5a79aba21cd56d2bd6cabb4835c5ecf1dfff9afb7848147b29816cd65dc",
+    "post_modify_people.php": "70b13ee248e2a923fe1e160e28c252ca3344f7272d20683f031ffc43297bb77c",
+    "query_functions.php": "3bc0a9f3136018e185b3af004831c5951ecfa692747873a0c9154cc19b267753",
+    "query_movies.php": "f6986155dfddfe5581ce9c73af8b4ba199b57ddeada139626e9e2bec8a1df8ef",
+    "query_songs.php": "d7e58077355ce639f90b8c3b02edafc6044a9db8cb85a3fa4073838d23060fc5",
+    "reports.php": "21b0d3ec01ad5a278958c9e26ac581300862e5455d8e0991d650baa1974dae98",
+    "reports_actors.php": "d612d120cf9a7be48abfcb079a8160ee2ef63290ef01b49b91bcf1880c0ec024",
+    "reports_actors_actresses.php": "9c02cf4c1f4f49ae253e40664dd23d4dd3942967e3fc5389dee65d74ef4d2d13",
+    "reports_lyricist.php": "21056c934ddd9a9d69aa6c87fa6173b1188abc600a782a11248a06b0e8ac61fc",
+    "reports_lyricists.php": "465066688fa906e50813fd366e5dbbb4e739cb12510220887cc335be28637867",
+    "scanner_errors.php": "1d034b433a39fae625e8faf3d3214fec179011fc2095015d28f022823ffb3036",
+    "scanner_goofy.php": "255e5ec12cfd0baa52326f0d9904bf02480727fe51a63fe41362ae6a9c14569f",
+    "scanner_not_found.php": "ff4350aa418d2df5ea6f23e09199b63b7a9927291793277a1d3b7148a1846737",
+    "scanner_releases.php": "e002289b6f50eb7e8d44a17f9df05b9491075362a82c5d9d9cd8bc9c1ce39e4c",
+    "scanner_warnings.php": "9c70b3e63cfa919694c25232f0987fe7a921d54dfb9b918998c9e9235618cd44",
+    "script.js": "feb6bcb3be84a557ccefb45bf2bdf9b473909573a467e086fb151b8265784201",
+    "scripts/catalog-ui.js": "f7162a07a44edb7a0ec92b6646857e734dfd805dd08ebe783d606669d224707f",
+    "scripts/layout.js": "3b5d895aec6680a4c464436f0fd641829528ee770ed30508339df31269a0d326",
+    "search.php": "ae75c4a627e2d46a24e338a80992f9c077938dd78f0d8e13724af02fcf18c9b9",
+    "search_data.php": "fd2c9c866b242d3f9921f1c4c3512de69874952b17130b3d5a6c5f8272d6274b",
+    "security.php": "cb081720ea7986b4274bc84d3d0280dd77b0baec62394478cbd8d66d3c8ce474",
+    "setup.php": "d333b5b708eefd33c25d7c6cb009695b06b8b4dce3011a464c34ac86adefaf40",
+    "sign_up.php": "b774f4edba8b34bad0ef4d4970a51371789f3639953b6c4b7212122e7d02eee5",
+    "song_info.php": "8c082f6798742d44aa6b9d550d85b739028e2dc08fb48ebccc960bede7cb075f",
+    "song_people_list_post.php": "c406a2daeff11597287b97b52700bad92d1faf95d5f297cafeb7978dd26fbb57",
+    "songs.php": "f92d9871d628792444bd672b1ea8965899341b509cfa5714b674d3ff0a05f2df",
+    "songs_ajax.php": "735b31f87ee05e6604e51835f3de0a42303fd36a6f611c6eeac7c51290be0f4d",
+    "songs_keyword.php": "d73fdef3e8b50759e9165b9f0223eb35435e1d8f89aa1e9602c77000f03ef1d1",
+    "songs_list.php": "25e5cc548d3a6eaf5bf5cc1b798cf84bb0ad93ea0e598ea068c93f57dffb3881",
+    "songs_media.php": "98fddd0a81e76b0f02062a3126f1058d20f4b332e39ac6c32a0866f0f6c838ab",
+    "songs_more_info.php": "2e325883b2bbb8724cae07c7875271786933e1464fcbf0761ca3f900d228e578",
+    "songs_movie_list.php": "89f9a8c4ac3029d218c254cd7bc1af0f56cb6fffa37cad554893260725a95407",
+    "songs_people_list.php": "c0cdab292b5aa579f5cbb61437d90b73980c577ee31b614d5d11a747e52b99c8",
+    "songs_trivia.php": "42c00c8cf34fb40d8f0a8c4395e11f8d91eddf9ae35f2572a0b0ad3fde2756f5",
+    "sql/migrations/007_database_cleanup.sql": "3921790785719b8da2b5528f24f674a8465e3626811d64f5635014ca1bc0b7c1",
+    "sql/schema.sql": "fc0816c55767493ac42415a2a797c6790a87fc45ca578cf46abaf34ff82a6251",
+    "styles/mainStyleSheet.css": "df8736f007de1975a06fd58468a34dc46c01ce11377d5b16410df4174ace5b6c",
+    "styles/responsive.css": "cfaaf0d2973110d5dd0af360b3a9835b9c2ff77ffc4800d495b5c1b9b67606a6",
+    "styles/style.css": "411592a64f4991ad8c752264d6e9c56a99484506198aeda0ad2adeb0154c535b",
+    "styles/ui.css": "54edd252ff9c3c6273021173c724d4f028b05b5c17f40ee9e14bc75d1c09d9d9",
+    "tests/backend.php": "423f3544e980727b9e707285799bc1919728ab77f81f80f3b3497a94d114e20e",
+    "tests/fixtures/week6-schema.sql": "7a68423619171bcbae096a9b85320b45032447a16c78dcd1b3ad7b22972ce0a0",
+    "tests/http_router.php": "3083dd62ad36c03100d2d315b434c0819b77293fdb61cb9130f6b6d451d2c080",
+    "tests/movie-search.php": "06aa64c3b43b6569c0856aa6fda1bbee900e6d3c16bdd7c5d431fbd4bc87357c",
+    "tests/run_week9.py": "8a8edc568a7d87996f6159ffaa2da9ead26f5ac3c27517d1a7196bf0c9e174e4",
+    "tests/security_http_test.py": "a6ac8caaca4fb130b515ada2849779eee624aa153a8d8ce947d5aad0e7f99835",
+    "tests/ui_http_test.py": "86a32f77ed48295a410d38cc52f1d8d66bb5665296f037e5cc2e32c1d9ac181a",
+    "tests/week9_fixture.php": "8d893cce1169c4dfa03879c32e5aecb6e071341eb66419253cc4e976fb84058c",
+    "tests/week9_http_test.py": "187e6cfc52d2d54c4b699183e945aca59c50d01ac8e9e347036fd421e2e75f55",
+    "tools/check-secrets.php": "6860b4b14a2d63e50a79e3912a789fe6b8e2fcb11e55a8453a5488a785fd6b9b",
+    "tools/create-admin.php": "875f5d7ff9faffe89ea83c7308fe95bf0344e9c2a1df5b4bb7fb4c4adbc8f875",
+    "tools/migrate.php": "b95ae49c3aedbb11b5241dc265d09f2d0f8b58fb07903748c5bc066280aa6c79",
+    "ui.php": "542e0ba846234ed471ecddebd7d1a5985d08cc4370e9a9ecfcd91cb699fc88f0",
+    "user_functions.php": "c2542256cf33b23c087b2e6cea27386b6f60668e26c1c12e8ae71a34588f07be",
+    "validation_functions.php": "f9adb621bde16f28c048d791858723099eae745530d47b37a432228ad72ec141",
+    "vendor/animate/animate.min.css": "a61e123314188bd0453320008e01b4bbb665bee09039f4cbd9bef44de410ce67",
+    "vendor/bootstrap/css/bootstrap.min.css": "5a3d8c05785485d36ee5c94d4681e5b1d9e4b94c5be8b5bd7b0f3168fff1bd9a",
+    "vendor/bootstrap/js/bootstrap.min.js": "36460e494e4c628443afded40b2743b5ede9a4a76fb4f7b9ef2345cc7e59fd64",
+    "vendor/datatables/dataTables.bootstrap.min.css": "499e4cfde88d5804719afe6df27edfadae5e1605eb9e29071cd72dca4bd43114",
+    "vendor/datatables/dataTables.bootstrap.min.js": "362ff44c2160e7b2f9c3faf8d45f1a298dc640889df763569317c49442407f1d",
+    "vendor/datatables/jquery.dataTables.min.js": "ea1c11ebd5e0683c3267fe2bcd43efe62be79bedfa8df29069df385c5ac07678",
+    "vendor/toastr/toastr.min.css": "601a099fc635f3cedbf6eb1aea2b1cf370a6b534d682576fedf7d8024e434fe8",
+    "vendor/toastr/toastr.min.js": "f2bb0e8511764611ff0081b549ff188c326c7376bf86e28513782b0a48f9c7aa"
+  }
+}
