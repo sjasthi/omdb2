@@ -1,5 +1,7 @@
 # Database and backend maintenance
 
+For fresh installation, start with [README.md](../README.md). The [current schema diagram and data dictionary](schema.md) list all 23 tables and their columns. [Deployment and recovery](deployment.md) gives the upgrade/backup sequence.
+
 The schema and migration support the Week 6 database with the existing `users(id,email,password,first_name,last_name,role)` layout. The migration preserves entity IDs, account details, and content. Every application table uses InnoDB. Fresh setup and upgrade are compared by column definitions, indexes, and foreign-key deletion rules in `tests/backend.php`.
 
 | Table group | Key and ownership |
@@ -25,6 +27,6 @@ Credit form values match by their numeric suffix, including sparse selections. E
 
 Poster files are outside MySQL transactions. Movie deletion captures metadata, commits the cascaded database delete, then removes validated local files. Poster upload removes its newly written file if its metadata insert fails. A filesystem cleanup failure is logged privately; backups include both database and poster directory. Song-media links remain external metadata; song deletion does not delete remote media.
 
-`add_movie_people.php` delegates to `add_people.php`; `delete_song1.php` remains a guarded POST compatibility entry point and all current links use `delete_song.php`. Unreferenced broken processors (`add_the_song.php`, `attach_song.php`, `add_movie_people_post.php`, `song_people_list_post.php`, `delete_movie_people.php`, `delete_song_people.php`) return HTTP 410 after the same admin/POST/CSRF checks. Placeholder history/timeline/trend pages are removed. Simple and extended song/person forms share their update implementations. Unused/broken external API helpers are removed; remaining read-only puzzle calls use HTTPS, a timeout, response checks, and local fallbacks.
+`add_movie_people.php` delegates to `add_people.php`; `delete_song1.php` remains a guarded POST compatibility entry point and all current links use `delete_song.php`. Unreferenced broken processors (`add_the_song.php`, `attach_song.php`, `add_movie_people_post.php`, `song_people_list_post.php`, `delete_movie_people.php`, `delete_song_people.php`) return HTTP 410 after the same admin/POST/CSRF checks. Placeholder history/timeline/trend pages are removed. Simple and extended song/person forms share their update implementations. Puzzle character/length helpers run locally through `api_methods.php`; the current games do not require the earlier external puzzle API. Optional embedded media can still use external providers.
 
 The CI matrix runs the database contract on MariaDB 10.4 and MySQL 8.0. Test fixtures are synthetic and contain no production rows or passwords. For a new schema change, update the fresh schema, add a versioned migration, and add a regression that exercises both paths.

@@ -9,6 +9,11 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check PHP syntax
         run: find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n 1 php -l
+      - name: Check shared JavaScript and package-builder syntax
+        run: |
+          node --check scripts/layout.js
+          node --check scripts/catalog-ui.js
+          python3 -m py_compile tools/package-release.py
       - name: Reject committed configuration and credentials
         run: php tools/check-secrets.php --all
   backend-database:
@@ -43,3 +48,19 @@ jobs:
           if [ -f "${{ runner.temp }}/omdb-week9-results/matrix.md" ]; then
             cat "${{ runner.temp }}/omdb-week9-results/matrix.md" >> "$GITHUB_STEP_SUMMARY"
           fi
+  deployment-package:
+    needs: lint-and-secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Build and verify the source-only deployment ZIP
+        run: python3 tools/package-release.py --output "${{ runner.temp }}/omdb2-final.zip"
+      - name: Save deployment ZIP and commit/checksum manifest
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: omdb2-final-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/omdb2-final.zip
+            ${{ runner.temp }}/omdb2-final.manifest.json
+          if-no-files-found: error
+          retention-days: 14

@@ -6,4 +6,4 @@ Sources: https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/ and https://cdnjs.clou
 Bootstrap: https://github.com/twbs/bootstrap/blob/v3.3.7/LICENSE
 DataTables: https://datatables.net/license/mit
 
-Anagram animations (Animate.css 4.1.1) and notifications (Toastr) are also served locally, retaining their upstream license headers. The former duplicate jQuery load on the anagram page is removed. External puzzle API requests remain separate from these static UI assets.
+Anagram animations (Animate.css 4.1.1) and notifications (Toastr) are also served locally, retaining their upstream license headers. The former duplicate jQuery load on the anagram page is removed. Current puzzle character/length helpers run locally; optional embedded media remains separate from these static UI assets.

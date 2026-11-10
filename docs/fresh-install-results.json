@@ -1,0 +1,238 @@
+{
+  "source_commit": "240e3f64305706546160abc01711721b0b9552b8",
+  "source_url": "https://github.com/sjasthi/omdb2",
+  "folder": "C:/xampp/htdocs/omdb-final",
+  "database": "omdb_final",
+  "database_port": 3307,
+  "old_application_used": false,
+  "checks": [
+    {
+      "test": "Fresh source downloaded from GitHub",
+      "expected": "main at 240e3f6",
+      "actual": "240e3f64305706546160abc01711721b0b9552b8",
+      "result": "PASS"
+    },
+    {
+      "test": "New database does not exist",
+      "expected": "0",
+      "actual": "0",
+      "result": "PASS"
+    },
+    {
+      "test": "Schema import into empty database",
+      "expected": "23 application/support tables",
+      "actual": "23",
+      "result": "PASS"
+    },
+    {
+      "test": "Fresh schema contains no default accounts",
+      "expected": "0",
+      "actual": "0",
+      "result": "PASS"
+    },
+    {
+      "test": "17 cascade foreign keys",
+      "expected": "17",
+      "actual": "17",
+      "result": "PASS"
+    },
+    {
+      "test": "Local configuration excluded by Git",
+      "expected": "ignored",
+      "actual": "True",
+      "result": "PASS"
+    },
+    {
+      "test": "Empty catalog opens under Apache",
+      "expected": "200",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "First administrator created through documented CLI",
+      "expected": "exit 0, ADMIN",
+      "actual": 0,
+      "result": "PASS"
+    },
+    {
+      "test": "Bootstrap refuses a second administrator",
+      "expected": "exit 1, account count remains 1",
+      "actual": 1,
+      "result": "PASS"
+    },
+    {
+      "test": "Read-only schema preflight",
+      "expected": "exit 0",
+      "actual": 0,
+      "result": "PASS"
+    },
+    {
+      "test": "Fresh admin signs in",
+      "expected": "302 to index.php",
+      "actual": 302,
+      "result": "PASS"
+    },
+    {
+      "test": "Administrator creates member account",
+      "expected": "200, USER",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Fresh member signs in",
+      "expected": "302",
+      "actual": 302,
+      "result": "PASS"
+    },
+    {
+      "test": "Member cannot open Admin",
+      "expected": "403",
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "test": "Member catalog hides admin actions",
+      "expected": "200, View only",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "movies sample CSV imported",
+      "expected": "3 records",
+      "actual": "3",
+      "result": "PASS"
+    },
+    {
+      "test": "people sample CSV imported",
+      "expected": "3 records",
+      "actual": "3",
+      "result": "PASS"
+    },
+    {
+      "test": "songs sample CSV imported",
+      "expected": "1 records",
+      "actual": "1",
+      "result": "PASS"
+    },
+    {
+      "test": "Movie 1 / person 1 credit",
+      "expected": "200",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Movie 1 / person 2 credit",
+      "expected": "200",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Movie 2 / person 1 credit",
+      "expected": "200",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Movie 3 / person 2 credit",
+      "expected": "200",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Attach imported song",
+      "expected": "200",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Attach singer credit",
+      "expected": "200",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Search cast_member=Avery&director=Morgan",
+      "expected": "1 matches",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Search cast_member=Avery",
+      "expected": "2 matches",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Search cast_member=MissingPerson",
+      "expected": "0 matches",
+      "actual": 200,
+      "result": "PASS"
+    },
+    {
+      "test": "Create from fresh administrator",
+      "expected": "302",
+      "actual": 302,
+      "result": "PASS"
+    },
+    {
+      "test": "Edit created movie",
+      "expected": "302",
+      "actual": 302,
+      "result": "PASS"
+    },
+    {
+      "test": "Delete disposable movie and numbers",
+      "expected": "302; 3 demo movies remain",
+      "actual": 302,
+      "result": "PASS"
+    },
+    {
+      "test": "Apache protects db_credentials.php",
+      "expected": "403 or 404",
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "test": "Apache protects sql/schema.sql",
+      "expected": "403 or 404",
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "test": "Apache protects tools/create-admin.php",
+      "expected": "403 or 404",
+      "actual": 404,
+      "result": "PASS"
+    },
+    {
+      "test": "Apache protects tests/run_week9.py",
+      "expected": "403 or 404",
+      "actual": 404,
+      "result": "PASS"
+    },
+    {
+      "test": "Apache protects docs/week9-testing.md",
+      "expected": "403 or 404",
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "test": "Apache protects .git/config",
+      "expected": "403 or 404",
+      "actual": 404,
+      "result": "PASS"
+    },
+    {
+      "test": "Bad URL",
+      "expected": "404",
+      "actual": 404,
+      "result": "PASS"
+    },
+    {
+      "test": "Application account cannot create schema",
+      "expected": "nonzero exit",
+      "actual": 1,
+      "result": "PASS"
+    }
+  ]
+}
