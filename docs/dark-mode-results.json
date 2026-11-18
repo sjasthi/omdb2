@@ -1,0 +1,157 @@
+{
+  "date": "2026-11-17",
+  "timezone": "America/Chicago",
+  "base_commit": "d325da40294aca8dd9d78518b090d3985985ef91",
+  "source_sha256": {
+    "nav.php": "d260c071003c6bdcafd45bfbea6c9517bded91db19e2ec2ae0b4bf1f8817b567",
+    "security.php": "9cd6bdb585a9473561b91c2adffe2297473fc1c2b06cd354eb732c3ac3aafe20",
+    "help.php": "a0d7f313d65fc491ee16caa4e2024e412397f173dd299fc93fbe5cac906f5a37",
+    "scripts/theme.js": "2b709441cf51369cc4e2c78623ae0a7349e147aad38b0ee808480c182e7a4b74",
+    "styles/theme.css": "95a5ff7fb8f361935f5c5f3d19648e7d6f64244062d9ed6df4f6742890493c4e"
+  },
+  "browser": {
+    "date": "2026-11-17",
+    "checks": [
+      {
+        "check": "System dark preference applies on first visit",
+        "pass": true
+      },
+      {
+        "check": "Toggle switches to light mode",
+        "pass": true
+      },
+      {
+        "check": "Light choice survives reload",
+        "pass": true
+      },
+      {
+        "check": "Dark choice survives reload",
+        "pass": true
+      },
+      {
+        "check": "Dark mode persists across navigation and covers legacy movie panel",
+        "pass": true
+      },
+      {
+        "check": "Missing-record error uses saved dark theme and exposes the toggle",
+        "pass": true
+      },
+      {
+        "check": "Keyboard toggles the error page to light mode",
+        "pass": true
+      },
+      {
+        "check": "Dark preference survives sign-in",
+        "pass": true
+      },
+      {
+        "check": "Admin form fields use dark surfaces and light text",
+        "pass": true
+      },
+      {
+        "check": "Legacy relationship selects use the dark theme",
+        "pass": true
+      },
+      {
+        "check": "Dark preference survives sign-out",
+        "pass": true
+      },
+      {
+        "check": "Home and theme control fit 390px",
+        "pass": true,
+        "actual": {
+          "buttonHeight": 44,
+          "buttonVisible": true,
+          "pageWidth": 375,
+          "width": 390
+        }
+      },
+      {
+        "check": "Home and theme control fit 768px",
+        "pass": true,
+        "actual": {
+          "buttonHeight": 44,
+          "buttonVisible": true,
+          "pageWidth": 753,
+          "width": 768
+        }
+      },
+      {
+        "check": "Home and theme control fit 1366px",
+        "pass": true,
+        "actual": {
+          "buttonHeight": 44,
+          "buttonVisible": true,
+          "pageWidth": 1351,
+          "width": 1366
+        }
+      },
+      {
+        "check": "Home and theme control fit 1440px",
+        "pass": true,
+        "actual": {
+          "buttonHeight": 44,
+          "buttonVisible": true,
+          "pageWidth": 1425,
+          "width": 1440
+        }
+      },
+      {
+        "check": "Phone toggle switches both ways",
+        "pass": true
+      }
+    ],
+    "console_errors": []
+  },
+  "regression": {
+    "started_utc": "2026-11-18T00:18:53Z",
+    "finished_utc": "2026-11-18T00:19:23Z",
+    "php": "PHP 8.0.30 (cli) (built: Sep  1 2023 14:15:38) ( ZTS Visual C++ 2019 x64 )",
+    "database_server": "10.4.32-MariaDB",
+    "suites": [
+      {
+        "suite": "backend",
+        "exit_code": 0
+      },
+      {
+        "suite": "movie-search",
+        "exit_code": 0
+      },
+      {
+        "suite": "security",
+        "exit_code": 0
+      },
+      {
+        "suite": "ui",
+        "exit_code": 0
+      },
+      {
+        "suite": "matrix",
+        "exit_code": 0
+      }
+    ],
+    "counts": {
+      "backend": 62,
+      "combined_search": 273,
+      "http_security": 307,
+      "http_ui": 132,
+      "matrix": 361,
+      "total": 1135,
+      "failed": 0
+    },
+    "matrix_included_in_total": true,
+    "disposable_database_removed": true
+  },
+  "syntax": {
+    "php": [
+      "nav.php",
+      "security.php",
+      "help.php"
+    ],
+    "javascript": [
+      "scripts/theme.js"
+    ],
+    "passed": true
+  },
+  "scope": "Local XAMPP app and source. Browser preferences only; source publication is separate."
+}

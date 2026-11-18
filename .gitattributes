@@ -3,3 +3,6 @@
 *.php text eol=lf
 *.py text eol=lf
 .githooks/* text eol=lf
+*.pdf binary
+*.pptx binary
+*.mp4 binary

@@ -42,6 +42,10 @@ function staged_blob(string $path): string {
 }
 $problems = [];
 foreach ($paths as $path) {
+    if (stripos(basename($path), '.private.') !== false) {
+        $problems[$path] = 'private presentation or configuration file';
+        continue;
+    }
     if (preg_match('~(^|/)(db_credentials\.php|[^/]*\.local\.php|\.env(?!\.example$)[^/]*|[^/]*(credentials|secrets)[^/]*\.json|[^/]*(backup|dump)[^/]*\.sql|omdb_db\.sql|omdb_\d[^/]*\.sql)$~i', $path)) {
         $problems[$path] = 'private configuration or database dump';
         continue;

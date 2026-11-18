@@ -5,6 +5,10 @@ ini_set('display_startup_errors', '0');
 ini_set('log_errors', '1');
 ini_set('default_charset', 'UTF-8');
 error_reporting(E_ALL);
+function omdb_asset_url(string $path): string {
+    // Existing installations must fetch changed styling/scripts instead of a stale browser copy.
+    return $path . '?v=' . substr(hash_file('sha256', __DIR__ . '/' . $path), 0, 12);
+}
 // An unlimited application buffer also keeps older pages' redirects valid.
 ob_start();
 
@@ -19,7 +23,7 @@ function security_fail(int $status, string $message): void {
     $root = rtrim(str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
     $title = [400=>'Check your details',403=>'Access unavailable',404=>'Page not found',405=>'Open the form first',500=>'Something went wrong'][$status] ?? 'Unable to complete this request';
     echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'.$escape($title).' | OMDB</title>'
-        .'<link rel="stylesheet" href="'.$escape($root.'/styles/ui.css').'"></head><body class="error-screen"><main class="error-card"><a href="'.$escape($root.'/index.php').'">OMDB · Home</a>'
+        .'<script src="'.$escape($root.'/'.omdb_asset_url('scripts/theme.js')).'"></script><link rel="stylesheet" href="'.$escape($root.'/'.omdb_asset_url('styles/ui.css')).'"><link rel="stylesheet" href="'.$escape($root.'/'.omdb_asset_url('styles/theme.css')).'"></head><body class="error-screen"><main class="error-card"><button class="theme-toggle btn btn-default" type="button" data-theme-toggle aria-pressed="false" hidden>Dark mode</button><a href="'.$escape($root.'/index.php').'">OMDB · Home</a>'
         .'<h1>'.$escape($title).'</h1><div class="notice notice--error" role="alert">'.$escape($message).'</div>'
         .'<p>Your request could not be completed. Use your browser’s Back button to return to the form, or choose a page below.</p>'
         .'<div class="form-actions"><a class="btn btn-primary" href="'.$escape($root.'/index.php').'">Home</a><a class="btn btn-default" href="'.$escape($root.'/help.php').'">Help</a></div></main></body></html>';
@@ -38,9 +42,12 @@ register_shutdown_function(function (): void {
 if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.use_strict_mode', '1');
     ini_set('session.use_only_cookies', '1');
+    // Keep installations with different databases from sharing a login session.
+    session_name('OMDB' . substr(hash('sha256', __DIR__), 0, 16));
+    $session_path = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/') . '/';
     session_set_cookie_params([
         'lifetime' => 0,
-        'path' => '/',
+        'path' => $session_path,
         'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
         'httponly' => true,
         'samesite' => 'Lax',

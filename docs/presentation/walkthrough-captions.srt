@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:08,000
+Home and recently added movies
+The home page shows catalog totals and the newest movie records. These fictional examples keep the demonstration repeatable.
+
+2
+00:00:08,000 --> 00:00:16,000
+Member catalog
+A member can browse and filter. Create, edit, delete and admin navigation controls are absent.
+
+3
+00:00:16,000 --> 00:00:24,000
+Catalog filters
+A native-title filter and the global filter narrow the list to Harbor Lights. Clear filters resets both searches and restores all three movies.
+
+4
+00:00:24,000 --> 00:00:36,000
+Cast and director together
+Avery Stone plus Morgan River returns one matching movie: Harbor Lights. Every selected condition must match the same movie.
+
+5
+00:00:36,000 --> 00:00:46,000
+Connected catalog records
+Movie details include existing people and soundtrack relationships. The test suite separately verifies relationship writes and cascade cleanup.
+
+6
+00:00:46,000 --> 00:00:54,000
+Server-side admin protection
+Opening the admin setup URL as a member returns an access-denied response. Hiding menu items does not replace the server check.
+
+7
+00:00:54,000 --> 00:01:04,000
+Administrator controls
+The administrator sees create, edit, relationship and delete actions. The server checks the role again for each write.
+
+8
+00:01:04,000 --> 00:01:14,000
+Create movie form
+The administrator form explains required fields and limits. This captured walkthrough does not submit or delete a record.
+
+9
+00:01:14,000 --> 00:01:22,000
+Phone layout
+The home page fits a 390-pixel viewport. The navigation collapses into Menu and the content stacks vertically.

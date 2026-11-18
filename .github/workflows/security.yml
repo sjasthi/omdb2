@@ -13,6 +13,7 @@ jobs:
         run: |
           node --check scripts/layout.js
           node --check scripts/catalog-ui.js
+          node --check scripts/theme.js
           python3 -m py_compile tools/package-release.py
       - name: Reject committed configuration and credentials
         run: php tools/check-secrets.php --all

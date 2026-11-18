@@ -1,0 +1,246 @@
+{
+  "date": "2026-11-17",
+  "base_commit": "60a8c008f039f7f6774b6280457febb2f1023029",
+  "checks": [
+    {
+      "check": "PHP syntax",
+      "passed": true,
+      "actual": {
+        "files": 123,
+        "failed_files": []
+      }
+    },
+    {
+      "check": "Shared and offline JavaScript syntax",
+      "passed": true,
+      "actual": {
+        "scripts": 3,
+        "failed_files": []
+      }
+    },
+    {
+      "check": "Package builder syntax",
+      "passed": true,
+      "actual": "Python AST parses"
+    },
+    {
+      "check": "Local documentation and image links",
+      "passed": true,
+      "actual": {
+        "references": 84,
+        "missing": []
+      }
+    },
+    {
+      "check": "Secret scan rejects private login filenames",
+      "passed": true,
+      "actual": "Synthetic .private.txt staged file rejected"
+    },
+    {
+      "check": "Release builder rejects private login filenames",
+      "passed": true,
+      "actual": "Synthetic committed .private.txt file rejected"
+    },
+    {
+      "check": "Private files ignored by default",
+      "passed": true,
+      "actual": "Login notes and local launcher match .gitignore"
+    },
+    {
+      "check": "Browser rehearsal",
+      "passed": true,
+      "actual": {
+        "checks": [
+          {
+            "name": "Clear filters resets column and global search",
+            "pass": true
+          },
+          {
+            "name": "Cast and director match one movie",
+            "pass": true
+          },
+          {
+            "name": "Member cannot open admin setup",
+            "pass": true
+          },
+          {
+            "name": "Admin catalog exposes create and edit controls",
+            "pass": true
+          },
+          {
+            "name": "Phone home fits 390px viewport",
+            "pass": true
+          }
+        ],
+        "console_errors": 0
+      }
+    },
+    {
+      "check": "Full regression rerun",
+      "passed": true,
+      "actual": [
+        {
+          "suite": "backend",
+          "exit_code": 0
+        },
+        {
+          "suite": "movie-search",
+          "exit_code": 0
+        },
+        {
+          "suite": "security",
+          "exit_code": 0
+        },
+        {
+          "suite": "ui",
+          "exit_code": 0
+        },
+        {
+          "suite": "matrix",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "check": "Editable slide structure",
+      "passed": true,
+      "actual": {
+        "slides": 8,
+        "speaker_note_pages": 8,
+        "native_table_slides": [
+          3,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "check": "Offline PDF render",
+      "passed": true,
+      "actual": {
+        "renderer": "Poppler",
+        "pages": 8,
+        "mean_pixel_difference_by_page": [
+          1.549,
+          1.851,
+          2.912,
+          2.317,
+          2.112,
+          1.679,
+          3.094,
+          2.02
+        ],
+        "visual_review": "All slides reviewed in the live session; PDF pages 6 and 7 also inspected at full size. Minor resampling differences are expected in the static PDF."
+      }
+    },
+    {
+      "check": "Private demo values absent from source",
+      "passed": true,
+      "actual": {
+        "matching_files": []
+      }
+    },
+    {
+      "check": "PowerShell syntax",
+      "passed": true,
+      "actual": "Final startup script parsed in PowerShell 7"
+    },
+    {
+      "check": "Installed CLI preflight",
+      "passed": true,
+      "actual": [
+        {
+          "check": "Database connection",
+          "passed": true,
+          "actual": "connected"
+        },
+        {
+          "check": "Catalog tables",
+          "passed": true,
+          "actual": {
+            "movies": 3,
+            "people": 3,
+            "songs": 1
+          }
+        },
+        {
+          "check": "Cascading foreign keys",
+          "passed": true,
+          "actual": 17
+        },
+        {
+          "check": "Unique account email",
+          "passed": true,
+          "actual": "present"
+        },
+        {
+          "check": "Administrator account",
+          "passed": true,
+          "actual": "account presence checked"
+        },
+        {
+          "check": "Member account",
+          "passed": true,
+          "actual": "account presence checked"
+        },
+        {
+          "check": "Prepared cast and director search",
+          "passed": true,
+          "actual": "1 matching movie(s)"
+        }
+      ]
+    },
+    {
+      "check": "Cold database startup",
+      "passed": true,
+      "actual": "Stopped isolated instance restarted and all readiness checks passed; slow-shutdown limitation documented"
+    },
+    {
+      "check": "Installed HTTP preflight and tool protection",
+      "passed": true,
+      "actual": [
+        {
+          "path": "login.php",
+          "status": 200,
+          "passed": true
+        },
+        {
+          "path": "tools/check-demo.php",
+          "status": 404,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "functional_counts": {
+    "backend": 62,
+    "combined_search": 273,
+    "http_security": 307,
+    "http_ui": 132,
+    "matrix": 361,
+    "total": 1135,
+    "failed": 0,
+    "matrix_included_in_total": true
+  },
+  "historical_week10_installation_checks": {
+    "passed": 38,
+    "rerun_in_this_rehearsal": false
+  },
+  "changed_source_sha256": {
+    "index.php": "61e4b23a2c4e47661d8efa96f737efac4a33b72328e8653b25f4e5c6393ca673",
+    "help.php": "bba69347f1e0e790033de158f409841f6ec9bf9d963af34845d2bb80c77e4899",
+    "scripts/catalog-ui.js": "55b00d5b43d913bee2f41d45207976639a553b38edd571f94b050e9d116b403b",
+    "styles/ui.css": "c508ce7d8d425f803ae88eed1dc4803bc3a6f81f9825d9304e2f3f96c0777022",
+    "tools/check-demo.php": "97c63cd973e13f5a7da9df4b49b8b4b0c5045145a583ff83b941bd1d3e88cde9",
+    "tools/start-demo.ps1": "248ec5fc97a64888ad1a4d9dbef447a69514020f77edf0a66b868e98c2c62e5b",
+    "tools/check-secrets.php": "47a49b3090f980e2aad8fe5d67c471cd0b60ee2423f434bc315767d60b12b521",
+    "tools/package-release.py": "deb837ea2cef9a6dacfc2de466f3bf27946b95da91c2cbdcfc7f786b2d1223d7"
+  },
+  "environment": {
+    "php": "8.0.30",
+    "database": "MariaDB 10.4.32",
+    "database_port": 3307,
+    "local_only": true
+  }
+}

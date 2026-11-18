@@ -6,6 +6,16 @@ This repository contains the application, an empty schema, fictional sample data
 
 ![OMDB home page with the fictional sample catalog](docs/screenshots/home.jpg)
 
+## Presentation and rehearsal
+
+The [presentation kit](docs/presentation/README.md) includes a ten-minute speaking outline, a three-minute demo sequence, professor Q&A, startup checks, and an offline screenshot walkthrough. On Windows, `tools/start-demo.ps1` can start the configured local servers and verify the schema, account roles and prepared sample search without changing data. See the [startup instructions](docs/presentation/startup.md) before using a custom database port.
+
+The home page lists recently added movies. Movies, People and Songs each have a **Clear filters** button that resets the table's global and column searches. [Help](help.php) explains these controls. Private login notes and machine-specific launchers stay outside the repository.
+
+Choose **Dark mode** beside the account badge to switch themes. OMDB follows the device color preference until you choose a theme, then remembers that choice in this browser. The preference applies across pages and sign-in sessions, including safe error pages. It does not change your account or database records. See [dark-mode usage and verification](docs/dark-mode.md).
+
+The original local catalog was restored with the current code on November 17, 2026: **3,997 movies, 15 people, 3 songs and 4 accounts**. See the [catalog-restoration verification](docs/full-catalog-restoration.md). Existing database data and local credentials remain private, outside the source package. Separate installations now use separate login cookies.
+
 ## Requirements
 
 | Component | Requirement |
