@@ -222,11 +222,20 @@ var flag = true;
       <div class="movie">
         <h2><?php echo h($native_name);?></h2>
         <div class="movie-img"><button type="button" class="poster-trigger" aria-label="Enlarge movie poster">
-        <?php if (isset($m_link[0]) && !empty(trim($m_link[0]))) { ?>
-        <img src="posters/<?php echo h($m_link[0]) . '.' . h($m_link_type[0]);?>" alt="<?php echo h($m_link[0]);?>" class="movie-image" id="movie-image" style="width:300px;height:300px;"></img>
-        <?php } else { ?>
-            <img class="movie-image" id="movie-image" src="images/no-image.png" alt="No Image" style="width:300px;height:300px;"></img>
-        <?php } ?>
+        <?php
+        $poster_source = 'images/no-image.png';
+        $poster_description = 'Poster unavailable';
+        foreach ($m_link ?? [] as $index => $name) {
+            $filename = $name . '.' . ($m_link_type[$index] ?? '');
+            if (strpos($filename, "\0") !== false || basename(str_replace('\\', '/', $filename)) !== $filename
+                || !in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp','gif'], true)
+                || !is_file(__DIR__ . '/posters/' . $filename)) { continue; }
+            $poster_source = 'posters/' . rawurlencode($filename);
+            $poster_description = $name;
+            break;
+        }
+        ?>
+        <img src="<?php echo h($poster_source); ?>" alt="<?php echo h($poster_description); ?>" class="movie-image" id="movie-image" style="width:300px;height:300px;">
         </button></div>
         <div class="text-movie-cont">
           <div class="mr-grid summary-row">

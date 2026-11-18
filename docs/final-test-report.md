@@ -1,5 +1,9 @@
 # Final static-analysis and functional-test report
 
+The [November 17 full-catalog restoration](full-catalog-restoration.md) preserves all 23 original database tables and verifies the current code with **1,141 functional checks**, including four installation-session checks and two missing-poster checks added after the original 1,135-check suite. Historical results below retain their original scope.
+
+The [November 17 presentation rehearsal](presentation/verification.md) reran the complete functional suite after the small presentation/UI additions. The Week 10 installation results below retain their original date and scope.
+
 Verification date: **November 9, 2026**. Application source: fresh GitHub clone at `240e3f64305706546160abc01711721b0b9552b8`, independent of the previously deployed app. Environment and install observations are recorded in [fresh-installation.md](fresh-installation.md). This is the current report; weekly reports retain their original dates/results as historical evidence.
 
 ## Results

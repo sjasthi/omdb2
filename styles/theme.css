@@ -1,0 +1,97 @@
+/* Theme colors are shared by the public catalog, administrator forms and safe error pages. */
+:root { color-scheme: light; }
+.theme-controls { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+.theme-toggle { gap:8px; cursor:pointer; }
+.theme-toggle[hidden] { display:none; }
+.theme-toggle::before { content:''; width:12px; height:12px; border:2px solid currentColor; border-radius:50%; }
+.theme-toggle[aria-pressed="true"]::before { background:currentColor; }
+.theme-toggle:focus-visible { outline:3px solid #1766a4; outline-offset:3px; }
+.error-card > .theme-toggle:not([hidden]) { display:flex; margin:0 0 20px auto; }
+html[data-theme="dark"] {
+    color-scheme:dark;
+    --ui-text:#e5edf7; --ui-muted:#a6b6cc; --ui-line:#32465e; --ui-tint:#16263b;
+    --omdb-blue:#8acbff; --omdb-border:#32465e; --omdb-muted:#a6b6cc;
+    --theme-bg:#0c1422; --theme-surface:#111e30; --theme-raised:#192a3f; --theme-hover:#233a55;
+}
+html[data-theme="dark"] body.omdb-app, html[data-theme="dark"] .error-screen { background:var(--theme-bg); color:var(--ui-text); }
+html[data-theme="dark"] .omdb-app #wrap, html[data-theme="dark"] .error-card { background:var(--theme-surface); }
+html[data-theme="dark"] .site-brand, html[data-theme="dark"] #primary-nav a, html[data-theme="dark"] .nav-logout,
+html[data-theme="dark"] #menu-left a, html[data-theme="dark"] .omdb-content label { color:var(--ui-text); }
+html[data-theme="dark"] #primary-nav a:hover, html[data-theme="dark"] #primary-nav a[aria-current="page"],
+html[data-theme="dark"] .nav-logout:hover, html[data-theme="dark"] #menu-left a:hover,
+html[data-theme="dark"] #menu-left a[aria-current="page"] { color:#cce8ff; background:var(--theme-hover); border-color:var(--ui-line); }
+html[data-theme="dark"] .account-badge, html[data-theme="dark"] .menu-toggle { color:var(--ui-text); background:var(--theme-raised); }
+html[data-theme="dark"] .stat-card { background:var(--theme-raised); }
+html[data-theme="dark"] .stat-card:hover { background:var(--theme-hover); border-color:#6386a8; }
+html[data-theme="dark"] .welcome-panel, html[data-theme="dark"] .help-panel,
+html[data-theme="dark"] .movie-search-form, html[data-theme="dark"] .omdb-content #movieCreate,
+html[data-theme="dark"] .omdb-content #movieModify, html[data-theme="dark"] .omdb-content #basecharAdmin,
+html[data-theme="dark"] .omdb-content .form-panel, html[data-theme="dark"] .omdb-content .omdb-form { background:var(--ui-tint); }
+html[data-theme="dark"] .omdb-app :focus-visible, html[data-theme="dark"] .error-screen :focus-visible { outline-color:#8acbff; }
+html[data-theme="dark"] .skip-link { background:var(--theme-raised); color:var(--omdb-blue); }
+html[data-theme="dark"] .omdb-app input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+html[data-theme="dark"] .omdb-app select, html[data-theme="dark"] .omdb-app textarea { background:var(--theme-bg); color:var(--ui-text); border-color:#60758f; }
+html[data-theme="dark"] .omdb-app input::placeholder, html[data-theme="dark"] .omdb-app textarea::placeholder { color:#a6b6cc; opacity:1; }
+html[data-theme="dark"] .omdb-app input[type="checkbox"], html[data-theme="dark"] .omdb-app input[type="radio"] { accent-color:#8acbff; }
+html[data-theme="dark"] .omdb-app input:disabled, html[data-theme="dark"] .omdb-app select:disabled,
+html[data-theme="dark"] .omdb-app textarea:disabled { background:var(--theme-raised); color:var(--ui-muted); }
+html[data-theme="dark"] .omdb-app .btn-default, html[data-theme="dark"] .omdb-app .btn-info,
+html[data-theme="dark"] .omdb-app .btn-warning, html[data-theme="dark"] .omdb-app .btn-success,
+html[data-theme="dark"] .error-screen .btn-default { background:var(--theme-raised); color:#b5dcff; border-color:#60758f; }
+html[data-theme="dark"] .omdb-app .btn-default:hover, html[data-theme="dark"] .omdb-app .btn-info:hover,
+html[data-theme="dark"] .omdb-app .btn-warning:hover, html[data-theme="dark"] .omdb-app .btn-success:hover,
+html[data-theme="dark"] .error-screen .btn-default:hover { background:var(--theme-hover); }
+html[data-theme="dark"] .omdb-app .btn-danger { color:#ffb5bf; background:#381e2a; border-color:#a05b6a; }
+html[data-theme="dark"] .omdb-app .btn-danger:hover { background:#512635; }
+html[data-theme="dark"] .omdb-app button:not(.btn):not(.nav-logout):not(.poster-trigger),
+html[data-theme="dark"] .omdb-app input[type="submit"], html[data-theme="dark"] .omdb-app input[type="button"] { color:var(--ui-text); background:var(--theme-raised); border-color:var(--ui-line); }
+html[data-theme="dark"] .notice, html[data-theme="dark"] .alert-info { background:#142f48; color:#bddfff; border-color:#5282a8; }
+html[data-theme="dark"] .notice--success, html[data-theme="dark"] .alert-success,
+html[data-theme="dark"] .omdb-content .message.success { background:#16372b; color:#b4e5c9; border-color:#528d70; }
+html[data-theme="dark"] .notice--error, html[data-theme="dark"] .alert-danger, html[data-theme="dark"] .errors,
+html[data-theme="dark"] .omdb-content .message.error { background:#3a202c; color:#ffc4cc; border-color:#a26374; }
+html[data-theme="dark"] .omdb-content input.invalid, html[data-theme="dark"] .omdb-content [aria-invalid="true"] { background:#3a202c; border-color:#e796a7; }
+html[data-theme="dark"] .alert-warning { background:#3b301d; color:#ffe1a6; border-color:#a48a55; }
+html[data-theme="dark"] .omdb-content table, html[data-theme="dark"] .omdb-content table tbody tr { color:var(--ui-text); background:var(--theme-surface); }
+html[data-theme="dark"] .omdb-content table thead th, html[data-theme="dark"] .omdb-content table tfoot th { color:#d5e5f6; background:var(--theme-raised); border-color:var(--ui-line); }
+html[data-theme="dark"] .omdb-content table th, html[data-theme="dark"] .omdb-content table td { border-color:var(--ui-line); }
+html[data-theme="dark"] .omdb-content .table-striped > tbody > tr:nth-of-type(odd) { background:#152338; }
+html[data-theme="dark"] .omdb-content table tbody tr:hover { background:var(--theme-hover); }
+html[data-theme="dark"] .omdb-content .pagination > li > a, html[data-theme="dark"] .omdb-content .pagination > li > span { background:var(--theme-raised); color:#b5dcff; border-color:var(--ui-line); }
+html[data-theme="dark"] .omdb-content .pagination > .active > a { background:var(--ui-blue); color:white; }
+html[data-theme="dark"] .omdb-content .pagination > .disabled > a { color:var(--ui-muted); }
+html[data-theme="dark"] .select2-container--default .select2-selection--single,
+html[data-theme="dark"] .select2-container--default .select2-selection--multiple,
+html[data-theme="dark"] .select2-dropdown, html[data-theme="dark"] .select2-search__field { background:var(--theme-bg); color:var(--ui-text); border-color:#60758f; }
+html[data-theme="dark"] .select2-container--default .select2-selection--single .select2-selection__rendered { color:var(--ui-text); }
+html[data-theme="dark"] .select2-container--default .select2-selection__placeholder,
+html[data-theme="dark"] .select2-container--default .select2-selection__clear { color:var(--ui-muted); }
+html[data-theme="dark"] .select2-container--default .select2-selection__choice,
+html[data-theme="dark"] .select2-container--default .select2-results__option[aria-selected="true"] { background:var(--theme-hover); color:var(--ui-text); border-color:var(--ui-line); }
+html[data-theme="dark"] .select2-container--default .select2-results__option--highlighted[aria-selected] { background:var(--ui-blue); color:white; }
+html[data-theme="dark"] .omdb-content .panel, html[data-theme="dark"] .omdb-content .well,
+html[data-theme="dark"] .omdb-content .list-group-item, html[data-theme="dark"] .omdb-content .card,
+html[data-theme="dark"] .modal-content, html[data-theme="dark"] .dropdown-menu,
+html[data-theme="dark"] .poster-dialog { background:var(--theme-raised); color:var(--ui-text); border-color:var(--ui-line); }
+html[data-theme="dark"] .omdb-content code, html[data-theme="dark"] .omdb-content pre { color:#c8dfff; background:var(--theme-bg); border-color:var(--ui-line); }
+html[data-theme="dark"] .omdb-content .container, html[data-theme="dark"] .omdb-content #container,
+html[data-theme="dark"] .omdb-content .anagram-creator { background:var(--theme-surface); color:var(--ui-text); }
+html[data-theme="dark"] .omdb-content .collapsible { background:var(--theme-hover); color:#d5e5f6; text-shadow:none; }
+html[data-theme="dark"] .omdb-content .movie-img { border-color:var(--ui-line); }
+html[data-theme="dark"] .omdb-content h1 { text-shadow:none; }
+html[data-theme="dark"] .omdb-content .subtitle, html[data-theme="dark"] .omdb-content .movie-meta,
+html[data-theme="dark"] .omdb-content .help { color:var(--ui-muted); }
+html[data-theme="dark"] .omdb-content .top-links a { color:var(--omdb-blue); }
+/* These older views use inline colors, so only their known warning/game colors need !important. */
+html[data-theme="dark"] .omdb-content [style*="color: #b30000"],
+html[data-theme="dark"] .omdb-content [style*="color:red"] { color:#ffb5bf !important; }
+html[data-theme="dark"] .omdb-content [style*="background-color: lightgrey"] { background:var(--theme-raised) !important; border-color:var(--ui-line) !important; }
+html[data-theme="dark"] .error-card a:not(.btn) { color:var(--omdb-blue); }
+@media print {
+    .theme-toggle { display:none !important; }
+    html[data-theme="dark"] { color-scheme:light; --ui-text:#000; --theme-bg:#fff; --theme-surface:#fff; }
+    html[data-theme="dark"] body.omdb-app, html[data-theme="dark"] .omdb-app #wrap,
+    html[data-theme="dark"] .omdb-content table, html[data-theme="dark"] .omdb-content table tbody tr,
+    html[data-theme="dark"] .error-screen, html[data-theme="dark"] .error-card { background:white; color:black; }
+    html[data-theme="dark"] .omdb-app *, html[data-theme="dark"] .error-screen * { color:black !important; background:transparent !important; text-shadow:none !important; box-shadow:none !important; }
+}

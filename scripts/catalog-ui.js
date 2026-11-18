@@ -40,4 +40,13 @@
     });
     const finalCell = document.createElement('th'); finalCell.setAttribute('aria-label','Actions have no filter'); filters.append(finalCell);
     tableElement.tHead.append(filters);
+    const reset = document.createElement('button');
+    reset.type = 'button'; reset.className = 'btn btn-default catalog-reset'; reset.textContent = 'Clear filters';
+    reset.setAttribute('aria-label', 'Clear all catalog filters');
+    reset.addEventListener('click', () => {
+        $(tableElement).closest('.dataTables_wrapper').find('input[type="search"]').val('');
+        table.search('').columns().search('').draw();
+    });
+    const actions = document.querySelector('.page-actions');
+    if (actions) { actions.append(reset); }
 })();

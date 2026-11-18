@@ -25,7 +25,7 @@ def main():
     allowed_sql = {'sql/schema.sql', 'sql/migrations/007_database_cleanup.sql', 'tests/fixtures/week6-schema.sql'}
     for path in paths:
         name = Path(path).name.lower()
-        if (name == 'db_credentials.php' or name.startswith('.env') or name.endswith(('.local.php', '.log', '.bak', '.zip'))
+        if (name == 'db_credentials.php' or '.private.' in name or name.startswith('.env') or name.endswith(('.local.php', '.log', '.bak', '.zip'))
                 or ('credentials' in name and name.endswith('.json')) or ('secrets' in name and name.endswith('.json'))
                 or (name.endswith('.sql') and path not in allowed_sql)):
             parser.error('Private or unreviewed artifact is tracked: ' + path)

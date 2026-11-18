@@ -23,21 +23,23 @@ $sidebar = $admin_navigation ? 'admin' : ($left_buttons === 'YES' ? ($sidebars[$
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo h($document_title); ?></title>
+    <script src="<?php echo h(omdb_asset_url('scripts/theme.js')); ?>"></script>
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="vendor/datatables/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="fonts/css/all.css">
     <link rel="stylesheet" href="fonts/css/v4-shims.min.css">
     <link rel="stylesheet" href="ajax/select2/dist/css/select2.min.css">
-    <link rel="stylesheet" href="styles/mainStyleSheet.css">
-    <link rel="stylesheet" href="styles/responsive.css">
-    <link rel="stylesheet" href="styles/ui.css">
+    <link rel="stylesheet" href="<?php echo h(omdb_asset_url('styles/mainStyleSheet.css')); ?>">
+    <link rel="stylesheet" href="<?php echo h(omdb_asset_url('styles/responsive.css')); ?>">
+    <link rel="stylesheet" href="<?php echo h(omdb_asset_url('styles/ui.css')); ?>">
+    <link rel="stylesheet" href="<?php echo h(omdb_asset_url('styles/theme.css')); ?>">
     <script src="ajax/jquery-3.2.1.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap.min.js"></script>
     <script src="ajax/select2/dist/js/select2.min.js"></script>
-    <script src="scripts/layout.js" defer></script>
-    <script src="scripts/catalog-ui.js" defer></script>
+    <script src="<?php echo h(omdb_asset_url('scripts/layout.js')); ?>" defer></script>
+    <script src="<?php echo h(omdb_asset_url('scripts/catalog-ui.js')); ?>" defer></script>
 </head>
 <body class="omdb-app">
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -65,7 +67,7 @@ $sidebar = $admin_navigation ? 'admin' : ($left_buttons === 'YES' ? ($sidebars[$
             </ul>
         </nav>
     </header>
-    <div class="utility-bar"><span class="account-badge"><?php echo is_admin() ? 'Administrator' : (is_logged_in() ? 'Member' : 'Guest'); ?></span>
+    <div class="utility-bar"><div class="theme-controls"><span class="account-badge"><?php echo is_admin() ? 'Administrator' : (is_logged_in() ? 'Member' : 'Guest'); ?></span><button class="theme-toggle btn btn-default" type="button" data-theme-toggle aria-pressed="false" hidden>Dark mode</button></div>
     <form class="site-search" method="get" action="search.php" role="search">
         <label class="sr-only" for="global-search">Search OMDB</label>
         <input type="search" id="global-search" name="text_search" class="form-control" maxlength="500" placeholder="Search titles, people, or cast + director">

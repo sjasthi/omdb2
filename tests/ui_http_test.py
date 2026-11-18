@@ -1,5 +1,5 @@
 """Week 8 UI contracts. Run only against an isolated *_test database."""
-import os,json,re,urllib.request,urllib.error,urllib.parse,http.cookiejar,subprocess
+import os,json,re,urllib.request,urllib.error,urllib.parse,http.cookiejar,subprocess,secrets,shutil
 from html.parser import HTMLParser
 from pathlib import Path
 BASE=os.environ['OMDB_TEST_URL']
@@ -74,6 +74,25 @@ check('Empty shared-cast report has a usable no-match message',status==200 and '
 status,body,_=user.get('anagrammer.php',{'movie_id':'1','input':'Demo film 1'})
 check('Member can solve a puzzle without receiving admin contribution controls',status==200 and 'createTheAnagram.php' not in body and 'Demo film 1' in body)
 check('Read-only UI audit leaves database unchanged',before==snapshot())
+
+# Reproduce stale poster records using only disposable fixture records and a uniquely named file.
+poster_name='ui-poster-'+secrets.token_hex(8)
+fixture_root=Path(__file__).resolve().parents[1]
+poster_file=fixture_root/'posters'/(poster_name+'.png')
+if poster_file.exists() or poster_file.resolve().parent!=(fixture_root/'posters').resolve():raise RuntimeError('Unexpected poster fixture path.')
+poster_movie=int(sql("INSERT INTO movies(native_name,english_name,year_made) VALUES ('"+poster_name+"','"+poster_name+"',2020); SELECT LAST_INSERT_ID();"))
+try:
+    sql("INSERT INTO movie_media(movie_id,m_link,m_link_type) VALUES ("+str(poster_movie)+",'"+poster_name+"-missing','jpg')")
+    status,body,_=user.get('movie_info.php?movie_id='+str(poster_movie))
+    check('Missing poster file displays the local placeholder',status==200 and 'src="images/no-image.png"' in body)
+    shutil.copy2(fixture_root/'images/no-image.png',poster_file)
+    sql("INSERT INTO movie_media(movie_id,m_link,m_link_type) VALUES ("+str(poster_movie)+",'"+poster_name+"','png')")
+    status,body,_=user.get('movie_info.php?movie_id='+str(poster_movie))
+    check('An available poster is used after a stale media reference',status==200 and ('src="posters/'+poster_name+'.png"') in body)
+finally:
+    sql('DELETE FROM movies WHERE movie_id='+str(poster_movie))
+    poster_file.unlink(missing_ok=True)
+
 token=admin.token('create_people.php')
 status,body,_=admin.get('create_people.php',{'csrf_token':token,'stage_name':'','first_name':'Retained Name'})
 check('Person validation is specific and retains safe input',status==400 and 'stage name' in body and 'value="Retained Name"' in body and 'role="alert"' in body)

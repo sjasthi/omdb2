@@ -23,6 +23,9 @@ def main():
     parser.add_argument('--output', required=True, type=Path, help='Private results directory outside the source/web root')
     parser.add_argument('--php', default=shutil.which('php') or r'C:\xampp\php\php.exe')
     parser.add_argument('--mysql', default=shutil.which('mysql') or r'C:\xampp\mysql\bin\mysql.exe')
+    parser.add_argument('--suites', nargs='+', choices=['backend','movie-search','security','ui','matrix','sessions'],
+                        default=['backend','movie-search','security','ui','matrix','sessions'],
+                        help='Run selected suites; the default runs every suite.')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[1]
     output = args.output.resolve()
@@ -75,12 +78,13 @@ def main():
             created = True
             metadata.update(json.loads(fixture.stdout))
             print('Isolated Week 9 fixture created.', flush=True)
-            run('backend', [args.php, 'tests/backend.php'])
-            run('movie-search', [args.php, 'tests/movie-search.php'])
+            if 'backend' in args.suites: run('backend', [args.php, 'tests/backend.php'])
+            if 'movie-search' in args.suites: run('movie-search', [args.php, 'tests/movie-search.php'])
             with socket.socket() as sock:
                 sock.bind(('127.0.0.1', 0)); port = sock.getsockname()[1]
             env.update(OMDB_TEST_URL=f'http://127.0.0.1:{port}/', OMDB_TEST_RESULTS=str(output / 'security.json'),
-                       OMDB_UI_RESULTS=str(output / 'ui.json'), OMDB_WEEK9_RESULTS=str(output / 'matrix.json'))
+                       OMDB_UI_RESULTS=str(output / 'ui.json'), OMDB_WEEK9_RESULTS=str(output / 'matrix.json'),
+                       OMDB_SESSION_RESULTS=str(output / 'sessions.json'))
             with (output / 'http-server.log').open('wb') as log:
                 server = subprocess.Popen([args.php, '-S', f'127.0.0.1:{port}', '-t', str(source), str(source / 'tests/http_router.php')], cwd=source,
                                           env=env, stdout=log, stderr=log)
@@ -91,8 +95,8 @@ def main():
                             urllib.request.urlopen(env['OMDB_TEST_URL'] + 'login.php', timeout=1).close(); break
                         except OSError: time.sleep(.1)
                     else: raise RuntimeError('PHP test server did not become ready.')
-                    for suite, filename in [('security', 'security_http_test.py'), ('ui', 'ui_http_test.py'), ('matrix', 'week9_http_test.py')]:
-                        run(suite, [sys.executable, '-X', 'utf8', 'tests/' + filename])
+                    for suite, filename in [('security', 'security_http_test.py'), ('ui', 'ui_http_test.py'), ('matrix', 'week9_http_test.py'), ('sessions', 'session_http_test.py')]:
+                        if suite in args.suites: run(suite, [sys.executable, '-X', 'utf8', 'tests/' + filename])
                 finally:
                     server.terminate(); server.wait(timeout=15)
     finally:

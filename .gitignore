@@ -96,6 +96,7 @@ styles/._style.css
 !.env.example
 *credentials*.json
 *secrets*.json
+*.private.*
 *.sql
 !/sql/schema.sql
 !/sql/migrations/007_database_cleanup.sql
