@@ -10,7 +10,7 @@ Sign in as the administrator you created during installation. Open **Admin**, ch
 | `people.csv` | People | 3 imported |
 | `songs.csv` | Songs | 1 imported; lyrics preserve the quoted line break and comma |
 
-From **Movies**, open **People** for **Harbor Lights**. Select **Avery Stone** with role **Actor**, and **Morgan River** with role **Director**, then save. Add Avery as Actor to Northern Journey and Morgan as Director to O'Neil's Return if you want an example with one shared result and two individual-only results. Use **Songs** on Harbor Lights to attach Harbor Theme. From Songs, use **Credits** to credit Casey North as Singer.
+From **Movies**, open **People** for **Harbor Lights**. Check **Avery Stone** and choose **Lead Actor**, then check **Morgan River** and choose **Director**. Enter optional screen names if desired and choose **Add**. Add Avery as Lead Actor to Northern Journey and Morgan as Director to O'Neil's Return if you want an example with one shared result and two individual-only results. Use **Songs** on Harbor Lights to attach Harbor Theme. From Songs, use **Credits**, check Casey North, choose **Performer**, and choose **Add**. These are the role labels available in the current forms; the cast search includes Lead Actor credits.
 
 Search for cast member `Avery Stone` and director `Morgan River`: only Harbor Lights should match. Searching for Avery alone should match Harbor Lights and Northern Journey. A name absent from this small catalog should return no matches.
 
