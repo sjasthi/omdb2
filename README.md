@@ -4,6 +4,8 @@ OMDB2 is a PHP/MySQL catalog for movies, people, songs, and their credits. Visit
 
 This repository contains the application, an empty schema, fictional sample data, installation instructions, screenshots, and reproducible tests. Start here for a new installation; an old developer database or password is not required.
 
+**Latest verification: November 24, 2026.** The current application passed **1,141 regression checks** and **130 additional installed-site HTTP checks**. Both existing login roles, search, dark mode and representative phone/tablet/desktop layouts were checked. The complete 23-table local catalog remained unchanged. See the [presentation-readiness report](docs/presentation-readiness-20261124.md) for scope and expected/actual evidence.
+
 ![OMDB home page with the fictional sample catalog](docs/screenshots/home.jpg)
 
 ## Presentation and rehearsal
@@ -15,6 +17,8 @@ The home page lists recently added movies. Movies, People and Songs each have a 
 Choose **Dark mode** beside the account badge to switch themes. OMDB follows the device color preference until you choose a theme, then remembers that choice in this browser. The preference applies across pages and sign-in sessions, including safe error pages. It does not change your account or database records. See [dark-mode usage and verification](docs/dark-mode.md).
 
 The original local catalog was restored with the current code on November 17, 2026: **3,997 movies, 15 people, 3 songs and 4 accounts**. See the [catalog-restoration verification](docs/full-catalog-restoration.md). Existing database data and local credentials remain private, outside the source package. Separate installations now use separate login cookies.
+
+The restored full catalog and the optional three-movie fictional sample catalog are separate installations. A fresh GitHub install does not include the private 3,997-movie database or its accounts. Create your own logins using the steps below. Do not import the empty schema over an existing catalog; follow [the backup and upgrade guide](docs/deployment.md#updating-an-existing-installation).
 
 ## Requirements
 
@@ -138,7 +142,33 @@ An empty catalog is expected. To reproduce the screenshots, import [movies.csv](
 
 Follow [the sample guide](examples/README.md) to attach credits through a movie's **People** and **Songs** actions. Search for **Avery Stone** under Cast member and **Morgan River** under Director: Harbor Lights should be the single match. The app searches stored records; it does not download movie information.
 
-CSV is UTF-8, **no header**, at most 10,000 records and a 5 MB application cap. Quoted commas/newlines work. Invalid rows roll back the upload. Movie native-title/year duplicates are skipped; people/songs create new rows on repeat imports. PHP may impose a lower upload limit. To allow 5 MB, configure `upload_max_filesize=5M` and `post_max_size=8M` in PHP, then restart Apache.
+CSV is UTF-8, **no header or ID column**, with these exact column orders:
+
+| Record type | Columns, from left to right |
+|---|---|
+| Movies | Native title, English title, release year |
+| People | Stage name, first name, middle name, last name, gender |
+| Songs | Song title, lyrics, theme |
+
+Use an empty field for an optional value; keep its comma so the column count stays correct. Accounts and relationships are not imported by these files. The limit is 10,000 records and a 5 MB application cap. Quoted commas/newlines work. Invalid rows roll back the upload. Movie native-title/year duplicates are skipped; people/songs create new rows on repeat imports. PHP may impose a lower upload limit. To allow 5 MB, configure `upload_max_filesize=5M` and `post_max_size=8M` in PHP, then restart Apache.
+
+### 8. Check startup before a demonstration
+
+From the installed application's folder, this read-only CLI check verifies the connection, catalog tables, 17 cascading foreign keys, unique email index and both account roles:
+
+```powershell
+& C:\xampp\php\php.exe tools/check-demo.php
+```
+
+Expected: `"ready": true`. Create a member in step 6 before checking both roles. Add `--require-demo` only after importing the fictional samples **and attaching their credits**. An ordinary/full catalog should use the command above without that flag.
+
+In an existing PowerShell 7 terminal whose script policy permits local scripts, the optional launcher starts missing configured local servers and checks the sign-in form:
+
+```powershell
+& .\tools\start-demo.ps1 -OpenBrowser
+```
+
+For a non-default database instance, also supply `-DatabaseConfig C:/your-local-database/my.ini`. The app's private configuration must use that instance's port. The launcher does not import, migrate, reset or create records. It does not change execution policy. If scripts are blocked, start the configured servers manually and run the PHP check. See [startup and rehearsal details](docs/presentation/startup.md). Machine-specific shortcuts and credentials stay outside Git; a shortcut that hard-codes an uninstalled runtime may need to be recreated after an update.
 
 ## Screenshots and help
 
@@ -178,9 +208,11 @@ With the database server running, from a Git clone:
 python tests/run_week9.py --php C:/xampp/php/php.exe --mysql C:/xampp/mysql/bin/mysql.exe --output C:/omdb-test-results/final
 ```
 
-The **test** database account needs CREATE/DROP DATABASE privileges. Set `OMDB_TEST_DB_SERVER`, `OMDB_TEST_DB_USER`, and `OMDB_TEST_DB_PASSWORD` if needed. This runner creates random accounts and exclusive disposable databases, copies source without local credentials, runs five suites, records expected/actual/pass/fail, and cleans up. Never point standalone HTTP scripts at a live database.
+The **test** database account needs CREATE/DROP DATABASE privileges. Set `OMDB_TEST_DB_SERVER`, `OMDB_TEST_DB_USER`, and `OMDB_TEST_DB_PASSWORD` if needed. This runner creates random accounts and exclusive disposable databases, copies source without local credentials, runs six suites, records expected/actual/pass/fail, and cleans up. Never point standalone HTTP scripts at a live database. For a custom database port, both PHP's `mysqli.default_port` and the MySQL client's port must match; the [final report](docs/final-test-report.md#reproduction-and-limits) documents the isolated port-3307 setup.
 
-The final run from a fresh GitHub clone passed **1,135 functional checks**: 62 backend, 273 search, 307 security HTTP, 132 UI HTTP, 361 matrix cases. Another **38 fresh-install acceptance checks** passed. See [final static-analysis and functional-test report](docs/final-test-report.md) and [fresh-install record](docs/fresh-installation.md). GitHub Actions repeats syntax, secrets and all five suites on MariaDB 10.4 and MySQL 8.0.
+The current full run passed **1,141 functional checks**: 62 backend, 273 combined search, 307 security HTTP, 134 UI HTTP, 361 matrix cases and 4 installation-session checks. The 361 matrix cases are included in that total. November 24 additionally verified 130 HTTP checks on the installed full catalog, 123 PHP files and three maintained JavaScript files for syntax, a tracked-source secret scan and representative responsive/theme/login flows. Those installed-site and browser observations are reported separately from the regression total.
+
+The earlier independent fresh GitHub installation passed **1,135 functional checks** and **38 fresh-install acceptance checks** on November 9; the later total includes the added poster/session cases. See the [current presentation-readiness evidence](docs/presentation-readiness-20261124.md), [final static-analysis and functional-test report](docs/final-test-report.md) and [fresh-install record](docs/fresh-installation.md). GitHub Actions repeats syntax, secrets and all six suites on MariaDB 10.4 and MySQL 8.0.
 
 Enable local hooks with `git config core.hooksPath .githooks` and PHP on PATH. Before uploading, run `php tools/check-secrets.php --all`. These checks do not erase old Git history.
 

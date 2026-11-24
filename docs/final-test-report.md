@@ -1,5 +1,7 @@
 # Final static-analysis and functional-test report
 
+The [November 24 presentation-readiness check](presentation-readiness-20261124.md) reran all **1,141 regression checks** and added **130 installed-site HTTP observations** against the full catalog. All passed. It also verified both login roles, themes, responsive layouts, served-source parity, launchers and preservation of all 23 database tables. This is a new readiness check of the existing installation; the November 9 independent fresh-install evidence below retains its original scope.
+
 The [November 17 full-catalog restoration](full-catalog-restoration.md) preserves all 23 original database tables and verifies the current code with **1,141 functional checks**, including four installation-session checks and two missing-poster checks added after the original 1,135-check suite. Historical results below retain their original scope.
 
 The [November 17 presentation rehearsal](presentation/verification.md) reran the complete functional suite after the small presentation/UI additions. The Week 10 installation results below retain their original date and scope.

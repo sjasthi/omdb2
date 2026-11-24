@@ -1,0 +1,933 @@
+{
+  "verified_local_date": "2026-11-24",
+  "source_commit": "34def21bc8d8c093d45dc65e27aca259e86ff36f",
+  "base_url": "http://127.0.0.1/omdb/",
+  "catalog": {
+    "movies": 3997,
+    "people": 15,
+    "songs": 3,
+    "movie_people": 138,
+    "users": 4
+  },
+  "preserved_tables": 23,
+  "changed_tables": [],
+  "foreign_keys": 17,
+  "functional_suites": {
+    "backend": 62,
+    "movie_search": 273,
+    "security": 307,
+    "ui": 134,
+    "matrix": 361,
+    "sessions": 4
+  },
+  "functional_passed": 1141,
+  "functional_failed": 0,
+  "test_database_removed": true,
+  "installed_http_passed": 130,
+  "installed_http_failed": 0,
+  "browser_observations": [
+    {
+      "check": "Home displays 3,997 movies, 15 people and 3 songs",
+      "passed": true
+    },
+    {
+      "check": "Movie table exposes all 3,997 records",
+      "passed": true
+    },
+    {
+      "check": "Zero-result movie table filtering returns a clear empty state",
+      "passed": true
+    },
+    {
+      "check": "Clear filters restores the complete table",
+      "passed": true
+    },
+    {
+      "check": "Gone in 60 Seconds global table filter returns one record",
+      "passed": true
+    },
+    {
+      "check": "Original member login works and hides admin navigation",
+      "passed": true
+    },
+    {
+      "check": "Member direct access to setup.php is denied",
+      "passed": true
+    },
+    {
+      "check": "Original administrator login works and shows admin navigation and CRUD controls",
+      "passed": true
+    },
+    {
+      "check": "Create-movie form renders required fields and limits",
+      "passed": true
+    },
+    {
+      "check": "CSV import form renders its guidance and controls",
+      "passed": true
+    },
+    {
+      "check": "Missing historical poster shows its placeholder",
+      "passed": true
+    },
+    {
+      "check": "390-pixel phone home and movie table have no page-width overflow",
+      "passed": true
+    },
+    {
+      "check": "Phone menu opens and movie navigation works",
+      "passed": true
+    },
+    {
+      "check": "Light-mode choice persists after reload",
+      "passed": true
+    },
+    {
+      "check": "Dark-mode choice persists between pages and reloads",
+      "passed": true
+    },
+    {
+      "check": "768-pixel tablet table has no page-width overflow",
+      "passed": true
+    },
+    {
+      "check": "1,366-pixel desktop table has no page-width overflow",
+      "passed": true
+    },
+    {
+      "check": "Brad Pitt cast search returns 84 matching stored credits/movies",
+      "passed": true
+    },
+    {
+      "check": "Brad Pitt plus Fight Club title returns exactly one movie",
+      "passed": true
+    },
+    {
+      "check": "Fight Club detail displays Brad Pitt and Tyler Durden credit",
+      "passed": true
+    },
+    {
+      "check": "Brad Pitt plus Steven Spielberg returns a clear zero-result message",
+      "passed": true
+    },
+    {
+      "check": "Help describes the current system, themes, roles and data limitations",
+      "passed": true
+    },
+    {
+      "check": "Browser recorded no console warnings or errors during the checked flows",
+      "passed": true
+    },
+    {
+      "check": "Temporary viewport override was reset and browser left at signed-out full-catalog home",
+      "passed": true
+    }
+  ],
+  "static_checks": {
+    "php_syntax_files": 123,
+    "maintained_js_syntax_files": 3,
+    "secret_scan": "passed",
+    "git_diff_check": "passed"
+  },
+  "deployed_tracked_source_files_verified": 232,
+  "source_changes_required": false,
+  "fix": "Private full-catalog and rehearsal launchers discover an available PowerShell 7 runtime instead of referencing an uninstalled runtime version.",
+  "launcher_checks": {
+    "full_catalog": "passed",
+    "three_movie_rehearsal": "passed"
+  },
+  "presentation_backup": {
+    "slides": 8,
+    "pptx_integrity": "passed",
+    "pdf_header": "passed",
+    "mp4_present": true,
+    "offline_walkthrough_present": true
+  },
+  "limitations": [
+    "Stored catalog does not include Steven Spielberg credits; the Brad Pitt + Spielberg example correctly returns zero matches.",
+    "Six original poster references were already missing at restoration; local placeholders remain in use.",
+    "Checks cover the recorded workflows, rather than every possible device, browser, or input."
+  ],
+  "installed_http_checks": [
+    {
+      "check": "guest: index.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: movies.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: people.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: songs.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: help.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: about.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: advance_movie_search.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: search_data.php?type=people",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: search_data.php?type=songs",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: search.php?text_search=Fight+Club&search=",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: movies_data.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: movies_keywords.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: movies_media.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: movies_numbers.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: movies_quotes.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: movies_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: people_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: songs_keyword.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: songs_media.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "guest: songs_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "protected file: db_credentials.php",
+      "expected": "HTTP 403, no technical error",
+      "actual": "HTTP 403; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "protected file: sql/schema.sql",
+      "expected": "HTTP 403, no technical error",
+      "actual": "HTTP 403; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "protected file: tools/check-demo.php",
+      "expected": "HTTP 404, no technical error",
+      "actual": "HTTP 404; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "Guest admin-page access",
+      "expected": "Redirect to sign-in",
+      "actual": "/omdb/login.php",
+      "passed": true
+    },
+    {
+      "check": "user: existing login",
+      "expected": "Member badge",
+      "actual": "valid",
+      "passed": true
+    },
+    {
+      "check": "user: index.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movies.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: people.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: songs.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: help.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: about.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: advance_movie_search.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: search_data.php?type=people",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: search_data.php?type=songs",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: search.php?text_search=Fight+Club&search=",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movies_data.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movies_keywords.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movies_media.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movies_numbers.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movies_quotes.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movies_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: people_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: songs_keyword.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: songs_media.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: songs_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: reports.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: reports_actors.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: reports_actors_actresses.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: reports_lyricist.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: query_movies.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: query_songs.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: games.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: games_base_chars_user.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: anagrammer.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: movie_in_movies.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: setup.php",
+      "expected": "HTTP 403, no technical error",
+      "actual": "HTTP 403; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: create_movie.php",
+      "expected": "HTTP 403, no technical error",
+      "actual": "HTTP 403; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: create_people.php",
+      "expected": "HTTP 403, no technical error",
+      "actual": "HTTP 403; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: create_song.php",
+      "expected": "HTTP 403, no technical error",
+      "actual": "HTTP 403; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "user: sign_up.php",
+      "expected": "HTTP 403, no technical error",
+      "actual": "HTTP 403; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: existing login",
+      "expected": "Administrator badge",
+      "actual": "valid",
+      "passed": true
+    },
+    {
+      "check": "admin: index.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: people.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: songs.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: help.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: about.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: advance_movie_search.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: search_data.php?type=people",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: search_data.php?type=songs",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: search.php?text_search=Fight+Club&search=",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_data.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_keywords.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_media.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_numbers.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_quotes.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: people_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: songs_keyword.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: songs_media.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: songs_trivia.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: reports.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: reports_actors.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: reports_actors_actresses.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: reports_lyricist.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: query_movies.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: query_songs.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: games.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: games_base_chars_user.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: anagrammer.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movie_in_movies.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: setup.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: setup.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "admin: create_movie.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: create_movie.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "admin: create_people.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: create_people.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "admin: create_song.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: create_song.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "admin: sign_up.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: sign_up.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "admin: add_movie_posters.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: add_movie_posters.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_anagram.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: movies_anagram.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "admin: games_base_chars_admin.php",
+      "expected": "HTTP 200, no technical error",
+      "actual": "HTTP 200; technical error=False",
+      "passed": true
+    },
+    {
+      "check": "admin: games_base_chars_admin.php token",
+      "expected": "CSRF form token",
+      "actual": "present",
+      "passed": true
+    },
+    {
+      "check": "Local asset: ajax/jquery-3.2.1.min.js",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: ajax/select2/dist/css/select2.min.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: ajax/select2/dist/js/select2.min.js",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: basechars.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: fonts/css/all.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: fonts/css/v4-shims.min.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: images/movies.png",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: images/omdb_logo.png",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: scripts/catalog-ui.js?v=55b00d5b43d9",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: scripts/layout.js?v=3b5d895aec66",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: scripts/theme.js?v=2b709441cf51",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: styles/mainStyleSheet.css?v=df8736f007de",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: styles/responsive.css?v=cfaaf0d29731",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: styles/theme.css?v=95a5ff7fb8f3",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: styles/ui.css?v=c508ce7d8d42",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/animate/animate.min.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/bootstrap/css/bootstrap.min.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/bootstrap/js/bootstrap.min.js",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/datatables/dataTables.bootstrap.min.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/datatables/dataTables.bootstrap.min.js",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/datatables/jquery.dataTables.min.js",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/toastr/toastr.min.css",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    },
+    {
+      "check": "Local asset: vendor/toastr/toastr.min.js",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "passed": true
+    }
+  ]
+}
